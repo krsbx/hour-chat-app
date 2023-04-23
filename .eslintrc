@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "extends": "@react-native-community",
+  "rules": {
+    "comma-dangle": "off",
+    "object-curly-newline": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "prettier/prettier": "off",
+    "react-native/no-inline-styles": "off",
+    "@typescript-eslint/no-shadow": "off",
+    "curly": "off"
+  }
+}
