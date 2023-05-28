@@ -2,16 +2,23 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import Navigations from './navigations';
+import { persistor, store } from './store';
 
 function App() {
   return (
-    <SafeAreaProvider style={{ flex: 1 }}>
-      <NavigationContainer>
-        <StatusBar animated translucent barStyle={'light-content'} />
-        <Navigations.AuthStack />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider style={{ flex: 1 }}>
+          <NavigationContainer>
+            <StatusBar animated translucent barStyle={'light-content'} />
+            <Navigations.AuthStack />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 
