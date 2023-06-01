@@ -63,3 +63,9 @@ yarn-error.log
 .metro-health-check*
 
 /**/*/google-services.json
+
+
+.env
+.env.*
+
+!.env.example
