@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { combineReducers } from 'redux';
 import { RESOURCE_NAME } from '../../constants/common';
 import { hasOwnProperty } from '../../utils/common';
-import { ResourceAction } from '../action-types/resources';
+import { ResourceAction } from '../actions-types/resources';
 
 const toArray = <T>(value: T) => (_.isArray(value) ? value : [value]) as T[];
 

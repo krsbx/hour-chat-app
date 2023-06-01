@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button } from '@rneui/themed';
+import Config from 'react-native-config';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 function LoginScreen() {
@@ -13,7 +14,7 @@ function LoginScreen() {
         alignItems: 'center',
       }}
     >
-      <Button title="Login" />
+      <Button title="Login" onPress={() => console.log(Config.API_URL)} />
     </View>
   );
 }
