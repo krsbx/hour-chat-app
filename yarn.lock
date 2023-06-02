@@ -6812,6 +6812,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.6"
 
+moment@^2.29.4:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -7519,6 +7524,20 @@ react-native-config@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.5.1.tgz#73c94f511493e9b7ff9350cdf351d203a1b05acc"
   integrity sha512-g1xNgt1tV95FCX+iWz6YJonxXkQX0GdD3fB8xQtR1GUBEqweB9zMROW77gi2TygmYmUkBI7LU4pES+zcTyK4HA==
+
+react-native-date-picker@^4.2.13:
+  version "4.2.13"
+  resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-4.2.13.tgz#b5b894ee6c5a154a752f9094342170515e169ea6"
+  integrity sha512-cQ3k+ExXggAnytomeNGNrtV/l2a7WzVUeWKo7Gs2pv/z3TCjjlmKn0ZBMPgcThrFAgFMxgYI0XzKVKT7TPsOmw==
+  dependencies:
+    prop-types "^15.8.1"
+
+react-native-element-dropdown@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-element-dropdown/-/react-native-element-dropdown-2.9.0.tgz#c218ab512bd8be69fa0ac70462293863f8cfd527"
+  integrity sha512-2Y/bmoFPTdKOUXbYloEKpMTWYE2VHrvva/5tgEuHqAlfAtGGr3r/ob0L0YYH1am5N0n1PKo3+eLf0c79QUSzYw==
+  dependencies:
+    lodash "^4.17.21"
 
 react-native-gesture-handler@^2.9.0:
   version "2.9.0"

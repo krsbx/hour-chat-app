@@ -4,4 +4,4 @@ const WINDOW = Dimensions.get('window');
 
 export const WINDOW_WIDTH = WINDOW.width;
 
-export const WINDOW_HEGITH = WINDOW.height;
+export const WINDOW_HEIGHT = WINDOW.height;
