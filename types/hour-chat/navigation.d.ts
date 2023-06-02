@@ -1,6 +1,8 @@
+import { AUTH_STACK } from '../../src/constants/screens';
+
 export type AppNavigationRoute = {};
 
 export type AuthStack = {
-  Login: undefined;
-  Register: undefined;
+  [AUTH_STACK.LOGIN]: undefined;
+  [AUTH_STACK.REGISTER]: undefined;
 };
