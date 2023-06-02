@@ -1,0 +1,55 @@
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Dropdown as RNDropdown } from 'react-native-element-dropdown';
+import { DropdownProps } from 'react-native-element-dropdown/src/components/Dropdown/model';
+import { scale } from 'react-native-size-matters';
+import { Labels } from '..';
+import { FONT_SIZE } from '../../constants/fonts';
+import STYLES from '../../styles';
+import { COLOR_PALETTE } from '../../utils/theme';
+
+const Dropdown = <T,>({ label, isRequired, ...props }: Props<T>) => {
+  return (
+    <View style={[STYLES.INPUTS.DEFAULT_PADDING, style.container]}>
+      {label && (
+        <Labels.RequiredLabel isRequired={isRequired}>
+          {label}
+        </Labels.RequiredLabel>
+      )}
+      <RNDropdown<T>
+        style={style.style}
+        placeholderStyle={STYLES.LABELS.PLACEHOLDER}
+        renderRightIcon={() => null}
+        activeColor={COLOR_PALETTE.PRIMARY_SECONDARY}
+        itemContainerStyle={style.itemContainer}
+        selectedTextStyle={style.itemText}
+        itemTextStyle={style.itemText}
+        {...props}
+      />
+    </View>
+  );
+};
+
+const style = StyleSheet.create({
+  container: {
+    marginBottom: scale(5),
+  },
+  style: {
+    ...STYLES.INPUTS.INPUT,
+    height: scale(40),
+  },
+  itemContainer: {
+    height: scale(48),
+  },
+  itemText: {
+    color: COLOR_PALETTE.NEUTRAL_90,
+    fontSize: scale(FONT_SIZE.EXTRA_SMALL),
+  },
+});
+
+type Props<T> = DropdownProps<T> & {
+  label?: string;
+  isRequired?: boolean;
+};
+
+export default Dropdown;

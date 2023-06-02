@@ -34,6 +34,28 @@ export const COLOR_PALETTE = {
   // NEUTRAL
   WHITE: '#ffffff',
   BLACK: '#000000',
+  NEUTRAL_20: '#EBF1F6',
+  NEUTRAL_30: '#E4EAEF',
+  NEUTRAL_40: '#D7DFE5',
+  NEUTRAL_50: '#BAC5CD',
+  NEUTRAL_60: '#98A6B0',
+  NEUTRAL_70: '#8796A1',
+  NEUTRAL_80: '#5D717F',
+  NEUTRAL_90: '#3D5565',
+  NEUTRAL_100: '#0A2639',
+
+  // DANGER
+  DANGER_MAIN: '#D8291A',
+  DANGER_PRESSED: '#67041D',
+
+  // SUCCESS
+  SUCCESS_MAIN: '#27A825',
+  SUCCESS_PRESSED: '#07501F',
+
+  // TEXT
+  get PLACEHOLDER() {
+    return this.NEUTRAL_70;
+  },
 };
 
 export const GLOBAL_STYLE = StyleSheet.create({});
