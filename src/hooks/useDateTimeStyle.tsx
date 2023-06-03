@@ -8,6 +8,8 @@ const useDateTimeStyle = ({
   disabled,
   isValidDate,
   placeholder,
+  isValid,
+  isError,
 }: Props) => {
   const style = useMemo(() => {
     const inputStyles: StyleProp<ViewStyle>[] = [STYLES.INPUTS.DATE_TIME];
@@ -20,9 +22,19 @@ const useDateTimeStyle = ({
     if (inputStyle) inputStyles.push(inputStyle);
     if (containerStyle) containerStyles.push(containerStyle);
     if (!isValidDate && placeholder) textStyles.push(STYLES.LABELS.PLACEHOLDER);
+    if (isValid) inputStyles.push(STYLES.INPUTS.VALID);
+    if (isError) inputStyles.push(STYLES.INPUTS.ERROR);
 
     return { inputStyles, textStyles, containerStyles };
-  }, [disabled, isValidDate, placeholder, containerStyle, inputStyle]);
+  }, [
+    disabled,
+    isValidDate,
+    placeholder,
+    containerStyle,
+    inputStyle,
+    isValid,
+    isError,
+  ]);
 
   return style;
 };
@@ -33,6 +45,8 @@ type Props = {
   placeholder?: string;
   containerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<ViewStyle>;
+  isValid?: boolean;
+  isError?: boolean;
 };
 
 export default useDateTimeStyle;

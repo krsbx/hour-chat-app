@@ -6,7 +6,7 @@ import { scale } from 'react-native-size-matters';
 import { Labels } from '..';
 import { FONT_SIZE } from '../../constants/fonts';
 import STYLES from '../../styles';
-import { COLOR_PALETTE } from '../../utils/theme';
+import { COLOR_PALETTE, opacityColor } from '../../utils/theme';
 
 const Dropdown = <T,>({ label, isRequired, ...props }: Props<T>) => {
   return (
@@ -19,8 +19,7 @@ const Dropdown = <T,>({ label, isRequired, ...props }: Props<T>) => {
       <RNDropdown<T>
         style={style.style}
         placeholderStyle={STYLES.LABELS.PLACEHOLDER}
-        renderRightIcon={() => null}
-        activeColor={COLOR_PALETTE.PRIMARY_SECONDARY}
+        activeColor={opacityColor(COLOR_PALETTE.NEUTRAL_20, 0.7)}
         itemContainerStyle={style.itemContainer}
         selectedTextStyle={style.itemText}
         itemTextStyle={style.itemText}

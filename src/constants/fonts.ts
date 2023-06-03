@@ -4,6 +4,7 @@ export const FONT_SIZE_TYPE = {
   MEDIUM: 'MEDIUM',
   SMALL: 'SMALL',
   EXTRA_SMALL: 'EXTRA_SMALL',
+  EXTRA_EXTRA_SMALL: 'EXTRA_EXTRA_SMALL',
 } as const;
 
 export const FONT_SIZE = {
@@ -12,4 +13,5 @@ export const FONT_SIZE = {
   [FONT_SIZE_TYPE.MEDIUM]: 18,
   [FONT_SIZE_TYPE.SMALL]: 14,
   [FONT_SIZE_TYPE.EXTRA_SMALL]: 12,
+  [FONT_SIZE_TYPE.EXTRA_EXTRA_SMALL]: 11,
 } as const;
