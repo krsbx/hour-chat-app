@@ -29,7 +29,7 @@ import { COLOR_PALETTE } from '../../utils/theme';
  * ```
  */
 const InputField = React.forwardRef<TextInput, Props>(
-  ({ isRequired, onChangeText, isError = false, ...props }, ref) => {
+  ({ isRequired, onChangeText, isValid, isError = false, ...props }, ref) => {
     const isPassword = useMemo(() => {
       return props.isPassword || props.secureTextEntry;
     }, [props.isPassword, props.secureTextEntry]);
@@ -53,11 +53,11 @@ const InputField = React.forwardRef<TextInput, Props>(
       const styles: StyleProp<TextStyle>[] = [STYLES.INPUTS.INPUT];
 
       if (isError) styles.push(STYLES.INPUTS.ERROR);
-      if (props.isValid) styles.push(STYLES.INPUTS.VALID);
+      if (isValid) styles.push(STYLES.INPUTS.VALID);
       if (isPassword) styles.push(STYLES.INPUTS.RIGHT_ICON);
 
       return styles;
-    }, [props.isValid, isError, isPassword]);
+    }, [isValid, isError, isPassword]);
 
     const rightIconContainerStyle = useMemo(() => {
       const styles: StyleProp<TextStyle>[] = [
@@ -65,13 +65,13 @@ const InputField = React.forwardRef<TextInput, Props>(
       ];
 
       if (isError) styles.push(STYLES.INPUTS.ERROR);
-      if (props.isValid) styles.push(STYLES.INPUTS.VALID);
+      if (isValid) styles.push(STYLES.INPUTS.VALID);
       if (props.disabled) styles.push(STYLES.CONTAINERS.RIGHT_ICON_DISABLED);
       if (props.rightIconContainerStyle)
         styles.push(props.rightIconContainerStyle);
 
       return styles;
-    }, [props.isValid, isError, props.disabled, props.rightIconContainerStyle]);
+    }, [isValid, isError, props.disabled, props.rightIconContainerStyle]);
 
     const leftIconContainerStyle = useMemo(() => {
       const styles: StyleProp<TextStyle>[] = [
@@ -79,13 +79,13 @@ const InputField = React.forwardRef<TextInput, Props>(
       ];
 
       if (isError) styles.push(STYLES.INPUTS.ERROR);
-      if (props.isValid) styles.push(STYLES.INPUTS.VALID);
+      if (isValid) styles.push(STYLES.INPUTS.VALID);
       if (props.disabled) styles.push(STYLES.CONTAINERS.LEFT_ICON_DISABLED);
       if (props.leftIconContainerStyle)
         styles.push(props.leftIconContainerStyle);
 
       return styles;
-    }, [props.isValid, isError, props.disabled, props.leftIconContainerStyle]);
+    }, [isValid, isError, props.disabled, props.leftIconContainerStyle]);
 
     const errorStyle = useMemo(() => {
       const styles: StyleProp<TextStyle>[] = [STYLES.ERRORS.ERROR];
@@ -124,10 +124,10 @@ const InputField = React.forwardRef<TextInput, Props>(
         renderErrorMessage={isError}
         errorStyle={errorStyle}
         rightIcon={rightIcon}
+        {...props}
+        {...(props.mask ? { InputComponent: MaskInput } : {})}
         leftIconContainerStyle={leftIconContainerStyle}
         rightIconContainerStyle={rightIconContainerStyle}
-        {...(props.mask ? { InputComponent: MaskInput } : {})}
-        {...props}
         errorMessage={isError ? props.errorMessage : undefined}
         // [masked, unmasked, obfuscated]: string[]
         onChangeText={(...args) => onChangeText?.(...args)}

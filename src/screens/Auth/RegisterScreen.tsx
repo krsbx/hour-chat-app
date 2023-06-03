@@ -1,13 +1,11 @@
-import { Text } from '@rneui/base';
 import { Formik } from 'formik';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { Screens } from '../../components';
+import { Labels, Screens } from '../../components';
 import { DEFAULT_REGISTER_VALUE } from '../../constants/defaults';
-import { FONT_SIZE } from '../../constants/fonts';
 import { WINDOW_WIDTH } from '../../constants/sizes';
 import { auths } from '../../schema';
 
@@ -50,13 +48,7 @@ const RegisterScreen = () => {
         paddingHorizontal: scale(10),
       }}
     >
-      <Animated.View
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-      >
-        <Text style={{ fontSize: scale(FONT_SIZE.LARGE), fontWeight: 'bold' }}>
-          Hour Chat
-        </Text>
-      </Animated.View>
+      <Labels.AppTitle />
       <Animated.View style={{ flex: formFlexSize.current }}>
         <Screens.Register.Indicator
           step={step}
