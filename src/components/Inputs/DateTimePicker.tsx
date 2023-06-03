@@ -2,10 +2,17 @@ import { Text } from '@rneui/base';
 import _ from 'lodash';
 import moment from 'moment';
 import React, { useCallback, useMemo, useState } from 'react';
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
+import {
+  StyleProp,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import DatePicker, { DatePickerProps } from 'react-native-date-picker';
 import { Wrappers } from '..';
 import useDateTimeStyle from '../../hooks/useDateTimeStyle';
+import STYLES from '../../styles';
 import { RequiredLabel } from '../Labels';
 
 const DateTimePicker: React.FC<Props> = ({
@@ -22,6 +29,11 @@ const DateTimePicker: React.FC<Props> = ({
   onConfirm: onConfirmProps,
   onDateChange: onDateChangeProps,
   disabled,
+  onBlur,
+  isValid,
+  isError,
+  errorMessage,
+  errorStyle: errorStyleProps,
   ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +61,17 @@ const DateTimePicker: React.FC<Props> = ({
     inputStyle,
     isValidDate,
     placeholder,
+    isValid,
+    isError,
   });
+
+  const errorStyle = useMemo(() => {
+    const styles: StyleProp<TextStyle>[] = [STYLES.ERRORS.ERROR_DATE];
+
+    if (errorStyleProps) styles.push(errorStyle);
+
+    return styles;
+  }, [errorStyleProps]);
 
   const onPress = useCallback(() => {
     if (disabled) return;
@@ -61,7 +83,8 @@ const DateTimePicker: React.FC<Props> = ({
     if (disabled) return;
 
     setIsOpen(false);
-  }, [disabled, setIsOpen]);
+    onBlur?.();
+  }, [disabled, setIsOpen, onBlur]);
 
   const onConfirm = useCallback(
     (date: Date) => {
@@ -72,7 +95,9 @@ const DateTimePicker: React.FC<Props> = ({
   );
 
   const onDateChange = useCallback(
-    (date: Date) => onDateChangeProps?.(date),
+    (date: Date) => {
+      onDateChangeProps?.(date);
+    },
     [onDateChangeProps]
   );
 
@@ -98,7 +123,10 @@ const DateTimePicker: React.FC<Props> = ({
             </Text>
           </Wrappers.LeftRightIcon>
         </TouchableOpacity>
-      </View>{' '}
+        {isError && !!errorMessage && (
+          <Text style={errorStyle}>{errorMessage}</Text>
+        )}
+      </View>
       <DatePicker
         open={isOpen}
         date={date ?? new Date()}
@@ -113,7 +141,7 @@ const DateTimePicker: React.FC<Props> = ({
 };
 
 type Props = Omit<DatePickerProps, 'open' | 'onCancel' | 'date'> & {
-  value?: string | null;
+  value?: Date | string | null;
   placeholder?: string;
   label?: string;
   disabled?: boolean;
@@ -124,6 +152,11 @@ type Props = Omit<DatePickerProps, 'open' | 'onCancel' | 'date'> & {
   rightIconContainerStyle?: StyleProp<ViewStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   inputStyle?: StyleProp<ViewStyle>;
+  onBlur?: () => void;
+  errorStyle?: StyleProp<TextStyle>;
+  isValid?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
 };
 
 export default DateTimePicker;

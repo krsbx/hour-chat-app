@@ -1,5 +1,4 @@
 import { scale } from 'react-native-size-matters';
-import STYLES from '.';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLOR_PALETTE } from '../utils/theme';
 import { flattenStyle } from './factory';
@@ -21,7 +20,7 @@ export const REQUIRED_STAR = flattenStyle({
 });
 
 export const DATE_TIME = flattenStyle({
-  ...STYLES.INPUTS.DATE_TIME,
   textAlign: 'left',
   flex: 1,
+  paddingHorizontal: scale(10),
 });

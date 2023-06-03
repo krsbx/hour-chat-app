@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { scale } from 'react-native-size-matters';
 import { FONT_SIZE } from '../constants/fonts';
 import { COLOR_PALETTE } from '../utils/theme';
@@ -33,8 +34,24 @@ export const VALID = flattenStyle({
 });
 
 export const DATE_TIME = flattenStyle({
-  ...INPUT,
+  ..._.omit(INPUT, [
+    'marginHorizontal',
+    'paddingHorizontal',
+    'paddingVertical',
+  ]),
   alignItems: 'center',
   height: scale(40),
   flexDirection: 'row',
+});
+
+export const RIGHT_ICON = flattenStyle({
+  borderRightWidth: 0,
+  borderTopRightRadius: 0,
+  borderBottomRightRadius: 0,
+});
+
+export const LEFT_ICON = flattenStyle({
+  borderLeftWidth: 0,
+  borderTopLeftRadius: 0,
+  borderBottomLeftRadius: 0,
 });

@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import { z } from 'zod';
+import moment from 'moment';
 import validator from 'validator';
+import { z } from 'zod';
 import { GENDER } from '../constants/resources';
 
 export const loginSchema = z
@@ -21,23 +22,30 @@ export const loginSchema = z
 
 export const registerSchema = z
   .object({
-    firstName: z.string().min(3),
-    middleName: z.string().min(3).optional(),
-    lastName: z.string().min(3).optional(),
-    username: z.string().min(5),
-    email: z.string().email(),
-    phoneNumber: z.string().refine(validator.isMobilePhone),
-    password: z.string().min(5),
-    confirmPassword: z.string().min(5),
-    dob: z.date().optional().nullable().default(null),
-    gender: z
-      .enum([GENDER.MALE, GENDER.FEMALE, GENDER.OTHER])
-      .optional()
-      .nullable()
-      .default(GENDER.OTHER),
+    step1: z.object({
+      firstName: z.string().min(3),
+      middleName: z.string().min(3).optional(),
+      lastName: z.string().min(3).optional(),
+      dob: z.string().refine((dob) => {
+        if (_.isNull(dob)) return true;
+
+        return moment(dob).isValid();
+      }),
+      gender: z
+        .enum([GENDER.MALE, GENDER.FEMALE, GENDER.OTHER])
+        .nullable()
+        .default(GENDER.OTHER),
+    }),
+    step2: z.object({
+      email: z.string().email(),
+      username: z.string().min(5),
+      phoneNumber: z.string().refine(validator.isMobilePhone),
+      password: z.string().min(5),
+      confirmPassword: z.string().min(5),
+    }),
   })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
+  .superRefine(({ step2 }, ctx) => {
+    if (step2.confirmPassword !== step2.password) {
       ctx.addIssue({
         code: 'custom',
         path: ['confirmPassword'],
