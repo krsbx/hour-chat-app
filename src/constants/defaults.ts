@@ -17,3 +17,8 @@ export const DEFAULT_REGISTER_VALUE: z.infer<typeof auths.registerSchema> = {
     confirmPassword: '',
   },
 };
+
+export const DEFAULT_LOGIN_VALUE: z.infer<typeof auths.loginSchema> = {
+  identifier: '',
+  password: '',
+};
