@@ -2,12 +2,12 @@ import { Formik } from 'formik';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, View } from 'react-native';
-import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Labels, Screens } from '../../components';
 import { DEFAULT_REGISTER_VALUE } from '../../constants/defaults';
 import { WINDOW_WIDTH } from '../../constants/sizes';
 import { auths } from '../../schema';
+import STYLES from '../../styles';
 
 const RegisterScreen = () => {
   const [step, setStep] = useState(1);
@@ -41,13 +41,7 @@ const RegisterScreen = () => {
   }, [startAnimation]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingVertical: scale(20),
-        paddingHorizontal: scale(10),
-      }}
-    >
+    <View style={STYLES.CONTAINERS.AUTH_CONTAINER}>
       <Labels.AppTitle />
       <Animated.View style={{ flex: formFlexSize.current }}>
         <Screens.Register.Indicator

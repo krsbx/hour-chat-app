@@ -2,11 +2,11 @@ import { Formik } from 'formik';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, View } from 'react-native';
-import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Labels, Screens } from '../../components';
 import { DEFAULT_LOGIN_VALUE } from '../../constants/defaults';
 import { auths } from '../../schema';
+import STYLES from '../../styles';
 
 const LoginScreen = () => {
   const formFlexSize = useRef(new Animated.Value(0));
@@ -39,13 +39,7 @@ const LoginScreen = () => {
   }, [startAnimation]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingVertical: scale(20),
-        paddingHorizontal: scale(10),
-      }}
-    >
+    <View style={STYLES.CONTAINERS.AUTH_CONTAINER}>
       <Labels.AppTitle />
       <Animated.View
         style={{ flex: formFlexSize.current, opacity: formOpacity.current }}

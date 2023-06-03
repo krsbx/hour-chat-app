@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { AUTH_STACK } from '../constants/screens';
-import Auth from '../screens/Auth';
+import { Auth } from '../screens';
 
 const Stack = createStackNavigator<HourChat.Navigation.AuthStack>();
 
