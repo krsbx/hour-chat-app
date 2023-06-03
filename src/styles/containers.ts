@@ -46,3 +46,9 @@ export const LEFT_ICON_ICON = flattenStyle({
 });
 
 export const LEFT_ICON_DISABLED = INPUTS.DISABLED;
+
+export const AUTH_CONTAINER = {
+  flex: 1,
+  paddingVertical: scale(20),
+  paddingHorizontal: scale(10),
+};

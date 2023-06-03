@@ -12,7 +12,7 @@ function App() {
       <PersistGate loading={null} persistor={persistor}>
         <SafeAreaProvider style={{ flex: 1 }}>
           <NavigationContainer>
-            <Navigations.AuthStack />
+            <Navigations.MainStack />
           </NavigationContainer>
         </SafeAreaProvider>
       </PersistGate>

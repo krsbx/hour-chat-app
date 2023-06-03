@@ -1,15 +1,32 @@
 import { Button } from '@rneui/themed';
+import { AxiosError } from 'axios';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Inputs } from '../..';
 import { auths } from '../../../schema';
+import { loginUser as _loginUser } from '../../../store/actions/auth';
 
-const Credentials = () => {
-  const { errors, handleChange, handleBlur, touched, values } =
+const Credentials: React.FC<Props> = ({ loginUser }) => {
+  const { errors, handleChange, handleBlur, touched, values, setFieldError } =
     useFormikContext<z.infer<typeof auths.loginSchema>>();
+
+  const onSubmit = useCallback(async () => {
+    try {
+      await loginUser(values);
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        const statusCode = err.response?.status;
+
+        if (statusCode === 404) {
+          setFieldError('identifier', 'User not found');
+        }
+      }
+    }
+  }, [loginUser, values, setFieldError]);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -38,13 +55,15 @@ const Credentials = () => {
           isPassword
         />
       </ScrollView>
-      <Button
-        title="Login"
-        disabled={!_.isEmpty()}
-        onPress={() => console.log(values)}
-      />
+      <Button title="Login" disabled={!_.isEmpty(errors)} onPress={onSubmit} />
     </KeyboardAvoidingView>
   );
 };
 
-export default Credentials;
+const connector = connect(null, {
+  loginUser: _loginUser,
+});
+
+type Props = ConnectedProps<typeof connector>;
+
+export default connector(Credentials);
