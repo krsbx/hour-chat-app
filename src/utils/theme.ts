@@ -56,6 +56,18 @@ export const COLOR_PALETTE = {
   get PLACEHOLDER() {
     return this.NEUTRAL_70;
   },
+
+  // BLUE
+  BLUE_10: '#A8BFF0',
+  BLUE_20: '#96B2ED',
+  BLUE_30: '#628BE4',
+  BLUE_40: '#85A5EA',
+  BLUE_50: '#7398E7',
+  BLUE_60: '#628BE4',
+  BLUE_70: '#517EE1',
+  BLUE_80: '#3F72DE',
+  BLUE_90: '#2E65DC',
+  BLUE_100: '#4476de',
 };
 
 export const GLOBAL_STYLE = StyleSheet.create({});
