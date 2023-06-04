@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import moment from 'moment';
 import validator from 'validator';
 import { z } from 'zod';
@@ -12,17 +11,17 @@ export const loginSchema = z.object({
 export const registerSchema = z.object({
   step1: z.object({
     firstName: z.string().min(3),
-    middleName: z.string().min(3).optional(),
-    lastName: z.string().min(3).optional(),
-    dob: z.string().refine((dob) => {
-      if (_.isNull(dob)) return true;
+    middleName: z.string().optional(),
+    lastName: z.string().optional(),
+    dob: z
+      .string()
+      .optional()
+      .refine((date) => {
+        if (!date) return true;
 
-      return moment(dob).isValid();
-    }),
-    gender: z
-      .enum([GENDER.MALE, GENDER.FEMALE, GENDER.OTHER])
-      .nullable()
-      .default(GENDER.OTHER),
+        return moment(date).isValid();
+      }),
+    gender: z.enum([GENDER.MALE, GENDER.FEMALE, GENDER.OTHER]).optional(),
   }),
   step2: z
     .object({
@@ -41,4 +40,8 @@ export const registerSchema = z.object({
         });
       }
     }),
+});
+
+export const otpSchema = z.object({
+  code: z.string().length(6),
 });

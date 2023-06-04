@@ -7,7 +7,7 @@ export const DEFAULT_REGISTER_VALUE: z.infer<typeof auths.registerSchema> = {
     middleName: '',
     lastName: '',
     dob: '',
-    gender: null,
+    gender: undefined,
   },
   step2: {
     username: '',
@@ -21,4 +21,8 @@ export const DEFAULT_REGISTER_VALUE: z.infer<typeof auths.registerSchema> = {
 export const DEFAULT_LOGIN_VALUE: z.infer<typeof auths.loginSchema> = {
   identifier: '',
   password: '',
+};
+
+export const DEFAULT_OTP_CODE: z.infer<typeof auths.otpSchema> = {
+  code: '',
 };

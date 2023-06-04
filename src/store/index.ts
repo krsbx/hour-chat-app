@@ -1,19 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import thunk from 'redux-thunk';
 import {
-  legacy_createStore as createStore,
   applyMiddleware,
   combineReducers,
+  legacy_createStore as createStore,
 } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistReducer, persistStore } from 'redux-persist';
+import thunk from 'redux-thunk';
 
+import { applyInterceptors } from './axios';
 import * as reducers from './reducers';
 
 const persistedReducer = persistReducer(
   {
     key: 'hour-chat',
     storage: AsyncStorage,
-    whitelist: [],
+    whitelist: ['auth'],
   },
   combineReducers(reducers)
 );
@@ -26,3 +27,5 @@ type AppState = ReturnType<typeof store.getState>;
 
 export type { AppDispatch, AppState };
 export { store, persistor };
+
+applyInterceptors(store.dispatch, store.getState);

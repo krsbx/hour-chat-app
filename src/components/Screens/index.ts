@@ -1,4 +1,5 @@
 import * as Login from './Login';
+import * as Otp from './Otp';
 import * as Register from './Register';
 
-export { Register, Login };
+export { Otp, Register, Login };
