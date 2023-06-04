@@ -67,6 +67,7 @@
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/sequelize": "^4.28.15",
     "@types/validator": "^13.7.17",
     "babel-jest": "^29.2.1",
     "eslint": "^8.19.0",

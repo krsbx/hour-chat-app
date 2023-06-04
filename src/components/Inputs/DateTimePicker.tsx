@@ -90,15 +90,17 @@ const DateTimePicker: React.FC<Props> = ({
     (date: Date) => {
       onConfirmProps?.(date);
       setIsOpen(false);
+      onBlur?.();
     },
-    [onConfirmProps, setIsOpen]
+    [onConfirmProps, setIsOpen, onBlur]
   );
 
   const onDateChange = useCallback(
     (date: Date) => {
       onDateChangeProps?.(date);
+      onBlur?.();
     },
-    [onDateChangeProps]
+    [onDateChangeProps, onBlur]
   );
 
   return (

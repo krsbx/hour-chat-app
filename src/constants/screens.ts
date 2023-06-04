@@ -1,4 +1,5 @@
 export const MAIN_STACK = {
+  LAUNCH: 'launch.screen',
   AUTH: 'auth-stack',
   MAIN: 'bottom-tab',
 } as const;
@@ -6,6 +7,7 @@ export const MAIN_STACK = {
 export const AUTH_STACK = {
   LOGIN: 'auth.login.screen',
   REGISTER: 'auth.register.screen',
+  OTP: 'auth.otp.screen',
 } as const;
 
 export const MAIN_TAB = {

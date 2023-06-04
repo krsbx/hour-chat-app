@@ -1,3 +1,5 @@
+import { GENDER } from '../../src/constants/resources';
+
 export type User = {
   id: number;
   firstName: string;
@@ -6,6 +8,9 @@ export type User = {
   username: string;
   email: string;
   phoneNumber: string;
+  isEmailVerified: boolean;
+  gender: ValueOf<typeof GENDER>;
+  dob: string | Date;
   createdAt: string;
   updatedAt: string;
 };

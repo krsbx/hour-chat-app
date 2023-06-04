@@ -1,32 +1,56 @@
-import { Button } from '@rneui/themed';
-import { AxiosError } from 'axios';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
-import React, { useCallback } from 'react';
-import { KeyboardAvoidingView, ScrollView } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
-import { Inputs } from '../..';
+import { Buttons, Inputs } from '../..';
+import { AUTH_STACK, MAIN_STACK, MAIN_TAB } from '../../../constants/screens';
 import { auths } from '../../../schema';
 import { loginUser as _loginUser } from '../../../store/actions/auth';
+import { onLoginError } from '../../../utils/errors/auth';
 
 const Credentials: React.FC<Props> = ({ loginUser }) => {
+  const navigation =
+    useNavigation<
+      HourChat.Navigation.AuthStackNavigation<typeof AUTH_STACK.LOGIN>
+    >();
   const { errors, handleChange, handleBlur, touched, values, setFieldError } =
     useFormikContext<z.infer<typeof auths.loginSchema>>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const navigateToOtp = useCallback(() => {
+    navigation.replace(AUTH_STACK.OTP);
+  }, [navigation]);
+
+  const navigateToChat = useCallback(() => {
+    navigation.dispatch(
+      StackActions.replace(MAIN_STACK.MAIN, {
+        screen: MAIN_TAB.CHAT,
+      })
+    );
+  }, [navigation]);
 
   const onSubmit = useCallback(async () => {
     try {
-      await loginUser(values);
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        const statusCode = err.response?.status;
+      Keyboard.dismiss();
+      setIsSubmitting(true);
 
-        if (statusCode === 404) {
-          setFieldError('identifier', 'User not found');
-        }
+      const { isEmailVerified } = await loginUser(values);
+
+      if (isEmailVerified) {
+        navigateToChat();
+        return;
       }
+
+      navigateToOtp();
+    } catch (error) {
+      onLoginError(error, setFieldError);
+    } finally {
+      setIsSubmitting(false);
     }
-  }, [loginUser, values, setFieldError]);
+  }, [loginUser, values, navigateToOtp, navigateToChat, setFieldError]);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -55,7 +79,12 @@ const Credentials: React.FC<Props> = ({ loginUser }) => {
           isPassword
         />
       </ScrollView>
-      <Button title="Login" disabled={!_.isEmpty(errors)} onPress={onSubmit} />
+      <Buttons.BaseButton
+        title="Login"
+        disabled={!_.isEmpty(errors)}
+        onPress={onSubmit}
+        loading={isSubmitting}
+      />
     </KeyboardAvoidingView>
   );
 };

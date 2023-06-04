@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { scale } from 'react-native-size-matters';
-import { FONT_SIZE } from '../constants/fonts';
 import { COLOR_PALETTE } from '../utils/theme';
 import { flattenStyle } from './factory';
+import { DEFAULT_TEXT } from './labels';
 
 export const DEFAULT_PADDING = flattenStyle({
   marginHorizontal: 0,
@@ -12,9 +12,9 @@ export const DEFAULT_PADDING = flattenStyle({
 
 export const INPUT = flattenStyle({
   ...DEFAULT_PADDING,
+  ...DEFAULT_TEXT,
   borderRadius: scale(12),
   borderWidth: scale(1),
-  fontSize: scale(FONT_SIZE.EXTRA_SMALL),
   borderColor: COLOR_PALETTE.NEUTRAL_50,
   color: COLOR_PALETTE.BLACK,
 });

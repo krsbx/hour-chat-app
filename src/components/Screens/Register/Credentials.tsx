@@ -1,33 +1,48 @@
-import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Button } from '@rneui/themed';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
-import React, { useCallback } from 'react';
-import { BackHandler, KeyboardAvoidingView, ScrollView } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, ScrollView, View } from 'react-native';
+import { scale } from 'react-native-size-matters';
+import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Inputs } from '../..';
+import { AUTH_STACK } from '../../../constants/screens';
+import useOverwriteBack from '../../../hooks/useOverwriteBack';
 import { auths } from '../../../schema';
+import { registerUser as _registerUser } from '../../../store/actions/auth';
+import { onRegisterError } from '../../../utils/errors/auth';
 
-const Credentials: React.FC<Props> = ({ prevStep }) => {
-  const { errors, handleChange, handleBlur, touched, values } =
+const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
+  const navigation =
+    useNavigation<
+      HourChat.Navigation.AuthStackNavigation<typeof AUTH_STACK.REGISTER>
+    >();
+  const { errors, handleChange, handleBlur, touched, values, setFieldError } =
     useFormikContext<z.infer<typeof auths.registerSchema>>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      const onBackPress = () => {
-        prevStep();
+  useOverwriteBack(prevStep);
 
-        return true;
-      };
+  const navigateToOtp = useCallback(() => {
+    navigation.replace(AUTH_STACK.OTP);
+  }, [navigation]);
 
-      const subs = BackHandler.addEventListener(
-        'hardwareBackPress',
-        onBackPress
-      );
+  const onSubmit = useCallback(async () => {
+    try {
+      Keyboard.dismiss();
+      setIsSubmitting(true);
 
-      return () => subs?.remove?.();
-    }, [prevStep])
-  );
+      await registerUser(values);
+
+      navigateToOtp();
+    } catch (error) {
+      onRegisterError(error, setFieldError);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [registerUser, values, navigateToOtp, setFieldError]);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -94,14 +109,27 @@ const Credentials: React.FC<Props> = ({ prevStep }) => {
           isPassword
         />
       </ScrollView>
-      <Button title={'Prev'} onPress={prevStep} />
-      <Button title={'Sign Up'} disabled={!_.isEmpty(errors.step2)} />
+      <View style={{ rowGap: scale(5) }}>
+        <Button title={'Prev'} onPress={prevStep} disabled={isSubmitting} />
+        <Button
+          title={'Sign Up'}
+          disabled={!_.isEmpty(errors.step2)}
+          onPress={onSubmit}
+          loading={isSubmitting}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 };
 
-type Props = {
+const connector = connect(null, {
+  registerUser: _registerUser,
+});
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & {
   prevStep: () => void;
 };
 
-export default Credentials;
+export default connector(Credentials);

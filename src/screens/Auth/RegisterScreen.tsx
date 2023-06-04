@@ -1,17 +1,37 @@
+import { Text } from '@rneui/base';
 import { Formik } from 'formik';
 import _ from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, View } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { Animated, StyleSheet, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Labels, Screens } from '../../components';
 import { DEFAULT_REGISTER_VALUE } from '../../constants/defaults';
+import { AUTH_STACK } from '../../constants/screens';
 import { WINDOW_WIDTH } from '../../constants/sizes';
 import { auths } from '../../schema';
 import STYLES from '../../styles';
+import { COLOR_PALETTE } from '../../utils/theme';
 
-const RegisterScreen = () => {
+const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const [step, setStep] = useState(1);
   const formFlexSize = useRef(new Animated.Value(0));
+
+  const formStyle = useMemo(() => {
+    const style = {
+      flex: formFlexSize.current,
+      rowGap: scale(10),
+    };
+
+    return style;
+  }, [formFlexSize]);
 
   const nextStep = useCallback(() => {
     setStep((curr) => curr + 1);
@@ -36,6 +56,15 @@ const RegisterScreen = () => {
     ]).start();
   }, []);
 
+  const onPressOnSignIn = useCallback(() => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+
+    navigation.replace(AUTH_STACK.LOGIN);
+  }, [navigation]);
+
   useEffect(() => {
     startAnimation();
   }, [startAnimation]);
@@ -43,7 +72,7 @@ const RegisterScreen = () => {
   return (
     <View style={STYLES.CONTAINERS.AUTH_CONTAINER}>
       <Labels.AppTitle />
-      <Animated.View style={{ flex: formFlexSize.current }}>
+      <Animated.View style={formStyle}>
         <Screens.Register.Indicator
           step={step}
           maxStep={2}
@@ -61,9 +90,33 @@ const RegisterScreen = () => {
             prevStep={prevStep}
           />
         </Formik>
+        <View style={styles.signUpContainer}>
+          <Text style={STYLES.LABELS.DEFAULT_TEXT}>
+            Already have an account?
+          </Text>
+          <TouchableOpacity activeOpacity={0.5} onPress={onPressOnSignIn}>
+            <Text style={[STYLES.LABELS.DEFAULT_TEXT, styles.signUpText]}>
+              Sign In
+            </Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  signUpContainer: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: scale(5),
+  },
+  signUpText: {
+    color: COLOR_PALETTE.BLUE_40,
+    fontWeight: 'bold',
+  },
+});
+
+type Props = HourChat.Navigation.AuthStackProps<typeof AUTH_STACK.REGISTER>;
 
 export default RegisterScreen;
