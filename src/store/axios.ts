@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import _ from 'lodash';
 import { Config } from 'react-native-config';
-import type { AppDispatch } from '.';
+import type { AppDispatch, store } from '.';
 import {
   overwriteResource,
   setResource,
@@ -13,14 +12,17 @@ const instance = axios.create({
   baseURL: Config.API_URL,
 });
 
-export const applyInterceptors = (dispatch: AppDispatch) => {
+export const applyInterceptors = (
+  dispatch: AppDispatch,
+  getState: typeof store.getState
+) => {
   instance.interceptors.request.use(
     async (config) => {
-      // Probably need to change the async storage item name to a const
-      const token = await AsyncStorage.getItem('token');
+      const token = getState().auth.token;
 
       if (config.headers) {
-        config.headers.Authorization = token ? `Bearer ${token}` : '';
+        if (!config.headers.Authorization)
+          config.headers.Authorization = token ? `Bearer ${token}` : '';
 
         if (_.isString(config.headers.resourceName))
           config.resourceName = <HourChat.Type.ResourceName>(

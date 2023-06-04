@@ -1,6 +1,7 @@
 export enum AuthActionType {
   LOGIN = 'auth.login',
   LOGOUT = 'auth.logout',
+  UPDATE = 'auth.update',
 }
 
 export type AuthReducer = HourChat.Resource.User & {
@@ -14,4 +15,9 @@ export type SetAuthToken = {
 
 export type RemoveAuthToken = {
   type: AuthActionType.LOGOUT;
+};
+
+export type UpdateAuthData = {
+  type: AuthActionType.UPDATE;
+  payload: Partial<AuthReducer>;
 };

@@ -15,7 +15,7 @@ const AuthStack = () => {
     >
       <Stack.Screen name={AUTH_STACK.LOGIN} component={Auth.Login} />
       <Stack.Screen name={AUTH_STACK.REGISTER} component={Auth.Register} />
-      <Stack.Screen name={AUTH_STACK.OTP} component={() => null} />
+      <Stack.Screen name={AUTH_STACK.OTP} component={Auth.Otp} />
     </Stack.Navigator>
   );
 };

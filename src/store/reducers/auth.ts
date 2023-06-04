@@ -5,6 +5,7 @@ import {
   AuthReducer,
   RemoveAuthToken,
   SetAuthToken,
+  UpdateAuthData,
 } from '../actions-types/auth';
 
 const initialState = {
@@ -13,7 +14,7 @@ const initialState = {
 
 const reducer = (
   state = _.cloneDeep(initialState),
-  action: SetAuthToken | RemoveAuthToken
+  action: SetAuthToken | RemoveAuthToken | UpdateAuthData
 ) => {
   switch (action.type) {
     case ActionType.LOGIN: {
@@ -26,6 +27,13 @@ const reducer = (
 
     case ActionType.LOGOUT: {
       return _.cloneDeep(initialState);
+    }
+
+    case ActionType.UPDATE: {
+      return {
+        ...state,
+        ...action.payload,
+      };
     }
 
     default: {

@@ -7,6 +7,20 @@ import { auths } from '../../schema';
 import { AuthActionType } from '../actions-types/auth';
 import axios from '../axios';
 
+export const requestEmailOtp = (token?: string) => async () => {
+  const headers = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  if (token) {
+    return axios.post('/email-otps', {}, headers);
+  }
+
+  return axios.post('/email-otps', {});
+};
+
 export const loginUser =
   (payload: { identifier: string; password: string }) =>
   async (dispatch: AppDispatch) => {
@@ -18,10 +32,11 @@ export const loginUser =
     });
 
     const { data } = await axios.post('/auth/login', payload);
+    const { token } = data.data;
 
     dispatch({
       type: AuthActionType.LOGIN,
-      payload: data.data,
+      payload: token,
     });
 
     const decoded = jwtDecode<HourChat.Resource.User>(data.data);
@@ -44,8 +59,27 @@ export const registerUser =
 
     const { data } = await axios.post('/auth/register', newPayload);
 
+    const { token } = data.data;
+
     dispatch({
       type: AuthActionType.LOGIN,
-      payload: data.data,
+      payload: token,
+    });
+
+    await requestEmailOtp(token)();
+
+    return token;
+  };
+
+export const verifyEmail =
+  ({ code }: z.infer<typeof auths.otpSchema>) =>
+  async (dispatch: AppDispatch) => {
+    await axios.post(`/email-otps/verify?code=${code}`);
+
+    dispatch({
+      type: AuthActionType.UPDATE,
+      payload: {
+        isEmailVerified: true,
+      },
     });
   };

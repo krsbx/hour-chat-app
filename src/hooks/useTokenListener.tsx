@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { AUTH_STACK, MAIN_STACK, MAIN_TAB } from '../constants/screens';
@@ -13,9 +13,7 @@ const useTokenListener = (isCallable: boolean) => {
     >();
 
   const navigateToLogin = useCallback(() => {
-    navigation.replace(MAIN_STACK.AUTH, {
-      screen: AUTH_STACK.LOGIN,
-    });
+    navigation.dispatch(StackActions.replace(MAIN_STACK.AUTH));
   }, [navigation]);
 
   const navigateToChat = useCallback(() => {

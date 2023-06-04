@@ -10,6 +10,8 @@ export const onRegisterError = <T>(
   if (!isAxiosError(error)) return;
   const response = error.response?.data;
 
+  if (!response) return;
+
   if (hasOwnProperty(response, 'name') && hasOwnProperty(response, 'errors')) {
     const { errors }: UniqueConstraintError | ValidationError = response;
     _.map(errors, ({ path }) => {
