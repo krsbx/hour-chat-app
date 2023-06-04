@@ -1,13 +1,15 @@
-import _ from 'lodash';
 import jwtDecode from 'jwt-decode';
+import _ from 'lodash';
 import {
-  AuthReducer,
-  SetAuthToken,
-  RemoveAuthToken,
   AuthActionType as ActionType,
+  AuthReducer,
+  RemoveAuthToken,
+  SetAuthToken,
 } from '../actions-types/auth';
 
-const initialState = {} as AuthReducer;
+const initialState = {
+  token: null,
+} as AuthReducer;
 
 const reducer = (
   state = _.cloneDeep(initialState),
@@ -23,9 +25,7 @@ const reducer = (
     }
 
     case ActionType.LOGOUT: {
-      return {
-        token: null,
-      };
+      return _.cloneDeep(initialState);
     }
 
     default: {

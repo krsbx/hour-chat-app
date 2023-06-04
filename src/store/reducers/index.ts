@@ -1,3 +1,4 @@
+import auth from './auth';
 import resources from './resources';
 
-export { resources };
+export { auth, resources };

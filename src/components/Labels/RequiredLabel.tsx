@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
-import { scale } from 'react-native-size-matters';
-import { StyleProp, StyleSheet, TextStyle, View } from 'react-native';
 import { Text, TextProps } from '@rneui/base';
+import React, { useMemo } from 'react';
+import { StyleProp, TextStyle, View } from 'react-native';
+import { scale } from 'react-native-size-matters';
 import STYLES from '../../styles';
+import { flattenStyle } from '../../styles/factory';
 
 const RequiredLabel: React.FC<Props> = ({
   isRequired,
@@ -14,10 +15,9 @@ const RequiredLabel: React.FC<Props> = ({
     const textStyles: StyleProp<TextStyle>[] = [STYLES.LABELS.REQUIRED_LABEL];
 
     if (style) textStyles.push(style);
-    if (isRequired) textStyles.push(styles.marginRight);
 
     return textStyles;
-  }, [isRequired, style]);
+  }, [style]);
 
   const starStyle = useMemo(() => {
     const requiredStyles: StyleProp<TextStyle>[] = [
@@ -30,23 +30,19 @@ const RequiredLabel: React.FC<Props> = ({
   }, [requiredStyle]);
 
   return (
-    <View style={styles.inline}>
+    <View style={inlineStyle}>
       <Text {...props} style={textStyle} />
       {isRequired && <Text style={starStyle}>*</Text>}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  inline: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    marginBottom: scale(5),
-  },
-  marginRight: {
-    marginRight: scale(2),
-  },
+const inlineStyle = flattenStyle({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'flex-end',
+  marginBottom: scale(5),
+  columnGap: scale(2),
 });
 
 type Props = TextProps & {
