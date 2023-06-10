@@ -4,20 +4,23 @@ import {
   combineReducers,
   legacy_createStore as createStore,
 } from 'redux';
+import { getPersistConfig } from 'redux-deep-persist';
 import { persistReducer, persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 
 import { applyInterceptors } from './axios';
 import * as reducers from './reducers';
 
-const persistedReducer = persistReducer(
-  {
-    key: 'hour-chat',
-    storage: AsyncStorage,
-    whitelist: ['auth'],
-  },
-  combineReducers(reducers)
-);
+const rootReducer = combineReducers(reducers);
+
+const persistConfig = getPersistConfig({
+  key: 'hour-chat',
+  storage: AsyncStorage,
+  whitelist: ['auth', 'resources.users'],
+  rootReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = createStore(persistedReducer, applyMiddleware(thunk));
 const persistor = persistStore(store);

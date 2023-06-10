@@ -1,4 +1,5 @@
 import { ResourceAction as ActionType } from '../actions-types/resources';
+import axios from '../axios';
 
 export const setResource = <
   T extends HourChat.Type.ResourceName,
@@ -8,6 +9,14 @@ export const setResource = <
   payload: U | U[]
 ) => ({
   type: ActionType[resourceName].SET,
+  payload,
+});
+
+export const setResourcePage = <T extends HourChat.Type.ResourceName>(
+  resourceName: T,
+  payload: Partial<HourChat.Store.ResourcePage>
+) => ({
+  type: ActionType[resourceName].SET_PAGE,
   payload,
 });
 
@@ -43,3 +52,24 @@ export const deleteResource = <
   type: ActionType[resourceName].DELETE,
   payload, // id
 });
+
+export const getResourceById =
+  <T extends HourChat.Type.ResourceName>(
+    resourceName: T,
+    id: string | number,
+    query = '',
+    overwrite = false
+  ) =>
+  async () => {
+    const { data } = await axios.get<{ data: HourChat.Store.Resource[T] }>(
+      `/${resourceName}/${id}?${query}`,
+      {
+        headers: {
+          resourceName,
+          overwrite,
+        },
+      }
+    );
+
+    return data.data;
+  };

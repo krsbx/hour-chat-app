@@ -8,7 +8,7 @@ export type ResourcePage = {
 };
 
 export type StoredResource<T> = {
-  data: Map<T['id'], T | Partial<T>>;
+  data: Record<T['id'], T | Partial<T>>;
   page: ResourcePage;
 };
 
@@ -29,6 +29,7 @@ export type Action<T extends HourChat.Type.ResourceName> = {
   UPDATE: `resources.${T}.update`;
   OVERWRITE: `resources.${T}.overwrite`;
   DELETE: `resources.${T}.delete`;
+  SET_PAGE: `resources.${T}.set.page`;
 };
 
 export type SetAction<T extends HourChat.Type.ResourceName> = {
@@ -54,6 +55,11 @@ export type DeleteAction<T extends HourChat.Type.ResourceName> = {
   payload: Resource[T]['id'];
 };
 
+export type SetPageAction<T extends HourChat.Type.ResourceName> = {
+  type: Action<T>['SET_PAGE'];
+  payload: Partial<ResourcePage>;
+};
+
 export type ResourceAction = {
   [RESOURCE_NAME.USERS]: Action<typeof RESOURCE_NAME.USERS>;
   [RESOURCE_NAME.DEVICE_TOKENS]: Action<typeof RESOURCE_NAME.DEVICE_TOKENS>;
@@ -64,4 +70,5 @@ export type StoreAction<T extends HourChat.Type.ResourceName> =
   | SetAction<T>
   | UpdateAction<T>
   | OverwriteAction<T>
-  | DeleteAction<T>;
+  | DeleteAction<T>
+  | SetPageAction<T>;

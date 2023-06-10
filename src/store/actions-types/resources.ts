@@ -8,6 +8,7 @@ const createResourceActionType = <T extends HourChat.Type.ResourceName>(
   UPDATE: `resources.${resourceName}.update`,
   OVERWRITE: `resources.${resourceName}.overwrite`,
   DELETE: `resources.${resourceName}.delete`,
+  SET_PAGE: `resources.${resourceName}.set.page`,
 });
 
 export const ResourceAction = _.reduce(

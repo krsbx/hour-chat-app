@@ -1,13 +1,16 @@
 import _ from 'lodash';
 import { combineReducers } from 'redux';
 import { RESOURCE_NAME } from '../../constants/common';
-import { hasOwnProperty } from '../../utils/common';
+import {
+  addExpirationTime,
+  hasOwnProperty,
+  isExpireable,
+  toArray,
+} from '../../utils/common';
 import { ResourceAction } from '../actions-types/resources';
 
-const toArray = <T>(value: T) => (_.isArray(value) ? value : [value]) as T[];
-
-const createInitialState = () => ({
-  data: new Map(),
+const createInitialState = <T extends HourChat.Type.ResourceName>() => ({
+  data: {} as HourChat.Store.ResourceRecord[T]['data'],
   page: {
     size: 0,
     total: 0,
@@ -27,13 +30,16 @@ const reducer = <T extends HourChat.Type.ResourceName>(resourceName: T) => {
       case ActionType.SET: {
         if (_.isString(action.payload)) return state;
 
-        toArray(action.payload).forEach((data) => {
-          const newData = data as HourChat.Store.Resource[T];
-          state.data.set(newData.id, newData as never);
-        });
+        const datas = toArray(action.payload) as HourChat.Store.Resource[T][];
+
+        if (isExpireable(resourceName)) addExpirationTime(datas);
 
         return {
           ...state,
+          data: {
+            ...state.data,
+            ..._.keyBy(datas, 'id'),
+          },
         };
       }
 
@@ -49,39 +55,49 @@ const reducer = <T extends HourChat.Type.ResourceName>(resourceName: T) => {
         )
           return state;
 
-        state.data.set(action.payload.id, action.payload.data);
-
         return {
           ...state,
+          data: {
+            ...state.data,
+            [action.payload.id]: {
+              ...state.data[action.payload.id],
+              ...action.payload.data,
+            },
+          },
         };
       }
 
       case ActionType.OVERWRITE: {
-        if (_.isString(action.payload)) return state;
+        if (_.isNumber(action.payload)) return state;
 
-        state.data.clear();
+        const datas = toArray(action.payload) as HourChat.Store.Resource[T][];
 
-        const datas = _.isArray(action.payload)
-          ? action.payload
-          : [action.payload];
-
-        _.forEach(datas, (data) => {
-          const newData = data as HourChat.Store.Resource[T];
-          state.data.set(newData.id, newData as never);
-        });
+        if (isExpireable(resourceName)) addExpirationTime(datas);
 
         return {
           ...state,
+          data: _.keyBy(datas, 'id'),
         };
       }
 
       case ActionType.DELETE: {
-        if (!_.isString(action.payload)) return state;
-
-        state.data.delete(action.payload);
+        if (!_.isNumber(action.payload)) return state;
 
         return {
           ...state,
+          data: _.omit(state.data, action.payload),
+        };
+      }
+
+      case ActionType.SET_PAGE: {
+        if (_.isNumber(action.payload)) return state;
+
+        return {
+          ...state,
+          page: {
+            ...state.page,
+            ...action.payload,
+          },
         };
       }
 
