@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { Animated, Keyboard, Pressable } from 'react-native';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import useAuthFormAnimation from '../../animations/useAuthFormAnimation';
-import { Labels } from '../../components';
+import { Label } from '../../components';
 import { Otp } from '../../components/Screens';
 import { DEFAULT_OTP_CODE } from '../../constants/defaults';
 import { auths } from '../../schema';
@@ -20,7 +20,7 @@ const OtpScreen: React.FC = () => {
       style={STYLES.CONTAINERS.AUTH_CONTAINER}
       onPress={Keyboard.dismiss}
     >
-      <Labels.AppTitle />
+      <Label.AppTitle />
       <Animated.View style={{ flex: flexSize }}>
         <Formik
           validationSchema={toFormikValidationSchema(auths.otpSchema)}

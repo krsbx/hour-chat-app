@@ -3,7 +3,7 @@ import { scale } from 'react-native-size-matters';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { COLOR_PALETTE } from '../../../utils/theme';
 
-const NearMe: React.FC<Props> = ({ focused, size }) => {
+const NearMeIcon: React.FC<Props> = ({ focused, size }) => {
   return (
     <MaterialIcons
       name="location-pin"
@@ -15,4 +15,4 @@ const NearMe: React.FC<Props> = ({ focused, size }) => {
 
 type Props = HourChat.Navigation.TabIcon;
 
-export default NearMe;
+export default NearMeIcon;

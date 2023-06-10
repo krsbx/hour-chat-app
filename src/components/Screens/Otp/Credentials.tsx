@@ -7,7 +7,7 @@ import { Keyboard, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
-import { Buttons, Inputs } from '../..';
+import { Buttons, Input } from '../..';
 import { AUTH_STACK, MAIN_STACK, MAIN_TAB } from '../../../constants/screens';
 import { auths } from '../../../schema';
 import {
@@ -64,7 +64,7 @@ const Credentials: React.FC<Props> = ({ requestEmailOtp, verifyEmail }) => {
       }}
     >
       <View style={{ justifyContent: 'center' }}>
-        <Inputs.OtpField
+        <Input.OtpField
           value={values.code}
           onChangeText={handleChange('code')}
           maxLength={6}

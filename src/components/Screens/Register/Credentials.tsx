@@ -7,7 +7,7 @@ import { Keyboard, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
-import { Inputs } from '../..';
+import { Input } from '../..';
 import { AUTH_STACK } from '../../../constants/screens';
 import useOverwriteBack from '../../../hooks/useOverwriteBack';
 import { auths } from '../../../schema';
@@ -47,7 +47,7 @@ const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'E-mail'}
           errorMessage={errors.step2?.email}
@@ -58,7 +58,7 @@ const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
           placeholder={'example@example.com'}
           value={values.step2.email}
         />
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'Username'}
           errorMessage={errors.step2?.username}
@@ -69,7 +69,7 @@ const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
           placeholder={'Your username'}
           value={values.step2.username}
         />
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'Phone Number'}
           errorMessage={errors.step2?.phoneNumber}
@@ -80,7 +80,7 @@ const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
           placeholder={'Your phone number'}
           value={values.step2.phoneNumber}
         />
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'Password'}
           errorMessage={errors.step2?.password}
@@ -92,7 +92,7 @@ const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
           placeholder={'Your password'}
           isPassword
         />
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'Confirm Password'}
           errorMessage={errors.step2?.confirmPassword}

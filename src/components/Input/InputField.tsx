@@ -10,7 +10,7 @@ import {
 import MaskInput, { Mask } from 'react-native-mask-input';
 import { scale } from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { Labels } from '..';
+import { Label } from '..';
 import { FONT_SIZE } from '../../constants/fonts';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
@@ -41,7 +41,7 @@ const InputField = React.forwardRef<TextInput, Props>(
       if (!props.label) return;
 
       return (
-        <Labels.RequiredLabel
+        <Label.RequiredLabel
           style={props.labelStyle}
           children={props.label}
           isRequired={isRequired}

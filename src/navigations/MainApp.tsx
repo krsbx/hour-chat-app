@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { scale } from 'react-native-size-matters';
-import { Buttons, Icons } from '../components';
+import { Buttons, Icon } from '../components';
 import { MAIN_TAB } from '../constants/screens';
 
 const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
@@ -29,7 +29,7 @@ const MainApp = () => {
         name={MAIN_TAB.CHAT}
         component={Empty}
         options={{
-          tabBarIcon: Icons.Mains.Chat,
+          tabBarIcon: Icon.Main.Chat,
           tabBarLabel: 'Chat',
         }}
       />
@@ -37,7 +37,7 @@ const MainApp = () => {
         name={MAIN_TAB.NEAR_ME}
         component={Empty}
         options={{
-          tabBarIcon: Icons.Mains.NearMe,
+          tabBarIcon: Icon.Main.NearMe,
           tabBarLabel: 'Near Me',
         }}
       />
@@ -45,7 +45,7 @@ const MainApp = () => {
         name={MAIN_TAB.PROFILE}
         component={Empty}
         options={{
-          tabBarIcon: Icons.Mains.Profile,
+          tabBarIcon: Icon.Main.Profile,
           tabBarLabel: 'Profile',
         }}
       />

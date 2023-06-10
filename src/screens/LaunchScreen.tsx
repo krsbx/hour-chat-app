@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
-import { Labels } from '../components';
+import { Label } from '../components';
 import useTokenListener from '../hooks/useTokenListener';
 import { COLOR_PALETTE } from '../utils/theme';
 
@@ -30,7 +30,7 @@ const LaunchScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
       <Animated.View style={{ flex: 1, opacity: opacity.current }}>
-        <Labels.AppTitle />
+        <Label.AppTitle />
       </Animated.View>
     </View>
   );
