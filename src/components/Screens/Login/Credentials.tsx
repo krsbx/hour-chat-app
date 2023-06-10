@@ -5,7 +5,7 @@ import React, { useCallback, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
-import { Buttons, Inputs } from '../..';
+import { Buttons, Input } from '../..';
 import { AUTH_STACK, MAIN_STACK, MAIN_TAB } from '../../../constants/screens';
 import { auths } from '../../../schema';
 import { loginUser as _loginUser } from '../../../store/actions/auth';
@@ -55,7 +55,7 @@ const Credentials: React.FC<Props> = ({ loginUser }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'E-mail/Username'}
           errorMessage={errors.identifier}
@@ -66,7 +66,7 @@ const Credentials: React.FC<Props> = ({ loginUser }) => {
           placeholder={'Your e-mail/username'}
           value={values.identifier}
         />
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'Password'}
           errorMessage={errors.password}

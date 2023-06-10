@@ -1,8 +1,8 @@
 import * as Buttons from './Buttons';
-import * as Icons from './Icons';
-import * as Inputs from './Inputs';
-import * as Labels from './Labels';
+import * as Icon from './Icon';
+import * as Input from './Input';
+import * as Label from './Label';
 import * as Screens from './Screens';
-import * as Wrappers from './Wrappers';
+import * as Wrapper from './Wrapper';
 
-export { Buttons, Icons, Inputs, Labels, Wrappers, Screens };
+export { Buttons, Icon, Input, Label, Wrapper, Screens };

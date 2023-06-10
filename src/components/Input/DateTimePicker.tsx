@@ -10,10 +10,10 @@ import {
   ViewStyle,
 } from 'react-native';
 import DatePicker, { DatePickerProps } from 'react-native-date-picker';
-import { Wrappers } from '..';
+import { Wrapper } from '..';
 import useDateTimeStyle from '../../hooks/useDateTimeStyle';
 import STYLES from '../../styles';
-import { RequiredLabel } from '../Labels';
+import { RequiredLabel } from '../Label';
 
 const DateTimePicker: React.FC<Props> = ({
   value,
@@ -114,7 +114,7 @@ const DateTimePicker: React.FC<Props> = ({
           activeOpacity={1}
           onPress={onPress}
         >
-          <Wrappers.LeftRightIcon
+          <Wrapper.LeftRightIcon
             leftIcon={leftIcon}
             leftIconContainerStyle={leftIconContainerStyle}
             rightIcon={rightIcon}
@@ -123,7 +123,7 @@ const DateTimePicker: React.FC<Props> = ({
             <Text style={style.textStyles}>
               {isValidDate ? moment(date).format(format) : placeholder ?? ''}
             </Text>
-          </Wrappers.LeftRightIcon>
+          </Wrapper.LeftRightIcon>
         </TouchableOpacity>
         {isError && !!errorMessage && (
           <Text style={errorStyle}>{errorMessage}</Text>

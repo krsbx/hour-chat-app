@@ -6,7 +6,7 @@ import { Animated, Easing, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { Labels, Screens } from '../../components';
+import { Label, Screens } from '../../components';
 import { DEFAULT_LOGIN_VALUE } from '../../constants/defaults';
 import { AUTH_STACK } from '../../constants/screens';
 import { auths } from '../../schema';
@@ -59,7 +59,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={STYLES.CONTAINERS.AUTH_CONTAINER}>
-      <Labels.AppTitle />
+      <Label.AppTitle />
       <Animated.View style={[formStyle]}>
         <Formik
           validationSchema={toFormikValidationSchema(auths.loginSchema)}

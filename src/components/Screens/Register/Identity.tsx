@@ -4,7 +4,7 @@ import _ from 'lodash';
 import React from 'react';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
 import { z } from 'zod';
-import { Inputs } from '../..';
+import { Input } from '../..';
 import { GENDERS } from '../../../constants/resources';
 import { auths } from '../../../schema';
 
@@ -15,7 +15,7 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        <Inputs.InputField
+        <Input.InputField
           isRequired
           label={'First Name'}
           errorMessage={errors.step1?.firstName}
@@ -26,7 +26,7 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           placeholder={'Your firstname'}
           value={values.step1.firstName}
         />
-        <Inputs.InputField
+        <Input.InputField
           label={'Middle Name'}
           errorMessage={errors.step1?.middleName}
           onChangeText={handleChange('step1.middleName')}
@@ -34,7 +34,7 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           placeholder={'Your middleName'}
           value={values.step1.middleName}
         />
-        <Inputs.InputField
+        <Input.InputField
           label={'Last Name'}
           errorMessage={errors.step1?.lastName}
           onChangeText={handleChange('step1.lastName')}
@@ -42,7 +42,7 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           placeholder={'Your lastName'}
           value={values.step1.lastName}
         />
-        <Inputs.DateTimePicker
+        <Input.DateTimePicker
           onConfirm={(date) => handleChange('step1.dob')(date.toISOString())}
           value={values.step1.dob}
           placeholder={'dd/mm/yyyy'}
@@ -54,7 +54,7 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           label={'Date of Birth'}
           isRequired
         />
-        <Inputs.Dropdown
+        <Input.Dropdown
           data={GENDERS}
           labelField={'label'}
           valueField={'value'}
