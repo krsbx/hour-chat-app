@@ -51,4 +51,5 @@ export const AUTH_CONTAINER = {
   flex: 1,
   paddingVertical: scale(20),
   paddingHorizontal: scale(10),
+  backgroundColor: COLOR_PALETTE.WHITE,
 };

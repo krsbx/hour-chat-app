@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Easing, View } from 'react-native';
 import { Labels } from '../components';
 import useTokenListener from '../hooks/useTokenListener';
+import { COLOR_PALETTE } from '../utils/theme';
 
 const LaunchScreen = () => {
   const opacity = useRef(new Animated.Value(0));
@@ -27,7 +28,7 @@ const LaunchScreen = () => {
   }, [startAnimation]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
       <Animated.View style={{ flex: 1, opacity: opacity.current }}>
         <Labels.AppTitle />
       </Animated.View>

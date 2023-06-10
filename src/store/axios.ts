@@ -2,9 +2,11 @@ import axios from 'axios';
 import _ from 'lodash';
 import { Config } from 'react-native-config';
 import type { AppDispatch, store } from '.';
+import { hasOwnProperty } from '../utils/common';
 import {
   overwriteResource,
   setResource,
+  setResourcePage,
   updateResource,
 } from './actions/resources';
 
@@ -45,16 +47,20 @@ export const applyInterceptors = (
     if (!config.resourceName) return res;
 
     if (config.overwrite) {
-      dispatch(overwriteResource(config.resourceName, data));
+      dispatch(overwriteResource(config.resourceName, data.data));
     } else if (config.method === 'patch') {
       dispatch(
         updateResource(config.resourceName, {
-          id: data.id,
-          data,
+          id: data.data.id,
+          data: data.data,
         }) as never
       );
     } else {
-      dispatch(setResource(config.resourceName, data));
+      if (hasOwnProperty<HourChat.Store.ResourcePage>(data, 'page')) {
+        dispatch(setResourcePage(config.resourceName, data.page));
+      }
+
+      dispatch(setResource(config.resourceName, data.data));
     }
 
     return res;

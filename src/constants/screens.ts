@@ -10,6 +10,12 @@ export const AUTH_STACK = {
   OTP: 'auth.otp.screen',
 } as const;
 
+export const CHAT_STACK = {
+  LIST: 'chat.list.screen',
+  VIEW: 'chat.view.screen',
+  DETAIL: 'chat.detail.screen',
+} as const;
+
 export const MAIN_TAB = {
   CHAT: 'bottom.chat.screen',
   NEAR_ME: 'bottom.near-me.screen',

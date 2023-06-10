@@ -3,7 +3,16 @@ import { Timestamp } from '@firebase/firestore';
 export type MessageData = {
   senderId: number;
   timestamp: Timestamp;
-  body: number;
+  body: string;
+};
+
+export type PrivateMetadata = MessageData & {
+  uuid: string; // receiverId
+};
+
+export type GroupMetadata = MessageData & {
+  name: string;
+  uuid: string;
 };
 
 export type Metadata =
@@ -16,3 +25,9 @@ export type Metadata =
       timestamp: Timestamp;
       typing;
     };
+
+export type ChatMessageHistory = PrivateMetadata | GroupMetadata;
+
+export type PrivateMessageHistory = Record<number, PrivateMetadata>;
+
+export type GroupMessageHistory = Record<number, GroupMetadata>;

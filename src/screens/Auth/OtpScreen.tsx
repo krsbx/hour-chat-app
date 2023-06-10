@@ -1,8 +1,9 @@
 import { Formik } from 'formik';
 import _ from 'lodash';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Animated, Keyboard, Pressable } from 'react-native';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import useAuthFormAnimation from '../../animations/useAuthFormAnimation';
 import { Labels } from '../../components';
 import { Otp } from '../../components/Screens';
 import { DEFAULT_OTP_CODE } from '../../constants/defaults';
@@ -10,29 +11,9 @@ import { auths } from '../../schema';
 import STYLES from '../../styles';
 
 const OtpScreen: React.FC = () => {
-  const formFlexSize = useRef(new Animated.Value(0));
+  const { flexSize, startAnimation } = useAuthFormAnimation();
 
-  const formStyle = useMemo(() => {
-    const style = {
-      flex: formFlexSize.current,
-    };
-
-    return style;
-  }, [formFlexSize]);
-
-  const startAnimation = useCallback(() => {
-    Animated.sequence([
-      Animated.timing(formFlexSize.current, {
-        toValue: 5,
-        duration: 1000,
-        useNativeDriver: false,
-      }),
-    ]).start();
-  }, []);
-
-  useEffect(() => {
-    startAnimation();
-  }, [startAnimation]);
+  useEffect(startAnimation, [startAnimation]);
 
   return (
     <Pressable
@@ -40,7 +21,7 @@ const OtpScreen: React.FC = () => {
       onPress={Keyboard.dismiss}
     >
       <Labels.AppTitle />
-      <Animated.View style={[formStyle]}>
+      <Animated.View style={{ flex: flexSize }}>
         <Formik
           validationSchema={toFormikValidationSchema(auths.otpSchema)}
           initialValues={_.cloneDeep(DEFAULT_OTP_CODE)}

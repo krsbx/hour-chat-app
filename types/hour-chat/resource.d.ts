@@ -13,6 +13,7 @@ export type User = {
   dob: string | Date;
   createdAt: string;
   updatedAt: string;
+  expiredAt: string;
 };
 
 export type DeviceToken = {

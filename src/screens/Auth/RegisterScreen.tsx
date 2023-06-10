@@ -1,17 +1,12 @@
 import { Text } from '@rneui/base';
 import { Formik } from 'formik';
 import _ from 'lodash';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import useAuthFormAnimation from '../../animations/useAuthFormAnimation';
 import { Labels, Screens } from '../../components';
 import { DEFAULT_REGISTER_VALUE } from '../../constants/defaults';
 import { AUTH_STACK } from '../../constants/screens';
@@ -22,16 +17,16 @@ import { COLOR_PALETTE } from '../../utils/theme';
 
 const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   const [step, setStep] = useState(1);
-  const formFlexSize = useRef(new Animated.Value(0));
+  const { flexSize, startAnimation } = useAuthFormAnimation();
 
   const formStyle = useMemo(() => {
     const style = {
-      flex: formFlexSize.current,
+      flex: flexSize,
       rowGap: scale(10),
     };
 
     return style;
-  }, [formFlexSize]);
+  }, [flexSize]);
 
   const nextStep = useCallback(() => {
     setStep((curr) => curr + 1);
@@ -46,15 +41,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     setStep((curr) => curr - 1);
   }, [step, setStep]);
 
-  const startAnimation = useCallback(() => {
-    Animated.sequence([
-      Animated.timing(formFlexSize.current, {
-        toValue: 5,
-        duration: 1000,
-        useNativeDriver: false,
-      }),
-    ]).start();
-  }, []);
+  useEffect(startAnimation, [startAnimation]);
 
   const onPressOnSignIn = useCallback(() => {
     if (navigation.canGoBack()) {
