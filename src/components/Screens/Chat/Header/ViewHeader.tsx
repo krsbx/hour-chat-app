@@ -2,7 +2,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { Text } from '@rneui/base';
 import _ from 'lodash';
 import React, { useCallback } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { FONT_SIZE } from '../../../../constants/fonts';
@@ -29,19 +29,7 @@ const ViewHeader: React.FC<Props> = ({ name, type }) => {
   useOverwriteBack(onPressOnBack);
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        backgroundColor: COLOR_PALETTE.BLUE_10,
-        alignItems: 'center',
-        paddingHorizontal: scale(10),
-        height: scale(45),
-        gap: scale(10),
-        borderBottomWidth: 1,
-        borderBottomColor: COLOR_PALETTE.NEUTRAL_40,
-      }}
-    >
+    <View style={style.container}>
       <TouchableOpacity onPress={onPressOnBack}>
         <IonIcons
           name="arrow-back"
@@ -49,34 +37,38 @@ const ViewHeader: React.FC<Props> = ({ name, type }) => {
           color={COLOR_PALETTE.WHITE}
         />
       </TouchableOpacity>
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: scale(5),
-          flex: 1,
-        }}
-      >
-        <Text
-          style={[
-            STYLES.LABELS.DEFAULT_TEXT,
-            { color: COLOR_PALETTE.WHITE, fontWeight: 'bold' },
-          ]}
-        >
-          [{_.capitalize(type)}]
-        </Text>
-        <Text
-          style={[
-            STYLES.LABELS.DEFAULT_TEXT,
-            { color: COLOR_PALETTE.WHITE, fontWeight: 'bold' },
-          ]}
-        >
-          {name}
-        </Text>
+      <View style={style.titleContainer}>
+        <Text style={style.title}>[{_.capitalize(type)}]</Text>
+        <Text style={style.title}>{name}</Text>
       </View>
       <View />
     </View>
   );
 };
+
+const style = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    backgroundColor: COLOR_PALETTE.BLUE_10,
+    alignItems: 'center',
+    paddingHorizontal: scale(10),
+    height: scale(45),
+    gap: scale(10),
+    borderBottomWidth: 1,
+    borderBottomColor: COLOR_PALETTE.NEUTRAL_40,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    gap: scale(5),
+    flex: 1,
+  },
+  title: {
+    ...STYLES.LABELS.DEFAULT_TEXT,
+    color: COLOR_PALETTE.WHITE,
+    fontWeight: 'bold',
+  },
+});
 
 type Props = {
   name: string;

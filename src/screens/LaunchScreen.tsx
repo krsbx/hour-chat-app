@@ -5,21 +5,17 @@ import useTokenListener from '../hooks/useTokenListener';
 import { COLOR_PALETTE } from '../utils/theme';
 
 const LaunchScreen = () => {
-  const opacity = useRef(new Animated.Value(0));
+  const opacity = useRef(new Animated.Value(0)).current;
   const [isCompleted, setIsCompleted] = useState(false);
 
   const startAnimation = useCallback(() => {
-    Animated.timing(opacity.current, {
+    Animated.timing(opacity, {
       toValue: 1,
       duration: 1000,
       easing: Easing.elastic(0.5),
       useNativeDriver: false,
-    }).start();
-
-    opacity.current.addListener((state) => {
-      setIsCompleted(state.value >= 1);
-    });
-  }, []);
+    }).start(() => setIsCompleted(true));
+  }, [opacity]);
 
   useTokenListener(isCompleted);
 
@@ -29,7 +25,7 @@ const LaunchScreen = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
-      <Animated.View style={{ flex: 1, opacity: opacity.current }}>
+      <Animated.View style={{ flex: 1, opacity: opacity }}>
         <Label.AppTitle />
       </Animated.View>
     </View>

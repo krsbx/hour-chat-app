@@ -1,8 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import _ from 'lodash';
 import React from 'react';
 import { scale } from 'react-native-size-matters';
 import { Buttons, Icon } from '../components';
-import { MAIN_TAB } from '../constants/screens';
+import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
+import ChatStack from './ChatStack';
 
 const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
 
@@ -27,10 +30,20 @@ const MainApp = () => {
     >
       <Tab.Screen
         name={MAIN_TAB.CHAT}
-        component={Empty}
-        options={{
-          tabBarIcon: Icon.Main.Chat,
-          tabBarLabel: 'Chat',
+        component={ChatStack}
+        options={({ route }) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+          const isHideable = _.includes(TAB_HIDEABLE, routeName);
+
+          return {
+            tabBarIcon: Icon.Main.Chat,
+            tabBarLabel: 'Chat',
+            ...(isHideable && {
+              tabBarStyle: {
+                display: 'none',
+              },
+            }),
+          };
         }}
       />
       <Tab.Screen
