@@ -54,10 +54,11 @@ const InputField = React.forwardRef<TextInput, Props>(
 
       if (isError) styles.push(STYLES.INPUTS.ERROR);
       if (isValid) styles.push(STYLES.INPUTS.VALID);
-      if (isPassword) styles.push(STYLES.INPUTS.RIGHT_ICON);
+      if (isPassword || props.rightIcon) styles.push(STYLES.INPUTS.RIGHT_ICON);
+      if (props.leftIcon) styles.push(STYLES.INPUTS.LEFT_ICON);
 
       return styles;
-    }, [isValid, isError, isPassword]);
+    }, [isValid, isError, isPassword, props.rightIcon, props.leftIcon]);
 
     const rightIconContainerStyle = useMemo(() => {
       const styles: StyleProp<TextStyle>[] = [

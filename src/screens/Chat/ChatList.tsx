@@ -1,7 +1,7 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, StatusBar, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import { Screens } from '../../components';
+import { Message } from '../../components';
 import useChatListListener from '../../hooks/useChatListListener';
 import { flattenStyle } from '../../styles/factory';
 import { hasOwnProperty } from '../../utils/common';
@@ -12,6 +12,7 @@ const ChatList = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
+      <StatusBar animated backgroundColor={COLOR_PALETTE.BLUE_10} />
       <View style={headerStyle} />
       <FlatList
         data={messages}
@@ -19,13 +20,9 @@ const ChatList = () => {
         contentContainerStyle={{ paddingHorizontal: scale(10) }}
         renderItem={({ item }) => {
           if (hasOwnProperty(item, 'name'))
-            return (
-              <Screens.Chat.Card.Group
-                {...(item as HourChat.Chat.GroupMetadata)}
-              />
-            );
+            return <Message.Group {...(item as HourChat.Chat.GroupMetadata)} />;
 
-          return <Screens.Chat.Card.Private {...item} />;
+          return <Message.Private {...item} />;
         }}
         keyExtractor={(item) => `${item.timestamp.toMillis()}-${item.uuid}`}
       />

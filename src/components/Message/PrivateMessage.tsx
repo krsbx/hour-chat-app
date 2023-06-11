@@ -1,9 +1,9 @@
 import React from 'react';
-import { CHAT_TYPE } from '../../../../constants/common';
-import useCachedUserData from '../../../../hooks/useCachedUserData';
+import { CHAT_TYPE } from '../../constants/common';
+import useCachedUserData from '../../hooks/useCachedUserData';
 import Message from './Message';
 
-const Private: React.FC<Props> = ({ uuid, body, timestamp }) => {
+const PrivateMessage: React.FC<Props> = ({ uuid, body, timestamp }) => {
   const { fullName, user } = useCachedUserData(uuid);
 
   if (!user) return null;
@@ -21,4 +21,4 @@ const Private: React.FC<Props> = ({ uuid, body, timestamp }) => {
 
 type Props = HourChat.Chat.PrivateMetadata;
 
-export default Private;
+export default PrivateMessage;
