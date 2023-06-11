@@ -14,13 +14,13 @@ import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const LoginScreen: React.FC<Props> = ({ navigation }) => {
-  const formFlexSize = useRef(new Animated.Value(0));
-  const formOpacity = useRef(new Animated.Value(0));
+  const formFlexSize = useRef(new Animated.Value(0)).current;
+  const formOpacity = useRef(new Animated.Value(0)).current;
 
   const formStyle = useMemo(() => {
     const style = {
-      flex: formFlexSize.current,
-      opacity: formOpacity.current,
+      flex: formFlexSize,
+      opacity: formOpacity,
       rowGap: scale(10),
     };
 
@@ -30,7 +30,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const startAnimation = useCallback(() => {
     Animated.parallel([
       Animated.sequence([
-        Animated.timing(formFlexSize.current, {
+        Animated.timing(formFlexSize, {
           toValue: 2,
           duration: 1500,
           useNativeDriver: false,
@@ -38,7 +38,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         }),
       ]),
       Animated.sequence([
-        Animated.timing(formOpacity.current, {
+        Animated.timing(formOpacity, {
           toValue: 1,
           delay: 750,
           duration: 750,
@@ -47,7 +47,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         }),
       ]),
     ]).start();
-  }, []);
+  }, [formFlexSize, formOpacity]);
 
   const onPressOnSignUp = useCallback(() => {
     navigation.push(AUTH_STACK.REGISTER);

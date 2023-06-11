@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const MAIN_STACK = {
   LAUNCH: 'launch.screen',
   AUTH: 'auth-stack',
@@ -21,3 +23,5 @@ export const MAIN_TAB = {
   NEAR_ME: 'bottom.near-me.screen',
   PROFILE: 'bottom.profile.screen',
 } as const;
+
+export const TAB_HIDEABLE = _(CHAT_STACK).omit(['LIST']).map().value();

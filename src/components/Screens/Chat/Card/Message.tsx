@@ -28,7 +28,7 @@ const Message: React.FC<Props> = ({
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.LIST>
     >();
 
-  const maxHeight = useRef(new Animated.Value(0));
+  const maxHeight = useRef(new Animated.Value(0)).current;
   const today = useMemo(() => moment(), []);
   const timestamp = useMemo(
     () => moment(timestampProps.toDate()),
@@ -58,21 +58,19 @@ const Message: React.FC<Props> = ({
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
-      Animated.timing(maxHeight.current, {
+      Animated.timing(maxHeight, {
         toValue: scale(60),
         duration: 1000,
         easing: Easing.circle,
         useNativeDriver: false,
       }),
     ]).start();
-  }, []);
+  }, [maxHeight]);
 
-  useEffect(() => {
-    startAnimation();
-  }, [startAnimation]);
+  useEffect(startAnimation, [startAnimation]);
 
   return (
-    <Animated.View style={{ maxHeight: maxHeight.current }}>
+    <Animated.View style={{ maxHeight }}>
       <TouchableOpacity
         style={style.container}
         activeOpacity={0.5}
@@ -92,7 +90,6 @@ const Message: React.FC<Props> = ({
 
 const style = StyleSheet.create({
   container: {
-    paddingHorizontal: scale(10),
     paddingVertical: scale(10),
     flexDirection: 'row',
     gap: scale(5),
