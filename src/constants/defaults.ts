@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { auths } from '../schema';
+import { auths, chats } from '../schema';
 
 export const DEFAULT_REGISTER_VALUE: z.infer<typeof auths.registerSchema> = {
   step1: {
@@ -25,4 +25,8 @@ export const DEFAULT_LOGIN_VALUE: z.infer<typeof auths.loginSchema> = {
 
 export const DEFAULT_OTP_CODE: z.infer<typeof auths.otpSchema> = {
   code: '',
+};
+
+export const DEFAULT_MESSAGE_VALUE: z.infer<typeof chats.messageSchema> = {
+  body: '',
 };

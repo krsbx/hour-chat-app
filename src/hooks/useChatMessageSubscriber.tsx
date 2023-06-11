@@ -5,6 +5,8 @@ import { Config } from 'react-native-config';
 import { CHAT_TYPE } from '../constants/common';
 import useCurrentUser from './useCurrentUser';
 
+const defaultLimit = 25;
+
 const useChatMessageSubscriber = <
   T extends HourChat.Type.ChatType,
   U extends T extends typeof CHAT_TYPE.PRIVATE
@@ -13,9 +15,12 @@ const useChatMessageSubscriber = <
 >(
   type: T,
   uid: string | number
-): U => {
+) => {
   const { user: currentUser } = useCurrentUser();
   const [messages, setMessages] = useState<U>([] as unknown as U);
+  const [isMaxReached, setIsMaxReached] = useState(false);
+  const [limit, setLimit] = useState(defaultLimit);
+  const [prevLimit, setPrevLimit] = useState(limit);
 
   const subscribePrivateMessages = useCallback(() => {
     const subscribe = firestore()
@@ -27,17 +32,22 @@ const useChatMessageSubscriber = <
       .doc('information')
       .collection('messages')
       .orderBy('timestamp', 'asc')
+      .limitToLast(limit)
       .onSnapshot((snap) => {
         const messages = _(snap.docs)
           .map((doc) => doc.data())
           .compact()
           .value();
 
+        if (prevLimit === defaultLimit && limit !== defaultLimit) {
+          setIsMaxReached(prevLimit === limit);
+        }
+
         setMessages(messages as U);
       });
 
     return subscribe;
-  }, [currentUser.id, uid]);
+  }, [currentUser.id, uid, prevLimit, limit]);
 
   const subscribeGroupMessages = useCallback(() => {
     const subscribe = firestore()
@@ -49,17 +59,22 @@ const useChatMessageSubscriber = <
       .doc(`${uid}`)
       .collection('messages')
       .orderBy('timestamp', 'asc')
+      .limitToLast(limit)
       .onSnapshot((snap) => {
         const messages = _(snap.docs)
           .map((doc) => doc.data())
           .compact()
           .value();
 
+        if (prevLimit === defaultLimit && limit !== defaultLimit) {
+          setIsMaxReached(prevLimit === limit);
+        }
+
         setMessages(messages as U);
       });
 
     return subscribe;
-  }, [currentUser.id, uid]);
+  }, [currentUser.id, uid, prevLimit, limit]);
 
   const subscribeMessages = useCallback(() => {
     switch (type) {
@@ -74,6 +89,16 @@ const useChatMessageSubscriber = <
     }
   }, [type, subscribeGroupMessages, subscribePrivateMessages]);
 
+  const increaseLimit = useCallback(() => {
+    if (isMaxReached) return;
+
+    setLimit((limit) => {
+      setPrevLimit(limit);
+
+      return limit + 10;
+    });
+  }, [setLimit, isMaxReached]);
+
   useEffect(() => {
     const unsubscribe = subscribeMessages();
 
@@ -82,7 +107,7 @@ const useChatMessageSubscriber = <
     };
   }, [subscribeMessages]);
 
-  return messages;
+  return { messages, increaseLimit, isMaxReached };
 };
 
 export default useChatMessageSubscriber;

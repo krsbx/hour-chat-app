@@ -11,10 +11,10 @@ import {
   View,
 } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import { FONT_SIZE } from '../../../../constants/fonts';
-import { CHAT_STACK } from '../../../../constants/screens';
-import STYLES from '../../../../styles';
-import { COLOR_PALETTE } from '../../../../utils/theme';
+import { FONT_SIZE } from '../../constants/fonts';
+import { CHAT_STACK } from '../../constants/screens';
+import STYLES from '../../styles';
+import { COLOR_PALETTE } from '../../utils/theme';
 
 const Message: React.FC<Props> = ({
   name,

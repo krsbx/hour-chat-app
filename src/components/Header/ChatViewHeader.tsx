@@ -2,16 +2,16 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { Text } from '@rneui/base';
 import _ from 'lodash';
 import React, { useCallback } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import IonIcons from 'react-native-vector-icons/Ionicons';
-import { FONT_SIZE } from '../../../../constants/fonts';
-import { CHAT_STACK } from '../../../../constants/screens';
-import useOverwriteBack from '../../../../hooks/useOverwriteBack';
-import STYLES from '../../../../styles';
-import { COLOR_PALETTE } from '../../../../utils/theme';
+import { FONT_SIZE } from '../../constants/fonts';
+import { CHAT_STACK } from '../../constants/screens';
+import useOverwriteBack from '../../hooks/useOverwriteBack';
+import STYLES from '../../styles';
+import { COLOR_PALETTE } from '../../utils/theme';
 
-const ViewHeader: React.FC<Props> = ({ name, type }) => {
+const ChatViewHeader: React.FC<Props> = ({ name, type }) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
@@ -30,6 +30,7 @@ const ViewHeader: React.FC<Props> = ({ name, type }) => {
 
   return (
     <View style={style.container}>
+      <StatusBar animated backgroundColor={COLOR_PALETTE.BLUE_10} />
       <TouchableOpacity onPress={onPressOnBack}>
         <IonIcons
           name="arrow-back"
@@ -75,4 +76,4 @@ type Props = {
   type: HourChat.Type.ChatType;
 };
 
-export default ViewHeader;
+export default ChatViewHeader;

@@ -3,12 +3,12 @@ import { ScreenWidth, Text } from '@rneui/base';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import useCachedUserData from '../../../../hooks/useCachedUserData';
-import useChatTimestamp from '../../../../hooks/useChatTimestamp';
-import STYLES from '../../../../styles';
-import { COLOR_PALETTE } from '../../../../utils/theme';
+import useCachedUserData from '../../hooks/useCachedUserData';
+import useChatTimestamp from '../../hooks/useChatTimestamp';
+import STYLES from '../../styles';
+import { COLOR_PALETTE } from '../../utils/theme';
 
-const Incoming: React.FC<Props> = ({ message, timestamp, senderId }) => {
+const IncomingBubble: React.FC<Props> = ({ message, timestamp, senderId }) => {
   const left = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCachedUserData(senderId);
   const datetime = useChatTimestamp(timestamp);
@@ -104,4 +104,4 @@ type Props = {
   senderId: number;
 };
 
-export default Incoming;
+export default IncomingBubble;

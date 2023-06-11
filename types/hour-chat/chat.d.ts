@@ -23,7 +23,7 @@ export type Metadata =
   | {
       members: number[];
       timestamp: Timestamp;
-      typing;
+      typing: number[];
     };
 
 export type ChatMessageHistory = PrivateMetadata | GroupMetadata;
