@@ -1,4 +1,5 @@
 import { Input, InputProps } from '@rneui/themed';
+import _ from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   StyleProp,
@@ -56,9 +57,17 @@ const InputField = React.forwardRef<TextInput, Props>(
       if (isValid) styles.push(STYLES.INPUTS.VALID);
       if (isPassword || props.rightIcon) styles.push(STYLES.INPUTS.RIGHT_ICON);
       if (props.leftIcon) styles.push(STYLES.INPUTS.LEFT_ICON);
+      if (props.inputStyle) styles.push(props.inputStyle);
 
       return styles;
-    }, [isValid, isError, isPassword, props.rightIcon, props.leftIcon]);
+    }, [
+      isValid,
+      isError,
+      isPassword,
+      props.rightIcon,
+      props.leftIcon,
+      props.inputStyle,
+    ]);
 
     const rightIconContainerStyle = useMemo(() => {
       const styles: StyleProp<TextStyle>[] = [
@@ -125,7 +134,7 @@ const InputField = React.forwardRef<TextInput, Props>(
         renderErrorMessage={isError}
         errorStyle={errorStyle}
         rightIcon={rightIcon}
-        {...props}
+        {..._.omit(props, ['inputStyle'])}
         {...(props.mask ? { InputComponent: MaskInput } : {})}
         leftIconContainerStyle={leftIconContainerStyle}
         rightIconContainerStyle={rightIconContainerStyle}

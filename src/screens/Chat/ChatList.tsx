@@ -1,15 +1,36 @@
-import React from 'react';
+import _ from 'lodash';
+import React, { useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import { Message } from '../../components';
+import { connect, ConnectedProps } from 'react-redux';
+import { Header, Message } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
+import { RESOURCE_NAME } from '../../constants/common';
 import useChatListListener from '../../hooks/useChatListListener';
-import { flattenStyle } from '../../styles/factory';
-import { hasOwnProperty } from '../../utils/common';
+import { AppState } from '../../store';
+import { getResourceData } from '../../store/selectors/resources';
+import { createFullName, hasOwnProperty } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatList = () => {
-  const messages = useChatListListener();
+const ChatList: React.FC<Props> = ({ users }) => {
+  const _messages = useChatListListener();
+  const [query, setQuery] = useState('');
+
+  const messages = useMemo(() => {
+    if (_.isEmpty(query)) return _messages;
+
+    return _messages.filter((value) => {
+      if (hasOwnProperty<string>(value, 'name')) {
+        return value.name.toLowerCase().includes(query.toLowerCase());
+      }
+
+      const fullName = createFullName(users[+value.uuid]);
+
+      if (_.isEmpty(fullName)) return false;
+
+      return fullName.toLowerCase().includes(query.toLowerCase());
+    });
+  }, [query, _messages, users]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
@@ -18,7 +39,7 @@ const ChatList = () => {
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
-      <View style={headerStyle} />
+      <Header.ChatList query={query} setQuery={setQuery} />
       <FlatList
         data={messages}
         style={{ flex: 1 }}
@@ -35,16 +56,12 @@ const ChatList = () => {
   );
 };
 
-const headerStyle = flattenStyle({
-  flexDirection: 'row',
-  justifyContent: 'space-evenly',
-  backgroundColor: COLOR_PALETTE.BLUE_10,
-  alignItems: 'center',
-  paddingHorizontal: scale(10),
-  height: scale(45),
-  gap: scale(10),
-  borderBottomWidth: 1,
-  borderBottomColor: COLOR_PALETTE.NEUTRAL_40,
+const mapStateToProps = (state: AppState) => ({
+  users: getResourceData(RESOURCE_NAME.USERS)(state),
 });
 
-export default ChatList;
+const connector = connect(mapStateToProps);
+
+type Props = ConnectedProps<typeof connector>;
+
+export default connector(ChatList);

@@ -21,6 +21,8 @@ export const CHAT_STACK = {
 export const MAIN_TAB = {
   CHAT: 'bottom.chat.screen',
   NEAR_ME: 'bottom.near-me.screen',
+  CREATE_STORY: 'bottom.story.button',
+  STORY: 'bottom.story.screen',
   PROFILE: 'bottom.profile.screen',
 } as const;
 

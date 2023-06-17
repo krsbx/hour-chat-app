@@ -30,6 +30,8 @@ export type ChatStack = {
 export type MainTab = {
   [MAIN_TAB.CHAT]: undefined;
   [MAIN_TAB.NEAR_ME]: undefined;
+  [MAIN_TAB.CREATE_STORY]: undefined;
+  [MAIN_TAB.STORY]: undefined;
   [MAIN_TAB.PROFILE]: undefined;
 };
 
@@ -57,7 +59,7 @@ export type ChatStackProps<T extends keyof ChatStack> = StackScreenProps<
 
 export type MainTabProps<T extends keyof MainTabProps> = CompositeScreenProps<
   BottomTabScreenProps<MainTab, T>,
-  StackScreenProps<MainStack>
+  CompositeScreenProps<StackScreenProps<ChatStack>, StackScreenProps<MainStack>>
 >;
 
 export type MainStackProps<T extends keyof MainStack> = CompositeScreenProps<

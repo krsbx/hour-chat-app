@@ -59,6 +59,23 @@ const MainApp = () => {
         }}
       />
       <Tab.Screen
+        name={MAIN_TAB.CREATE_STORY}
+        component={Empty}
+        options={{
+          tabBarIcon: Icon.Main.CreateStory,
+          tabBarLabelStyle: { display: 'none' },
+          tabBarButton: Buttons.CreateStory,
+        }}
+      />
+      <Tab.Screen
+        name={MAIN_TAB.STORY}
+        component={Empty}
+        options={{
+          tabBarIcon: Icon.Main.Story,
+          tabBarLabel: 'Story',
+        }}
+      />
+      <Tab.Screen
         name={MAIN_TAB.PROFILE}
         component={Empty}
         options={{

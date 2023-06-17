@@ -6,6 +6,7 @@ import {
   Easing,
   FlatList,
   RefreshControl,
+  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
@@ -73,6 +74,11 @@ const ChatView: React.FC<Props> = ({ route }) => {
 
   return (
     <View style={style.mainContainer}>
+      <StatusBar
+        animated
+        backgroundColor={COLOR_PALETTE.BLUE_10}
+        barStyle={'light-content'}
+      />
       <Animated.View style={{ flex: emptySize }} />
       <Animated.View style={{ flex: flexSize }}>
         <Header.ChatView name={route.params.name} type={route.params.type} />

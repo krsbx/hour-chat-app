@@ -1,4 +1,5 @@
 import BaseButton from './BaseButton';
+import CreateStory from './CreateStory';
 import TabBarButton from './TabBarButton';
 
-export { BaseButton, TabBarButton };
+export { BaseButton, CreateStory, TabBarButton };
