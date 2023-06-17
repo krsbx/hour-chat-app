@@ -1,4 +1,4 @@
-import { Timestamp } from '@firebase/firestore';
+import type { Timestamp } from '@firebase/firestore';
 import moment from 'moment';
 import { useMemo } from 'react';
 

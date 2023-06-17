@@ -13,8 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
 import { Buttons, Header, Input } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
-import { FONT_SIZE } from '../../constants/fonts';
-import { CREATE_STORY_TAB } from '../../constants/screens';
+import { CREATE_STORY_STACK } from '../../constants/screens';
 import useImageStoryResoulution from '../../hooks/useImageStoryResoulution';
 import { AppState } from '../../store';
 import {
@@ -29,6 +28,7 @@ import {
   getFileResolution,
   getTypedStory,
 } from '../../store/selectors/story';
+import STYLES from '../../styles';
 import { COLOR_PALETTE, opacityColor } from '../../utils/theme';
 
 const Form: React.FC<Props> = ({
@@ -89,7 +89,7 @@ const Form: React.FC<Props> = ({
   }, [deleteFile, deleteResolution]);
 
   const onPressOnPreview = useCallback(() => {
-    navigation.navigate(CREATE_STORY_TAB.PREVIEW);
+    navigation.navigate(CREATE_STORY_STACK.PREVIEW);
   }, [navigation]);
 
   const imageResolution = useImageStoryResoulution(resolution);
@@ -122,14 +122,7 @@ const Form: React.FC<Props> = ({
           <Buttons.BaseButton
             title={'Attach Image'}
             onPress={onAttachFile}
-            icon={
-              <Ionicons
-                name={'image'}
-                size={scale(FONT_SIZE.SMALL)}
-                color={COLOR_PALETTE.WHITE}
-                style={style.iconPadding}
-              />
-            }
+            icon={<Ionicons name={'image'} {...STYLES.ICONS.DEFAULT_ICON} />}
           />
           {!!file.uri && (
             <View style={{ position: 'relative', alignItems: 'center' }}>
@@ -154,14 +147,7 @@ const Form: React.FC<Props> = ({
           <Buttons.BaseButton
             title={'Preview'}
             onPress={onPressOnPreview}
-            icon={
-              <Ionicons
-                name={'eye'}
-                size={scale(FONT_SIZE.SMALL)}
-                color={COLOR_PALETTE.WHITE}
-                style={style.iconPadding}
-              />
-            }
+            icon={<Ionicons name={'eye'} {...STYLES.ICONS.DEFAULT_ICON} />}
           />
         </View>
       </ScrollView>
@@ -178,9 +164,6 @@ const style = StyleSheet.create({
     position: 'absolute',
     top: scale(5),
     right: scale(5),
-  },
-  iconPadding: {
-    paddingRight: scale(5),
   },
 });
 
@@ -201,6 +184,6 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps &
-  HourChat.Navigation.CreateStoryProps<typeof CREATE_STORY_TAB.FORM>;
+  HourChat.Navigation.CreateStoryProps<typeof CREATE_STORY_STACK.FORM>;
 
 export default connector(Form);

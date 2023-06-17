@@ -1,7 +1,12 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { AUTH_STACK, MAIN_STACK, MAIN_TAB } from '../constants/screens';
+import {
+  AUTH_STACK,
+  CHAT_STACK,
+  MAIN_STACK,
+  MAIN_TAB,
+} from '../constants/screens';
 import { getAuth } from '../store/selectors/auth';
 
 const useTokenListener = (isCallable: boolean) => {
@@ -19,6 +24,9 @@ const useTokenListener = (isCallable: boolean) => {
   const navigateToChat = useCallback(() => {
     navigation.replace(MAIN_STACK.MAIN, {
       screen: MAIN_TAB.CHAT,
+      params: {
+        screen: CHAT_STACK.LIST,
+      },
     });
   }, [navigation]);
 

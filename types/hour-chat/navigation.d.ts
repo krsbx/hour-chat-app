@@ -1,4 +1,5 @@
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import {
   CompositeScreenProps,
   NavigatorScreenParams,
@@ -7,15 +8,26 @@ import { StackScreenProps } from '@react-navigation/stack';
 import {
   AUTH_STACK,
   CHAT_STACK,
-  CREATE_STORY_TAB,
+  CREATE_STORY_STACK,
   MAIN_STACK,
   MAIN_TAB,
+  STORY_TAB,
 } from '../../src/constants/screens';
 
 export type AuthStack = {
   [AUTH_STACK.LOGIN]: undefined;
   [AUTH_STACK.REGISTER]: undefined;
   [AUTH_STACK.OTP]: undefined;
+};
+
+export type CreateStory = {
+  [CREATE_STORY_STACK.FORM]: undefined;
+  [CREATE_STORY_STACK.PREVIEW]: undefined;
+};
+
+export type StoryTab = {
+  [STORY_TAB.USERS]: undefined;
+  [STORY_TAB.ME]: undefined;
 };
 
 export type ChatStack = {
@@ -29,16 +41,11 @@ export type ChatStack = {
 };
 
 export type MainTab = {
-  [MAIN_TAB.CHAT]: undefined;
+  [MAIN_TAB.CHAT]: NavigatorScreenParams<ChatStack>;
   [MAIN_TAB.NEAR_ME]: undefined;
-  [MAIN_TAB.CREATE_STORY]: undefined;
-  [MAIN_TAB.STORY]: undefined;
+  [MAIN_TAB.CREATE_STORY]: NavigatorScreenParams<CreateStory>;
+  [MAIN_TAB.STORY]: NavigatorScreenParams<StoryTab>;
   [MAIN_TAB.PROFILE]: undefined;
-};
-
-export type CreateStory = {
-  [CREATE_STORY_TAB.FORM]: undefined;
-  [CREATE_STORY_TAB.PREVIEW]: undefined;
 };
 
 export type MainStack = {
@@ -63,28 +70,25 @@ export type ChatStackProps<T extends keyof ChatStack> = StackScreenProps<
   T
 >;
 
-export type CreateStoryProps<T extends keyof CreateStory> = StackScreenProps<
-  CreateStory,
+export type StoryTabProps<T extends keyof StoryTab> = MaterialTopTabScreenProps<
+  StoryTab,
   T
 >;
 
+export type CreateStoryProps<T extends keyof CreateStory> =
+  CompositeScreenProps<
+    StackScreenProps<CreateStory, T>,
+    StackScreenProps<MainTab>
+  >;
+
 export type MainTabProps<T extends keyof MainTabProps> = CompositeScreenProps<
   BottomTabScreenProps<MainTab, T>,
-  CompositeScreenProps<
-    StackScreenProps<ChatStack>,
-    CompositeScreenProps<
-      StackScreenProps<CreateStory>,
-      StackScreenProps<MainStack>
-    >
-  >
+  StackScreenProps<MainStack>
 >;
 
 export type MainStackProps<T extends keyof MainStack> = CompositeScreenProps<
   StackScreenProps<MainStack, T>,
-  CompositeScreenProps<
-    StackScreenProps<AuthStack>,
-    BottomTabScreenProps<MainTab>
-  >
+  BottomTabScreenProps<MainTab>
 >;
 
 export type AuthStackNavigation<T extends keyof AuthStack> =
