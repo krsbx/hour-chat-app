@@ -11,3 +11,8 @@ export const isSameDate = (arg0: Metadata, arg1: Metadata) => {
 
   return moment(secondDate).isSame(firstDate, 'D');
 };
+
+export const sortMessage = (
+  a: HourChat.Chat.ChatMessageHistory,
+  b: HourChat.Chat.ChatMessageHistory
+) => b.timestamp.toMillis() - a.timestamp.toMillis();

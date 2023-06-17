@@ -15,7 +15,7 @@ const initialState = {
 const reducer = (
   state = _.cloneDeep(initialState),
   action: SetLocation | UpdateLocation | DeleteLocation
-) => {
+): GeolocationResponse => {
   switch (action.type) {
     case ActionType.SET: {
       return action.payload;

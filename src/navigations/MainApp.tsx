@@ -8,6 +8,7 @@ import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
 import useWatchPosition from '../hooks/useWatchPosition';
 import { Content } from '../screens';
 import ChatStack from './ChatStack';
+import CreateStoryStack from './CreateStoryStack';
 
 const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
 
@@ -42,6 +43,7 @@ const MainApp = () => {
           return {
             tabBarIcon: Icon.Main.Chat,
             tabBarLabel: 'Chat',
+            tabBarHideOnKeyboard: true,
             ...(isHideable && {
               tabBarStyle: {
                 display: 'none',
@@ -60,11 +62,11 @@ const MainApp = () => {
       />
       <Tab.Screen
         name={MAIN_TAB.CREATE_STORY}
-        component={Empty}
+        component={CreateStoryStack}
         options={{
           tabBarIcon: Icon.Main.CreateStory,
           tabBarLabelStyle: { display: 'none' },
-          tabBarButton: Buttons.CreateStory,
+          tabBarHideOnKeyboard: true,
         }}
       />
       <Tab.Screen

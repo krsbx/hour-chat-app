@@ -1,3 +1,4 @@
 import NearMe from './NearMe';
+import Profile from './Profile';
 
-export { NearMe };
+export { NearMe, Profile };

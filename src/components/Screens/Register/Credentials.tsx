@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import { Button } from '@rneui/themed';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
-import { Input } from '../..';
+import { Buttons, Input } from '../..';
 import { AUTH_STACK } from '../../../constants/screens';
 import useOverwriteBack from '../../../hooks/useOverwriteBack';
 import { auths } from '../../../schema';
@@ -22,6 +21,7 @@ const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
   const { errors, handleChange, handleBlur, touched, values, setFieldError } =
     useFormikContext<z.infer<typeof auths.registerSchema>>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isDisabled = useMemo(() => !_.isEmpty(errors.step2), [errors.step2]);
 
   useOverwriteBack(prevStep);
 
@@ -109,11 +109,15 @@ const Credentials: React.FC<Props> = ({ prevStep, registerUser }) => {
           isPassword
         />
       </ScrollView>
-      <View style={{ rowGap: scale(5) }}>
-        <Button title={'Prev'} onPress={prevStep} disabled={isSubmitting} />
-        <Button
+      <View style={{ rowGap: scale(5), alignItems: 'center' }}>
+        <Buttons.BaseButton
+          title={'Prev'}
+          onPress={prevStep}
+          disabled={isSubmitting}
+        />
+        <Buttons.BaseButton
           title={'Sign Up'}
-          disabled={!_.isEmpty(errors.step2)}
+          disabled={isDisabled}
           onPress={onSubmit}
           loading={isSubmitting}
         />

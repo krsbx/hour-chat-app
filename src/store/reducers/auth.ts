@@ -16,7 +16,7 @@ const initialState = {
 const reducer = (
   state = _.cloneDeep(initialState),
   action: SetAuthToken | RemoveAuthToken | UpdateAuthData
-) => {
+): AuthReducer => {
   switch (action.type) {
     case ActionType.LOGIN: {
       return {
