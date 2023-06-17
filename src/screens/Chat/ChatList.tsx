@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList, StatusBar, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { Message } from '../../components';
+import FocusedStatusBar from '../../components/FocusedStatusBar';
 import useChatListListener from '../../hooks/useChatListListener';
 import { flattenStyle } from '../../styles/factory';
 import { hasOwnProperty } from '../../utils/common';
@@ -12,7 +13,11 @@ const ChatList = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
-      <StatusBar animated backgroundColor={COLOR_PALETTE.BLUE_10} />
+      <FocusedStatusBar
+        animated
+        backgroundColor={COLOR_PALETTE.BLUE_10}
+        barStyle={'light-content'}
+      />
       <View style={headerStyle} />
       <FlatList
         data={messages}

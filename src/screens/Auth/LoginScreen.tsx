@@ -2,7 +2,7 @@ import { Text } from '@rneui/base';
 import { Formik } from 'formik';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Animated, Easing, StyleSheet, View } from 'react-native';
+import { Animated, Easing, StatusBar, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
@@ -59,6 +59,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={STYLES.CONTAINERS.AUTH_CONTAINER}>
+      <StatusBar
+        animated
+        backgroundColor={COLOR_PALETTE.WHITE}
+        barStyle={'dark-content'}
+      />
       <Label.AppTitle />
       <Animated.View style={[formStyle]}>
         <Formik

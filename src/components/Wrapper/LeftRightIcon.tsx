@@ -31,7 +31,7 @@ type Props = {
   rightIcon?: JSX.Element;
   leftIconContainerStyle?: StyleProp<ViewStyle>;
   rightIconContainerStyle?: StyleProp<ViewStyle>;
-  children?: React.ReactNode;
+  children?: JSX.Element;
 };
 
 export default LeftRightIcon;

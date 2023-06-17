@@ -33,4 +33,5 @@ export type UserLocation = {
   };
   createdAt: Date;
   updatedAt: Date;
+  user?: User;
 };

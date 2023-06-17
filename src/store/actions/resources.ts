@@ -61,15 +61,33 @@ export const getResourceById =
     overwrite = false
   ) =>
   async () => {
-    const { data } = await axios.get<{ data: HourChat.Store.Resource[T] }>(
-      `/${resourceName}/${id}?${query}`,
-      {
-        headers: {
-          resourceName,
-          overwrite,
-        },
-      }
-    );
+    const { data } = await axios.get<
+      HourChat.Response.Resource<HourChat.Store.Resource[T]>
+    >(`/${resourceName}/${id}?${query}`, {
+      headers: {
+        resourceName,
+        overwrite,
+      },
+    });
 
     return data.data;
+  };
+
+export const getResources =
+  <T extends HourChat.Type.ResourceName>(
+    resourceName: T,
+    query = '',
+    overwrite = false
+  ) =>
+  async () => {
+    const { data } = await axios.get<
+      HourChat.Response.Resources<HourChat.Store.Resource[T]>
+    >(`/${resourceName}?${query}`, {
+      headers: {
+        resourceName,
+        overwrite,
+      },
+    });
+
+    return data;
   };

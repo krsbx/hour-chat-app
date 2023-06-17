@@ -30,7 +30,7 @@ const DelayContainer: React.FC<Props> = ({ delay, children }) => {
 
 type Props = {
   delay: number;
-  children?: React.ReactNode;
+  children?: JSX.Element;
 };
 
 export default DelayContainer;
