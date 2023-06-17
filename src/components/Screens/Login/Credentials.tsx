@@ -2,7 +2,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
 import React, { useCallback, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Buttons, Input } from '../..';
@@ -92,12 +92,14 @@ const Credentials: React.FC<Props> = ({ loginUser, addDeviceToken }) => {
           isPassword
         />
       </ScrollView>
-      <Buttons.BaseButton
-        title="Login"
-        disabled={!_.isEmpty(errors)}
-        onPress={onSubmit}
-        loading={isSubmitting}
-      />
+      <View style={{ alignItems: 'center' }}>
+        <Buttons.BaseButton
+          title="Login"
+          disabled={!_.isEmpty(errors)}
+          onPress={onSubmit}
+          loading={isSubmitting}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 };

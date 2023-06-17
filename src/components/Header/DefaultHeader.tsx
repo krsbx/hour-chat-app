@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const NearMeHeader = () => {
+const DefaultHeader: React.FC = () => {
   return (
     <View style={style.container}>
       <Text style={style.inputStyle}>Hour Chat</Text>
@@ -41,4 +41,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default NearMeHeader;
+export default DefaultHeader;

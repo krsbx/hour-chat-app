@@ -7,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import {
   AUTH_STACK,
   CHAT_STACK,
+  CREATE_STORY_TAB,
   MAIN_STACK,
   MAIN_TAB,
 } from '../../src/constants/screens';
@@ -35,6 +36,11 @@ export type MainTab = {
   [MAIN_TAB.PROFILE]: undefined;
 };
 
+export type CreateStory = {
+  [CREATE_STORY_TAB.FORM]: undefined;
+  [CREATE_STORY_TAB.PREVIEW]: undefined;
+};
+
 export type MainStack = {
   [MAIN_STACK.LAUNCH]: undefined;
   [MAIN_STACK.AUTH]: NavigatorScreenParams<AuthStack>;
@@ -57,9 +63,20 @@ export type ChatStackProps<T extends keyof ChatStack> = StackScreenProps<
   T
 >;
 
+export type CreateStoryProps<T extends keyof CreateStory> = StackScreenProps<
+  CreateStory,
+  T
+>;
+
 export type MainTabProps<T extends keyof MainTabProps> = CompositeScreenProps<
   BottomTabScreenProps<MainTab, T>,
-  CompositeScreenProps<StackScreenProps<ChatStack>, StackScreenProps<MainStack>>
+  CompositeScreenProps<
+    StackScreenProps<ChatStack>,
+    CompositeScreenProps<
+      StackScreenProps<CreateStory>,
+      StackScreenProps<MainStack>
+    >
+  >
 >;
 
 export type MainStackProps<T extends keyof MainStack> = CompositeScreenProps<

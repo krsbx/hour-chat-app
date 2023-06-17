@@ -19,4 +19,15 @@ export const RESOURCE_EXPIRE_AFTER = {
   UNIT: DurationInputArg2;
 };
 
+export const CHAT_BASE_PATH = {
+  [CHAT_TYPE.PRIVATE]: 'privates',
+  [CHAT_TYPE.GROUP]: 'groups',
+  get PRIVATE() {
+    return this[CHAT_TYPE.PRIVATE];
+  },
+  get GROUP() {
+    return this[CHAT_TYPE.GROUP];
+  },
+} as const;
+
 export const EXPIREABLE_RESOURCE = [RESOURCE_NAME.USERS] as const;

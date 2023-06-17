@@ -63,7 +63,7 @@ const NearMe: React.FC<Props> = ({
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
-      <Header.NearMe />
+      <Header.Default />
       <MapView
         moveOnMarkerPress={false}
         showsPointsOfInterest={false}

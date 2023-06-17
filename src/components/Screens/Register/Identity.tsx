@@ -1,16 +1,16 @@
-import { Button } from '@rneui/themed';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
-import React from 'react';
-import { KeyboardAvoidingView, ScrollView } from 'react-native';
+import React, { useMemo } from 'react';
+import { KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { z } from 'zod';
-import { Input } from '../..';
+import { Buttons, Input } from '../..';
 import { GENDERS } from '../../../constants/resources';
 import { auths } from '../../../schema';
 
 const Identity: React.FC<Props> = ({ nextStep }) => {
   const { errors, handleChange, handleBlur, setFieldTouched, touched, values } =
     useFormikContext<z.infer<typeof auths.registerSchema>>();
+  const isDisabled = useMemo(() => !_.isEmpty(errors.step1), [errors.step1]);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -52,7 +52,6 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           isError={touched.step1?.dob && !!errors.step1?.dob}
           errorMessage={errors.step1?.dob}
           label={'Date of Birth'}
-          isRequired
         />
         <Input.Dropdown
           data={GENDERS}
@@ -64,11 +63,13 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           value={values.step1.gender}
         />
       </ScrollView>
-      <Button
-        title={'Next'}
-        onPress={nextStep}
-        disabled={!_.isEmpty(errors.step1)}
-      />
+      <View style={{ alignItems: 'center' }}>
+        <Buttons.BaseButton
+          title={'Next'}
+          onPress={nextStep}
+          disabled={isDisabled}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 };

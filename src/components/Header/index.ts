@@ -1,5 +1,5 @@
 import ChatList from './ChatListHeader';
 import ChatView from './ChatViewHeader';
-import NearMe from './NearMeHeader';
+import Default from './DefaultHeader';
 
-export { ChatView, ChatList, NearMe };
+export { ChatView, ChatList, Default };
