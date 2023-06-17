@@ -9,10 +9,9 @@ import useWatchPosition from '../hooks/useWatchPosition';
 import { Content } from '../screens';
 import ChatStack from './ChatStack';
 import CreateStoryStack from './CreateStoryStack';
+import StoryTab from './StoryTab';
 
 const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
-
-const Empty = () => null;
 
 const MainApp = () => {
   useWatchPosition();
@@ -71,7 +70,7 @@ const MainApp = () => {
       />
       <Tab.Screen
         name={MAIN_TAB.STORY}
-        component={Empty}
+        component={StoryTab}
         options={{
           tabBarIcon: Icon.Main.Story,
           tabBarLabel: 'Story',
@@ -79,7 +78,7 @@ const MainApp = () => {
       />
       <Tab.Screen
         name={MAIN_TAB.PROFILE}
-        component={Empty}
+        component={Content.Profile}
         options={{
           tabBarIcon: Icon.Main.Profile,
           tabBarLabel: 'Profile',
