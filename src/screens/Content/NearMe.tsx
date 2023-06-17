@@ -6,7 +6,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Header, Icon } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
 import { CHAT_TYPE, RESOURCE_NAME } from '../../constants/common';
-import { MAIN_TAB } from '../../constants/screens';
+import { CHAT_STACK, MAIN_TAB } from '../../constants/screens';
 import useDebounce from '../../hooks/useDebounce';
 import { AppState } from '../../store';
 import {
@@ -33,10 +33,13 @@ const NearMe: React.FC<Props> = ({
 
   const navigateToChat = useCallback(
     (uuid: string | number) => {
-      navigation.navigate('chat.view.screen', {
-        name: createFullName(users[+uuid]),
-        type: CHAT_TYPE.PRIVATE,
-        uuid,
+      navigation.navigate(MAIN_TAB.CHAT, {
+        screen: CHAT_STACK.VIEW,
+        params: {
+          name: createFullName(users[+uuid]),
+          type: CHAT_TYPE.PRIVATE,
+          uuid,
+        },
       });
     },
     [navigation, users]

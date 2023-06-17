@@ -1,5 +1,4 @@
 import { Input, InputProps } from '@rneui/themed';
-import _ from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   StyleProp,
@@ -126,16 +125,16 @@ const InputField = React.forwardRef<TextInput, Props>(
 
     return (
       <Input
-        inputStyle={inputStyle}
         inputContainerStyle={style.inputContainer}
         disabledInputStyle={STYLES.INPUTS.DISABLED}
         placeholderTextColor={COLOR_PALETTE.PLACEHOLDER}
         numberOfLines={1}
         renderErrorMessage={isError}
-        errorStyle={errorStyle}
         rightIcon={rightIcon}
-        {..._.omit(props, ['inputStyle'])}
+        {...props}
         {...(props.mask ? { InputComponent: MaskInput } : {})}
+        errorStyle={errorStyle}
+        inputStyle={inputStyle}
         leftIconContainerStyle={leftIconContainerStyle}
         rightIconContainerStyle={rightIconContainerStyle}
         errorMessage={isError ? props.errorMessage : undefined}

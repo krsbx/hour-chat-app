@@ -43,7 +43,10 @@ const ChatList: React.FC<Props> = ({ users }) => {
       <FlatList
         data={messages}
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingHorizontal: scale(10) }}
+        contentContainerStyle={{
+          paddingHorizontal: scale(10),
+          paddingBottom: scale(80),
+        }}
         renderItem={({ item }) => {
           if (hasOwnProperty(item, 'name'))
             return <Message.Group {...(item as HourChat.Chat.GroupMetadata)} />;

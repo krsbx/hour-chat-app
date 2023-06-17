@@ -26,9 +26,14 @@ export const MAIN_TAB = {
   PROFILE: 'bottom.profile.screen',
 } as const;
 
-export const CREATE_STORY_TAB = {
+export const CREATE_STORY_STACK = {
   FORM: 'create.story.screen',
   PREVIEW: 'preview.story.screen',
+} as const;
+
+export const STORY_TAB = {
+  USERS: 'users.story.screen',
+  ME: 'my.story.screen',
 } as const;
 
 export const TAB_HIDEABLE = _(CHAT_STACK).omit(['LIST']).map().value();

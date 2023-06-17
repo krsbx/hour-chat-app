@@ -1,4 +1,4 @@
-import { Timestamp } from '@firebase/firestore';
+import type { Timestamp } from '@firebase/firestore';
 import { ScreenWidth, Text } from '@rneui/base';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';

@@ -1,4 +1,4 @@
-import { Timestamp } from '@firebase/firestore';
+import type { Timestamp } from '@firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from '@rneui/base';
 import moment from 'moment';

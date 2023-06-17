@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios';
 import _ from 'lodash';
-import { UniqueConstraintError, ValidationError } from 'sequelize';
+import type { UniqueConstraintError, ValidationError } from 'sequelize';
 import { hasOwnProperty } from '../common';
 
 export const onRegisterError = <T>(
