@@ -8,7 +8,8 @@ export const getResources =
 export const getResourceData =
   <T extends HourChat.Type.ResourceName>(resourceName: T) =>
   (state: AppState) =>
-    getResources(resourceName)(state).data;
+    getResources(resourceName)(state)
+      .data as HourChat.Store.ResourceRecord[T]['data'];
 
 export const getResourcePage =
   <T extends HourChat.Type.ResourceName>(resourceName: T) =>

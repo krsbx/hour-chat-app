@@ -2,7 +2,7 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { Text } from '@rneui/base';
 import _ from 'lodash';
 import React, { useCallback } from 'react';
-import { StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { FONT_SIZE } from '../../constants/fonts';
@@ -30,11 +30,6 @@ const ChatViewHeader: React.FC<Props> = ({ name, type }) => {
 
   return (
     <View style={style.container}>
-      <StatusBar
-        animated
-        backgroundColor={COLOR_PALETTE.BLUE_10}
-        barStyle={'light-content'}
-      />
       <TouchableOpacity onPress={onPressOnBack}>
         <IonIcons
           name="arrow-back"

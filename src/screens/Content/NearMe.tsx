@@ -1,8 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
+import { Header, Icon } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
+import { CHAT_TYPE, RESOURCE_NAME } from '../../constants/common';
+import { MAIN_TAB } from '../../constants/screens';
 import useDebounce from '../../hooks/useDebounce';
 import { AppState } from '../../store';
 import {
@@ -10,18 +14,33 @@ import {
   getNearMe as _getNearMe,
 } from '../../store/actions/location';
 import { getUserCoordinate } from '../../store/selectors/location';
+import { getResourceData } from '../../store/selectors/resources';
 import { mapStyle } from '../../styles/map';
+import { createFullName } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const NearMe: React.FC<Props> = ({
   addUserPosition,
   getNearMe,
   coordinate,
+  users,
+  navigation,
 }) => {
   const [nearestUsers, setNearestUsers] = useState<
     HourChat.Resource.UserLocation[]
   >([]);
   const mapRef = useRef<MapView>(null);
+
+  const navigateToChat = useCallback(
+    (uuid: string | number) => {
+      navigation.navigate('chat.view.screen', {
+        name: createFullName(users[+uuid]),
+        type: CHAT_TYPE.PRIVATE,
+        uuid,
+      });
+    },
+    [navigation, users]
+  );
 
   useDebounce(() => {
     if (!coordinate.latitude || !coordinate.longitude) return;
@@ -41,15 +60,22 @@ const NearMe: React.FC<Props> = ({
     <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
       <FocusedStatusBar
         animated
-        backgroundColor={COLOR_PALETTE.WHITE}
-        barStyle={'dark-content'}
+        backgroundColor={COLOR_PALETTE.BLUE_10}
+        barStyle={'light-content'}
       />
+      <Header.NearMe />
       <MapView
-        showsUserLocation
+        moveOnMarkerPress={false}
         showsPointsOfInterest={false}
-        showsBuildings={false}
+        showsMyLocationButton={false}
         provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
+        mapPadding={{
+          top: 0,
+          right: 0,
+          bottom: scale(100),
+          left: scale(10),
+        }}
         onMapLoaded={() => {
           if (!coordinate.latitude || !coordinate.longitude) return;
 
@@ -66,9 +92,20 @@ const NearMe: React.FC<Props> = ({
         }}
         ref={mapRef}
       >
-        {nearestUsers.map((user) => {
-          console.log(user);
-          return null;
+        {nearestUsers.map(({ user, location }) => {
+          if (!user) return null;
+
+          return (
+            <Icon.Marker.User
+              key={`${user.id}-marker`}
+              user={user}
+              coordinate={{
+                latitude: location.coordinates[1],
+                longitude: location.coordinates[0],
+              }}
+              onPress={() => navigateToChat(user.id)}
+            />
+          );
         })}
       </MapView>
     </View>
@@ -77,6 +114,7 @@ const NearMe: React.FC<Props> = ({
 
 const mapStateToProps = (state: AppState) => ({
   coordinate: getUserCoordinate(state),
+  users: getResourceData(RESOURCE_NAME.USERS)(state),
 });
 
 const connector = connect(mapStateToProps, {
@@ -84,6 +122,9 @@ const connector = connect(mapStateToProps, {
   getNearMe: _getNearMe,
 });
 
-type Props = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps &
+  HourChat.Navigation.MainTabProps<typeof MAIN_TAB.NEAR_ME>;
 
 export default connector(NearMe);

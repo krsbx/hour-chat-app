@@ -8,7 +8,7 @@ export type ResourcePage = {
 };
 
 export type StoredResource<T> = {
-  data: Record<T['id'], T | Partial<T>>;
+  data: Record<T['id'], T>;
   page: ResourcePage;
 };
 
