@@ -11,9 +11,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@notifee/react-native": "^7.7.1",
     "@react-native-async-storage/async-storage": "^1.18.1",
-    "@react-native-firebase/app": "^17.4.2",
-    "@react-native-firebase/firestore": "^17.4.2",
+    "@react-native-community/geolocation": "^3.0.6",
+    "@react-native-firebase/app": "^18.0.0",
+    "@react-native-firebase/firestore": "^18.0.0",
+    "@react-native-firebase/messaging": "^18.0.0",
     "@react-native-masked-view/masked-view": "^0.2.9",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/drawer": "^6.6.2",
@@ -36,6 +39,7 @@
     "react-native-date-picker": "^4.2.13",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-gesture-handler": "^2.9.0",
+    "react-native-maps": "^1.7.1",
     "react-native-mask-input": "^1.2.3",
     "react-native-pager-view": "^6.2.0",
     "react-native-reanimated": "^3.1.0",

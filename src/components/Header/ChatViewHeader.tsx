@@ -30,7 +30,11 @@ const ChatViewHeader: React.FC<Props> = ({ name, type }) => {
 
   return (
     <View style={style.container}>
-      <StatusBar animated backgroundColor={COLOR_PALETTE.BLUE_10} />
+      <StatusBar
+        animated
+        backgroundColor={COLOR_PALETTE.BLUE_10}
+        barStyle={'light-content'}
+      />
       <TouchableOpacity onPress={onPressOnBack}>
         <IonIcons
           name="arrow-back"

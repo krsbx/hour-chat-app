@@ -5,7 +5,7 @@ import { Config } from 'react-native-config';
 import { CHAT_TYPE } from '../constants/common';
 import useCurrentUser from './useCurrentUser';
 
-const defaultLimit = 25;
+const DEFAULT_LIMIT = 25;
 
 const useChatMessageSubscriber = <
   T extends HourChat.Type.ChatType,
@@ -19,7 +19,7 @@ const useChatMessageSubscriber = <
   const { user: currentUser } = useCurrentUser();
   const [messages, setMessages] = useState<U>([] as unknown as U);
   const [isMaxReached, setIsMaxReached] = useState(false);
-  const [limit, setLimit] = useState(defaultLimit);
+  const [limit, setLimit] = useState(DEFAULT_LIMIT);
   const [prevLimit, setPrevLimit] = useState(limit);
 
   const subscribePrivateMessages = useCallback(() => {
@@ -39,7 +39,7 @@ const useChatMessageSubscriber = <
           .compact()
           .value();
 
-        if (prevLimit === defaultLimit && limit !== defaultLimit) {
+        if (prevLimit === DEFAULT_LIMIT && limit !== DEFAULT_LIMIT) {
           setIsMaxReached(prevLimit === limit);
         }
 
@@ -66,7 +66,7 @@ const useChatMessageSubscriber = <
           .compact()
           .value();
 
-        if (prevLimit === defaultLimit && limit !== defaultLimit) {
+        if (prevLimit === DEFAULT_LIMIT && limit !== DEFAULT_LIMIT) {
           setIsMaxReached(prevLimit === limit);
         }
 

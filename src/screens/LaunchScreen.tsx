@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Easing, View } from 'react-native';
+import { Animated, Easing, StatusBar, View } from 'react-native';
 import { Label } from '../components';
 import useTokenListener from '../hooks/useTokenListener';
 import { COLOR_PALETTE } from '../utils/theme';
@@ -25,6 +25,11 @@ const LaunchScreen = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
+      <StatusBar
+        animated
+        backgroundColor={COLOR_PALETTE.WHITE}
+        barStyle={'dark-content'}
+      />
       <Animated.View style={{ flex: 1, opacity: opacity }}>
         <Label.AppTitle />
       </Animated.View>

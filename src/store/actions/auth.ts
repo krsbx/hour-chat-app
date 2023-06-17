@@ -2,10 +2,11 @@ import jwtDecode from 'jwt-decode';
 import _ from 'lodash';
 import validator from 'validator';
 import { z } from 'zod';
-import { AppDispatch } from '..';
+import { AppDispatch, store } from '..';
 import { auths } from '../../schema';
 import { AuthActionType } from '../actions-types/auth';
 import axios from '../axios';
+import { getAuth } from '../selectors/auth';
 
 export const requestEmailOtp = (token?: string) => async () => {
   const headers = {
@@ -31,7 +32,9 @@ export const loginUser =
       [key]: payload.identifier,
     });
 
-    const { data } = await axios.post('/auth/login', payload);
+    const { data } = await axios.post<
+      HourChat.Response.Resource<{ token: string }>
+    >('/auth/login', payload);
     const { token } = data.data;
 
     dispatch({
@@ -39,7 +42,7 @@ export const loginUser =
       payload: token,
     });
 
-    const decoded = jwtDecode<HourChat.Resource.User>(data.data);
+    const decoded = jwtDecode<HourChat.Resource.User>(token);
 
     return decoded;
   };
@@ -57,7 +60,9 @@ export const registerUser =
       {} as (typeof payload)['step1'] & (typeof payload)['step2']
     );
 
-    const { data } = await axios.post('/auth/register', newPayload);
+    const { data } = await axios.post<
+      HourChat.Response.Resource<{ token: string }>
+    >('/auth/register', newPayload);
 
     const { token } = data.data;
 
@@ -83,3 +88,15 @@ export const verifyEmail =
       },
     });
   };
+
+export const addDeviceToken = () => () => {
+  const { id, deviceToken } = getAuth(store.getState());
+
+  axios
+    .post(`/device-tokens/${id}`, {
+      token: deviceToken,
+    })
+    .catch(() => {
+      // Do nothing if there is an error
+    });
+};

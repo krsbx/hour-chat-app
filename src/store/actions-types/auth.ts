@@ -6,6 +6,7 @@ export enum AuthActionType {
 
 export type AuthReducer = HourChat.Resource.User & {
   token: string | null;
+  deviceToken: string | null;
 };
 
 export type SetAuthToken = {

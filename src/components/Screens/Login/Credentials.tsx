@@ -8,10 +8,13 @@ import { z } from 'zod';
 import { Buttons, Input } from '../..';
 import { AUTH_STACK, MAIN_STACK, MAIN_TAB } from '../../../constants/screens';
 import { auths } from '../../../schema';
-import { loginUser as _loginUser } from '../../../store/actions/auth';
+import {
+  addDeviceToken as _addDeviceToken,
+  loginUser as _loginUser,
+} from '../../../store/actions/auth';
 import { onLoginError } from '../../../utils/errors/auth';
 
-const Credentials: React.FC<Props> = ({ loginUser }) => {
+const Credentials: React.FC<Props> = ({ loginUser, addDeviceToken }) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.AuthStackNavigation<typeof AUTH_STACK.LOGIN>
@@ -39,6 +42,9 @@ const Credentials: React.FC<Props> = ({ loginUser }) => {
 
       const { isEmailVerified } = await loginUser(values);
 
+      // Record current user device token
+      addDeviceToken();
+
       if (isEmailVerified) {
         navigateToChat();
         return;
@@ -50,7 +56,14 @@ const Credentials: React.FC<Props> = ({ loginUser }) => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [loginUser, values, navigateToOtp, navigateToChat, setFieldError]);
+  }, [
+    loginUser,
+    values,
+    navigateToOtp,
+    navigateToChat,
+    setFieldError,
+    addDeviceToken,
+  ]);
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
@@ -91,6 +104,7 @@ const Credentials: React.FC<Props> = ({ loginUser }) => {
 
 const connector = connect(null, {
   loginUser: _loginUser,
+  addDeviceToken: _addDeviceToken,
 });
 
 type Props = ConnectedProps<typeof connector>;

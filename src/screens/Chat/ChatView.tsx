@@ -52,8 +52,10 @@ const ChatView: React.FC<Props> = ({ route }) => {
   const onContentSizeChange = useCallback(() => {
     if (!flatListRef.current) return;
 
+    if (!messages.length) return;
+
     flatListRef.current.scrollToEnd();
-  }, [flatListRef]);
+  }, [flatListRef, messages]);
 
   const onRefetching = useCallback(() => {
     if (isRefteching || isMaxReached) return;
@@ -76,30 +78,33 @@ const ChatView: React.FC<Props> = ({ route }) => {
         <Header.ChatView name={route.params.name} type={route.params.type} />
         <FlatList
           style={{ flex: 1 }}
-          data={messages}
+          data={messages ?? []}
           contentContainerStyle={{ paddingHorizontal: scale(10) }}
           onContentSizeChange={onContentSizeChange}
+          onLayout={onContentSizeChange}
           renderItem={({ item, index }) => {
+            const prev = messages?.[index - 1];
+
             if (+item.senderId === currentUser.id) {
               return (
-                <Wrapper.DelayContainer delay={100 * (index + 1)}>
+                <Wrapper.ChatBubbleContainer current={item} prev={prev}>
                   <Bubble.Outgoing
                     message={item.body}
                     timestamp={item.timestamp}
                     senderId={item.senderId}
                   />
-                </Wrapper.DelayContainer>
+                </Wrapper.ChatBubbleContainer>
               );
             }
 
             return (
-              <Wrapper.DelayContainer delay={100 * (index + 1)}>
+              <Wrapper.ChatBubbleContainer current={item} prev={prev}>
                 <Bubble.Incoming
                   message={item.body}
                   timestamp={item.timestamp}
                   senderId={item.senderId}
                 />
-              </Wrapper.DelayContainer>
+              </Wrapper.ChatBubbleContainer>
             );
           }}
           keyExtractor={(item, index) =>

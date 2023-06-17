@@ -10,6 +10,7 @@ import {
 
 const initialState = {
   token: null,
+  deviceToken: null,
 } as AuthReducer;
 
 const reducer = (
