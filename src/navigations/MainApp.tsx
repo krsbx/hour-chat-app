@@ -5,6 +5,8 @@ import React from 'react';
 import { scale } from 'react-native-size-matters';
 import { Buttons, Icon } from '../components';
 import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
+import useWatchPosition from '../hooks/useWatchPosition';
+import { Content } from '../screens';
 import ChatStack from './ChatStack';
 
 const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
@@ -12,6 +14,8 @@ const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
 const Empty = () => null;
 
 const MainApp = () => {
+  useWatchPosition();
+
   return (
     <Tab.Navigator
       initialRouteName={MAIN_TAB.CHAT}
@@ -48,7 +52,7 @@ const MainApp = () => {
       />
       <Tab.Screen
         name={MAIN_TAB.NEAR_ME}
-        component={Empty}
+        component={Content.NearMe}
         options={{
           tabBarIcon: Icon.Main.NearMe,
           tabBarLabel: 'Near Me',
