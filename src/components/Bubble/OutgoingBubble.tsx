@@ -6,9 +6,14 @@ import { scale } from 'react-native-size-matters';
 import useChatTimestamp from '../../hooks/useChatTimestamp';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import STYLES from '../../styles';
+import { decryptText } from '../../utils/chats/encryption';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const OutgoingBubble: React.FC<Props> = ({ message, timestamp }) => {
+const OutgoingBubble: React.FC<Props> = ({
+  message,
+  timestamp,
+  decryption,
+}) => {
   const right = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCurrentUser();
   const datetime = useChatTimestamp(timestamp);
@@ -38,7 +43,7 @@ const OutgoingBubble: React.FC<Props> = ({ message, timestamp }) => {
         </Text>
         <View style={style.messageTimestamp}>
           <Text style={[STYLES.LABELS.DEFAULT_TEXT, style.message]}>
-            {message}
+            {decryptText(message, decryption)}
           </Text>
           <Text style={style.timestamp}>{datetime}</Text>
         </View>
@@ -103,6 +108,7 @@ type Props = {
   message: string;
   timestamp: Timestamp;
   senderId: number;
+  decryption: HourChat.Type.Encryption;
 };
 
 export default OutgoingBubble;

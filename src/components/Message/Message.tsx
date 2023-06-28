@@ -11,9 +11,12 @@ import {
   View,
 } from 'react-native';
 import { scale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
+import { getCurrentEncryption } from '../../store/selectors/encryption';
 import STYLES from '../../styles';
+import { decryptText } from '../../utils/chats/encryption';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const Message: React.FC<Props> = ({
@@ -27,6 +30,7 @@ const Message: React.FC<Props> = ({
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.LIST>
     >();
+  const config = useSelector(getCurrentEncryption(type, uuid));
 
   const maxHeight = useRef(new Animated.Value(0)).current;
   const today = useMemo(() => moment(), []);
@@ -35,7 +39,7 @@ const Message: React.FC<Props> = ({
     [timestampProps]
   );
   const timestampLabel = useMemo(() => {
-    const isInPast = timestamp.isBefore(today);
+    const isInPast = timestamp.isBefore(today, 'days');
     const dayPasses = Math.abs(timestamp.diff(today, 'days'));
 
     if (isInPast) {
@@ -78,7 +82,9 @@ const Message: React.FC<Props> = ({
       >
         <View style={{ flex: 1, gap: scale(5) }}>
           <Text style={style.title}>{name}</Text>
-          <Text style={STYLES.LABELS.DEFAULT_TEXT}>{body}</Text>
+          <Text style={STYLES.LABELS.DEFAULT_TEXT}>
+            {decryptText(body, config)}
+          </Text>
         </View>
         <View>
           <Text style={style.timestamp}>{timestampLabel}</Text>

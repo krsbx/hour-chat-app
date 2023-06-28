@@ -1,6 +1,12 @@
 import { Formik } from 'formik';
 import _ from 'lodash';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {
   Animated,
   Easing,
@@ -15,6 +21,7 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Bubble, Header, Screens, Wrapper } from '../../components';
 import { DEFAULT_MESSAGE_VALUE } from '../../constants/defaults';
 import { CHAT_STACK } from '../../constants/screens';
+import useChatDecryption from '../../hooks/useChatDecryption';
 import useChatMessageSubscriber from '../../hooks/useChatMessageSubscriber';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import { chats } from '../../schema';
@@ -32,6 +39,10 @@ const ChatView: React.FC<Props> = ({ route }) => {
     route.params.type,
     route.params.uuid
   );
+
+  const chatHasMessage = useMemo(() => messages.length > 0, [messages]);
+
+  const decryption = useChatDecryption(route.params, [chatHasMessage]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
@@ -98,6 +109,7 @@ const ChatView: React.FC<Props> = ({ route }) => {
                     message={item.body}
                     timestamp={item.timestamp}
                     senderId={item.senderId}
+                    decryption={decryption}
                   />
                 </Wrapper.ChatBubbleContainer>
               );
@@ -109,6 +121,7 @@ const ChatView: React.FC<Props> = ({ route }) => {
                   message={item.body}
                   timestamp={item.timestamp}
                   senderId={item.senderId}
+                  decryption={decryption}
                 />
               </Wrapper.ChatBubbleContainer>
             );
