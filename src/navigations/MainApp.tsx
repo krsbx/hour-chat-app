@@ -5,16 +5,19 @@ import React from 'react';
 import { scale } from 'react-native-size-matters';
 import { Buttons, Icon } from '../components';
 import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
+import useWatchAuthToken from '../hooks/useWatchAuthToken';
 import useWatchPosition from '../hooks/useWatchPosition';
 import { Content } from '../screens';
 import ChatStack from './ChatStack';
 import CreateStoryStack from './CreateStoryStack';
+import ProfileStack from './ProfileStack';
 import StoryTab from './StoryTab';
 
 const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
 
 const MainApp = () => {
   useWatchPosition();
+  useWatchAuthToken();
 
   return (
     <Tab.Navigator
@@ -78,7 +81,7 @@ const MainApp = () => {
       />
       <Tab.Screen
         name={MAIN_TAB.PROFILE}
-        component={Content.Profile}
+        component={ProfileStack}
         options={{
           tabBarIcon: Icon.Main.Profile,
           tabBarLabel: 'Profile',

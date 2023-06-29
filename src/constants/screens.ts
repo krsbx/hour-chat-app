@@ -36,4 +36,10 @@ export const STORY_TAB = {
   ME: 'my.story.screen',
 } as const;
 
+export const PROFILE_STACK = {
+  MAIN: 'profile.main.screen',
+  SETTING: 'profile.setting.screen',
+  FRIEND_LIST: 'profile.friend-list.screen',
+} as const;
+
 export const TAB_HIDEABLE = _(CHAT_STACK).omit(['LIST']).map().value();

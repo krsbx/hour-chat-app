@@ -2,11 +2,13 @@ import jwtDecode from 'jwt-decode';
 import _ from 'lodash';
 import validator from 'validator';
 import { z } from 'zod';
-import { AppDispatch, store } from '..';
+import { AppDispatch } from '..';
 import { auths } from '../../schema';
 import { AuthActionType } from '../actions-types/auth';
+import { ResourceAction } from '../actions-types/resources';
 import axios from '../axios';
-import { getAuth } from '../selectors/auth';
+import { resetEncryption } from './encryptions';
+import { resetStory } from './story';
 
 export const requestEmailOtp = (token?: string) => async () => {
   const headers = {
@@ -89,14 +91,30 @@ export const verifyEmail =
     });
   };
 
-export const addDeviceToken = () => () => {
-  const { id, deviceToken } = getAuth(store.getState());
-
-  axios
-    .post(`/device-tokens/${id}`, {
-      token: deviceToken,
-    })
-    .catch(() => {
-      // Do nothing if there is an error
+export const addDeviceToken =
+  (id: string, deviceToken: string) => (dispatch: AppDispatch) => {
+    dispatch({
+      type: AuthActionType.UPDATE,
+      payload: {
+        deviceToken,
+      },
     });
+
+    axios
+      .post(`/device-tokens/${id}`, {
+        token: deviceToken,
+      })
+      .catch(() => {
+        // Do nothing if there is an error
+      });
+  };
+
+export const logoutUser = () => (dispatch: AppDispatch) => {
+  dispatch({ type: AuthActionType.LOGOUT });
+  dispatch({
+    type: ResourceAction.users.OVERWRITE,
+    payload: [],
+  });
+  resetEncryption()(dispatch);
+  resetStory()(dispatch);
 };

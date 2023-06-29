@@ -30,3 +30,7 @@ export const getChatEncryption =
 
     return data;
   };
+
+export const resetEncryption = () => (dispatch: AppDispatch) => {
+  dispatch({ type: EncryptionActionType.RESET });
+};

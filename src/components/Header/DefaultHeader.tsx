@@ -5,9 +5,9 @@ import { scale } from 'react-native-size-matters';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const DefaultHeader: React.FC = () => {
+const DefaultHeader: React.FC<Props> = ({ noBottomLine }) => {
   return (
-    <View style={style.container}>
+    <View style={[style.container, noBottomLine && { borderBottomWidth: 0 }]}>
       <Text style={style.inputStyle}>Hour Chat</Text>
       <View style={style.bottomLine} />
     </View>
@@ -40,5 +40,9 @@ const style = StyleSheet.create({
     minWidth: '94.5%',
   },
 });
+
+type Props = {
+  noBottomLine?: boolean;
+};
 
 export default DefaultHeader;

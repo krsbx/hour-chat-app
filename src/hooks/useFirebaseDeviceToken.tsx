@@ -1,12 +1,11 @@
 import notifee, { AuthorizationStatus } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store';
-import { AuthActionType } from '../store/actions-types/auth';
+import { addDeviceToken } from '../store/actions/auth';
+import useCurrentUser from './useCurrentUser';
 
 const useFirebaseDeviceToken = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const { user: currentUser } = useCurrentUser();
 
   const requestPermission = useCallback(async () => {
     const { authorizationStatus: status } = await notifee.requestPermission();
@@ -31,15 +30,10 @@ const useFirebaseDeviceToken = () => {
 
     if (!deviceToken) return;
 
-    dispatch({
-      type: AuthActionType.UPDATE,
-      payload: {
-        deviceToken,
-      },
-    });
+    addDeviceToken(currentUser.id, deviceToken);
 
     return deviceToken;
-  }, [dispatch]);
+  }, [currentUser.id]);
 
   useEffect(() => {
     requestPermission()
