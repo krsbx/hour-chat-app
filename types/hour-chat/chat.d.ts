@@ -1,7 +1,7 @@
 import type { Timestamp } from '@firebase/firestore';
 
 export type MessageData = {
-  senderId: number;
+  senderId: string;
   timestamp: Timestamp;
   body: string;
 };
@@ -17,17 +17,17 @@ export type GroupMetadata = MessageData & {
 
 export type Metadata =
   | {
-      typing: number[];
+      typing: string[];
       timestamp: Timestamp;
     }
   | {
-      members: number[];
+      members: string[];
       timestamp: Timestamp;
-      typing: number[];
+      typing: string[];
     };
 
 export type ChatMessageHistory = PrivateMetadata | GroupMetadata;
 
-export type PrivateMessageHistory = Record<number, PrivateMetadata>;
+export type PrivateMessageHistory = Record<string, PrivateMetadata>;
 
-export type GroupMessageHistory = Record<number, GroupMetadata>;
+export type GroupMessageHistory = Record<string, GroupMetadata>;

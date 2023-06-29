@@ -18,6 +18,7 @@ const useSingleChatListListener = <
   type: T
 ) => {
   const { user: currentUser } = useCurrentUser();
+  const [messagesObj, setMessagesObj] = useState<Record<string, U>>({});
   const [messages, setMessages] = useState<U[]>([] as U[]);
   const basePath = useMemo(() => CHAT_BASE_PATH[type], [type]);
 
@@ -35,13 +36,14 @@ const useSingleChatListListener = <
         const messages = _.reduce(
           data,
           (prev, curr) => {
-            prev.push(curr as U);
+            prev.push(curr as unknown as U);
 
             return prev;
           },
           [] as U[]
         ).sort(sortMessage);
 
+        setMessagesObj(_.keyBy(messages, 'uuid'));
         setMessages(messages);
       });
 
@@ -56,7 +58,7 @@ const useSingleChatListListener = <
     };
   }, [chatListSubcriber]);
 
-  return messages;
+  return [messages, messagesObj] as const;
 };
 
 export default useSingleChatListListener;

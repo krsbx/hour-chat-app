@@ -7,9 +7,10 @@ import Config from 'react-native-config';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store';
 import { StoriesActionType } from '../store/actions-types/stories';
+import { sortStory } from '../store/reducers/stories';
 import useCurrentUser from './useCurrentUser';
 
-const useUserStoryListener = (_uids?: number[]) => {
+const useUserStoryListener = (_uids?: string[]) => {
   const isOnFocus = useIsFocused();
   const dispatch = useDispatch<AppDispatch>();
   const { user: currentUser } = useCurrentUser();
@@ -26,7 +27,8 @@ const useUserStoryListener = (_uids?: number[]) => {
       .doc('story')
       .collection('users')
       .where('userId', 'in', uids)
-      .where('timestamp', '>', moment().subtract(1, 'day').toDate())
+      .where('createdAt', '>', moment().subtract(7, 'day').toDate())
+      .where('createdAt', '<=', moment().toDate())
       .onSnapshot((snap) => {
         if (!snap?.docs) return;
 
@@ -37,7 +39,7 @@ const useUserStoryListener = (_uids?: number[]) => {
           }))
         ) as HourChat.Story.StoryWithUuid[];
 
-        docs.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
+        docs.sort(sortStory);
 
         dispatch({
           type: StoriesActionType.OVERWRITE,

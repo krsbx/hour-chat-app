@@ -4,8 +4,8 @@ import { sortMessage } from '../utils/chats/common';
 import useSingleChatListListener from './useSingleChatListListener';
 
 const useChatListListener = () => {
-  const privateMessages = useSingleChatListListener(CHAT_TYPE.PRIVATE);
-  const groupMessages = useSingleChatListListener(CHAT_TYPE.GROUP);
+  const [privateMessages] = useSingleChatListListener(CHAT_TYPE.PRIVATE);
+  const [groupMessages] = useSingleChatListListener(CHAT_TYPE.GROUP);
 
   const messages = useMemo(() => {
     const messages: HourChat.Chat.ChatMessageHistory[] = [

@@ -34,7 +34,9 @@ const MyStory: React.FC<Props> = ({ stories }) => {
           gap: scale(10),
           paddingBottom: scale(80),
         }}
-        keyExtractor={(item) => `${item.timestamp.toMillis()}-${item.userId}`}
+        keyExtractor={(item) =>
+          `${item?.createdAt?.toMillis?.() ?? ''}-${item.userId}`
+        }
       />
     </View>
   );

@@ -11,10 +11,11 @@ export type BaseStory = {
 };
 
 export type Story = BaseStory & {
-  userId: number;
-  dislikes: number[];
-  likes: number[];
-  timestamp: Timestamp;
+  userId: string;
+  dislikes: string[];
+  likes: string[];
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 };
 
 export type StoryWithUuid = Story & {

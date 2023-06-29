@@ -56,7 +56,7 @@ export const deleteResource = <
 export const getResourceById =
   <T extends HourChat.Type.ResourceName>(
     resourceName: T,
-    id: string | number,
+    id: string,
     query = '',
     overwrite = false
   ) =>

@@ -17,7 +17,7 @@ import { createFullName } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const StoryCard: React.FC<Props> = ({
-  timestamp,
+  createdAt,
   likes,
   dislikes,
   body,
@@ -48,7 +48,7 @@ const StoryCard: React.FC<Props> = ({
       <View style={style.header}>
         <Text style={STYLES.LABELS.DEFAULT_TEXT}>{fullName}</Text>
         <Text style={style.headerDateTime}>
-          {moment(timestamp.toDate()).format('hh:mm A | Do MMMM YYYY')}
+          {moment(createdAt.toDate()).format('hh:mm A | Do MMMM YYYY')}
         </Text>
       </View>
       <View style={style.body}>
