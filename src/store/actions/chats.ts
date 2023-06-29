@@ -3,7 +3,7 @@ import axios from '../axios';
 import { getAuth } from '../selectors/auth';
 
 export const sendPrivateMessage =
-  ({ body, receiverId }: { body: string; receiverId: string | number }) =>
+  ({ body, receiverId }: { body: string; receiverId: string }) =>
   async () => {
     const { id } = getAuth(store.getState());
 
@@ -15,7 +15,7 @@ export const sendPrivateMessage =
   };
 
 export const sendGroupMessage =
-  ({ body, uuid }: { body: string; uuid: string | number }) =>
+  ({ body, uuid }: { body: string; uuid: string }) =>
   async () => {
     const { id } = getAuth(store.getState());
 
@@ -27,7 +27,7 @@ export const sendGroupMessage =
   };
 
 export const setTypingPrivateMessage =
-  ({ receiverId, typing }: { receiverId: string | number; typing: boolean }) =>
+  ({ receiverId, typing }: { receiverId: string; typing: boolean }) =>
   async () => {
     const { id } = getAuth(store.getState());
 
@@ -39,7 +39,7 @@ export const setTypingPrivateMessage =
   };
 
 export const setTypingGroupMessage =
-  ({ uuid, typing }: { uuid: string | number; typing: boolean }) =>
+  ({ uuid, typing }: { uuid: string; typing: boolean }) =>
   async () => {
     const { id } = getAuth(store.getState());
 

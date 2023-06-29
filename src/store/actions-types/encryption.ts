@@ -1,8 +1,8 @@
 import { CHAT_TYPE } from '../../constants/common';
 
 export type EncryptionReducer = {
-  [CHAT_TYPE.GROUP]: Record<string | number, HourChat.Type.Encryption>;
-  [CHAT_TYPE.PRIVATE]: Record<string | number, HourChat.Type.Encryption>;
+  [CHAT_TYPE.GROUP]: Record<string, HourChat.Type.Encryption>;
+  [CHAT_TYPE.PRIVATE]: Record<string, HourChat.Type.Encryption>;
 };
 
 export enum EncryptionActionType {
@@ -15,7 +15,7 @@ export type SetEncryption = {
   type: EncryptionActionType.SET;
   payload: {
     type: HourChat.Type.ChatType;
-    uuid: string | number;
+    uuid: string;
     config: HourChat.Type.Encryption;
   };
 };
@@ -24,7 +24,7 @@ export type DeleteEncryption = {
   type: EncryptionActionType.DELETE;
   payload: {
     type: HourChat.Type.ChatType;
-    uuid: string | number;
+    uuid: string;
   };
 };
 

@@ -1,7 +1,7 @@
 import { GENDER } from '../../src/constants/resources';
 
 export type User = {
-  id: number;
+  id: string;
   firstName: string;
   middleName: string;
   lastName: string;
@@ -17,16 +17,16 @@ export type User = {
 };
 
 export type DeviceToken = {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   token: string | null;
   createdAt: string;
   updatedAt: string;
 };
 
 export type UserLocation = {
-  id: number;
-  userId: number;
+  id: string;
+  userId: string;
   location: {
     type: 'Point';
     coordinates: [number, number];

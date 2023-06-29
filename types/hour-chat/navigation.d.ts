@@ -33,7 +33,7 @@ export type StoryTab = {
 export type ChatStack = {
   [CHAT_STACK.LIST]: undefined;
   [CHAT_STACK.VIEW]: {
-    uuid: string | number;
+    uuid: string;
     type: HourChat.Type.ChatType;
     name: string;
   };

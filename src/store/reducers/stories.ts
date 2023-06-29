@@ -12,7 +12,7 @@ const initialState = [] as HourChat.Story.StoryWithUuid[];
 export const sortStory = (
   a: HourChat.Story.StoryWithUuid,
   b: HourChat.Story.StoryWithUuid
-) => a.timestamp.toMillis() - b.timestamp.toMillis();
+) => a.createdAt.toMillis() - b.createdAt.toMillis();
 
 const reducer = (
   state = _.cloneDeep(initialState),

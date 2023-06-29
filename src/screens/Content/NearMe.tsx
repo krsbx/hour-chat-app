@@ -32,7 +32,7 @@ const NearMe: React.FC<Props> = ({
   const mapRef = useRef<MapView>(null);
 
   const navigateToChat = useCallback(
-    (uuid: string | number) => {
+    (uuid: string) => {
       navigation.navigate(MAIN_TAB.CHAT, {
         screen: CHAT_STACK.VIEW,
         params: {

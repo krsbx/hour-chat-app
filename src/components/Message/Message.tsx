@@ -14,9 +14,9 @@ import { scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
+import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
 import { getCurrentEncryption } from '../../store/selectors/encryption';
 import STYLES from '../../styles';
-import { decryptText } from '../../utils/chats/encryption';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const Message: React.FC<Props> = ({
@@ -52,6 +52,8 @@ const Message: React.FC<Props> = ({
     return timestamp.format('HH:mm');
   }, [timestamp, today]);
 
+  const messageBody = useDecryptedChatMessage(body, config);
+
   const onPress = useCallback(() => {
     navigation.push(CHAT_STACK.VIEW, {
       type: type,
@@ -82,9 +84,7 @@ const Message: React.FC<Props> = ({
       >
         <View style={{ flex: 1, gap: scale(5) }}>
           <Text style={style.title}>{name}</Text>
-          <Text style={STYLES.LABELS.DEFAULT_TEXT}>
-            {decryptText(body, config)}
-          </Text>
+          <Text style={STYLES.LABELS.DEFAULT_TEXT}>{messageBody}</Text>
         </View>
         <View>
           <Text style={style.timestamp}>{timestampLabel}</Text>
@@ -119,7 +119,7 @@ type Props = {
   timestamp: Timestamp;
   body: string;
   type: HourChat.Type.ChatType;
-  uuid: string | number;
+  uuid: string;
 };
 
 export default Message;

@@ -11,6 +11,7 @@ import {
   Animated,
   Easing,
   FlatList,
+  ListRenderItemInfo,
   RefreshControl,
   StatusBar,
   StyleSheet,
@@ -24,25 +25,27 @@ import { CHAT_STACK } from '../../constants/screens';
 import useChatDecryption from '../../hooks/useChatDecryption';
 import useChatMessageSubscriber from '../../hooks/useChatMessageSubscriber';
 import useCurrentUser from '../../hooks/useCurrentUser';
+import useLastMessageListener from '../../hooks/useLastMessageListener';
 import { chats } from '../../schema';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const ChatView: React.FC<Props> = ({ route }) => {
   const { user: currentUser } = useCurrentUser();
   const [isRefteching, setIsRefetching] = useState(false);
+  const [topOffset, setTopOffset] = useState(0);
 
   const flatListRef = useRef<FlatList | null>(null);
   const flexSize = useRef(new Animated.Value(0)).current;
   const emptySize = useRef(new Animated.Value(1)).current;
 
-  const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber(
-    route.params.type,
-    route.params.uuid
-  );
+  const { total } = useLastMessageListener(route.params);
+  const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber({
+    ...route.params,
+    total,
+  });
 
   const chatHasMessage = useMemo(() => messages.length > 0, [messages]);
-
-  const decryption = useChatDecryption(route.params, [chatHasMessage]);
+  const config = useChatDecryption(route.params, [chatHasMessage]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
@@ -66,8 +69,10 @@ const ChatView: React.FC<Props> = ({ route }) => {
 
     if (!messages.length) return;
 
+    if (topOffset <= 10) return;
+
     flatListRef.current.scrollToEnd();
-  }, [flatListRef, messages]);
+  }, [flatListRef, messages, topOffset]);
 
   const onRefetching = useCallback(() => {
     if (isRefteching || isMaxReached) return;
@@ -99,17 +104,23 @@ const ChatView: React.FC<Props> = ({ route }) => {
           contentContainerStyle={{ paddingHorizontal: scale(10) }}
           onContentSizeChange={onContentSizeChange}
           onLayout={onContentSizeChange}
-          renderItem={({ item, index }) => {
+          onScroll={(e) => setTopOffset(e?.nativeEvent?.contentOffset?.y ?? 0)}
+          renderItem={({
+            item,
+            index,
+          }: ListRenderItemInfo<
+            HourChat.Chat.PrivateMetadata | HourChat.Chat.GroupMetadata
+          >) => {
             const prev = messages?.[index - 1];
 
-            if (+item.senderId === currentUser.id) {
+            if (item.senderId === currentUser.id) {
               return (
                 <Wrapper.ChatBubbleContainer current={item} prev={prev}>
                   <Bubble.Outgoing
                     message={item.body}
                     timestamp={item.timestamp}
                     senderId={item.senderId}
-                    decryption={decryption}
+                    config={config}
                   />
                 </Wrapper.ChatBubbleContainer>
               );
@@ -121,7 +132,7 @@ const ChatView: React.FC<Props> = ({ route }) => {
                   message={item.body}
                   timestamp={item.timestamp}
                   senderId={item.senderId}
-                  decryption={decryption}
+                  config={config}
                 />
               </Wrapper.ChatBubbleContainer>
             );

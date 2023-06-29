@@ -8,8 +8,8 @@ export const getChatEncryption =
     senderId,
     type,
   }: {
-    senderId: string | number;
-    receiverId: string | number;
+    senderId: string;
+    receiverId: string;
     type: HourChat.Type.ChatType;
   }) =>
   async (dispatch: AppDispatch) => {

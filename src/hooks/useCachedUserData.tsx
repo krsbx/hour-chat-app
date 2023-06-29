@@ -5,7 +5,7 @@ import { getResourceById } from '../store/actions/resources';
 import { getResurceDataById } from '../store/selectors/resources';
 import { createFullName, isResourceExpired } from '../utils/common';
 
-const useCachedUserData = (uuid: string | number) => {
+const useCachedUserData = (uuid: string) => {
   const _user = useSelector(getResurceDataById(RESOURCE_NAME.USERS, +uuid));
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [user, setUser] = useState<HourChat.Resource.User | undefined>(_user);

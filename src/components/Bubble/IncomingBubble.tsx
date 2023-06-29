@@ -5,19 +5,20 @@ import { Animated, Easing, StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import useCachedUserData from '../../hooks/useCachedUserData';
 import useChatTimestamp from '../../hooks/useChatTimestamp';
+import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
 import STYLES from '../../styles';
-import { decryptText } from '../../utils/chats/encryption';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const IncomingBubble: React.FC<Props> = ({
   message,
   timestamp,
   senderId,
-  decryption,
+  config,
 }) => {
   const left = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCachedUserData(senderId);
   const datetime = useChatTimestamp(timestamp);
+  const messageBody = useDecryptedChatMessage(message, config);
 
   const startAnimation = useCallback(() => {
     Animated.timing(left, {
@@ -45,7 +46,7 @@ const IncomingBubble: React.FC<Props> = ({
         </Text>
         <View style={style.messageTimestamp}>
           <Text style={[STYLES.LABELS.DEFAULT_TEXT, style.message]}>
-            {decryptText(message, decryption)}
+            {messageBody}
           </Text>
           <Text style={style.timestamp}>{datetime}</Text>
         </View>
@@ -107,8 +108,8 @@ const style = StyleSheet.create({
 type Props = {
   message: string;
   timestamp: Timestamp;
-  senderId: number;
-  decryption: HourChat.Type.Encryption;
+  senderId: string;
+  config: HourChat.Type.Encryption;
 };
 
 export default IncomingBubble;

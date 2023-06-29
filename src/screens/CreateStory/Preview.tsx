@@ -14,6 +14,7 @@ import {
 } from '../../constants/screens';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import { AppState } from '../../store';
+import { uploadFiles as _uploadFiles } from '../../store/actions/files';
 import { createStory as _createStory } from '../../store/actions/stories';
 import {
   getAttachedFile,
@@ -29,18 +30,19 @@ const Preview: React.FC<Props> = ({
   resolution,
   story,
   createStory,
+  uploadFiles,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isDisabled = useMemo(() => {
     if (_.isEmpty(story) && _.isEmpty(file)) return true;
+
     if (
       !_.isEmpty(file) &&
       file.type?.includes('images') &&
-      (!resolution.width || !resolution.height)
+      (!resolution.width || !resolution.height) &&
+      !_.trim(story).length
     )
       return true;
-
-    if (!_.trim(story).length) return true;
 
     return false;
   }, [story, file, resolution]);
@@ -63,30 +65,40 @@ const Preview: React.FC<Props> = ({
     try {
       setIsSubmitting(true);
 
+      let uri = '';
+
+      if (file.uri) {
+        const { data } = await uploadFiles(file);
+
+        uri = data[0];
+      }
+
       await createStory({
         body: story,
-        ...(file.uri && {
-          uri: file.uri,
-          height: resolution.height,
-          width: resolution.width,
-          type: file.type,
+        ...(uri && {
+          file: {
+            uri: uri,
+            height: resolution.height,
+            width: resolution.width,
+            type: file.type,
+          },
         }),
       });
 
       navigateToMyStory();
-    } catch {
+    } catch (e) {
       // Do nothing if there is an error
     } finally {
       setIsSubmitting(false);
     }
   }, [
+    file,
     createStory,
-    file.type,
-    file.uri,
+    story,
     resolution.height,
     resolution.width,
-    story,
     navigateToMyStory,
+    uploadFiles,
   ]);
 
   return (
@@ -101,7 +113,8 @@ const Preview: React.FC<Props> = ({
         <Card.Story
           likes={[]}
           dislikes={[]}
-          timestamp={moment() as never}
+          createdAt={moment() as never}
+          updatedAt={moment() as never}
           body={story}
           userId={currentUser.id}
           file={{
@@ -156,6 +169,7 @@ const mapStateToProps = (state: AppState) => ({
 
 const connector = connect(mapStateToProps, {
   createStory: _createStory,
+  uploadFiles: _uploadFiles,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

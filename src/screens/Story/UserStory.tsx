@@ -13,17 +13,17 @@ import { COLOR_PALETTE } from '../../utils/theme';
 
 const UserStory: React.FC<Props> = ({ stories }) => {
   // Listen to user that has been chatted
-  const messages = useSingleChatListListener(CHAT_TYPE.PRIVATE);
+  const [messages] = useSingleChatListListener(CHAT_TYPE.PRIVATE);
   const userIds = useMemo(
     () =>
       messages.reduce((prev, curr) => {
         // Unique only
-        if (prev.includes(+curr.uuid)) return prev;
+        if (prev.includes(curr.uuid)) return prev;
 
-        prev.push(+curr.uuid);
+        prev.push(curr.uuid);
 
         return prev;
-      }, [] as number[]),
+      }, [] as string[]),
     [messages]
   );
 
@@ -50,7 +50,9 @@ const UserStory: React.FC<Props> = ({ stories }) => {
           gap: scale(10),
           paddingBottom: scale(80),
         }}
-        keyExtractor={(item) => `${item.timestamp.toMillis()}-${item.userId}`}
+        keyExtractor={(item) =>
+          `${item?.createdAt?.toMillis?.() ?? ''}-${item.userId}`
+        }
       />
     </View>
   );
