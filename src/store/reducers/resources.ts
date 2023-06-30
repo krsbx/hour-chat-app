@@ -91,6 +91,7 @@ const reducer = <T extends HourChat.Type.ResourceName>(resourceName: T) => {
 
       case ActionType.SET_PAGE: {
         if (_.isNumber(action.payload)) return state;
+        if (!_.isObject(action.payload)) return state;
 
         return {
           ...state,

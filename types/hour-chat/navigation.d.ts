@@ -11,6 +11,7 @@ import {
   CREATE_STORY_STACK,
   MAIN_STACK,
   MAIN_TAB,
+  PROFILE_STACK,
   STORY_TAB,
 } from '../../src/constants/screens';
 
@@ -20,9 +21,15 @@ export type AuthStack = {
   [AUTH_STACK.OTP]: undefined;
 };
 
-export type CreateStory = {
+export type CreateStoryStack = {
   [CREATE_STORY_STACK.FORM]: undefined;
   [CREATE_STORY_STACK.PREVIEW]: undefined;
+};
+
+export type ProfileStack = {
+  [PROFILE_STACK.MAIN]: undefined;
+  [PROFILE_STACK.SETTING]: undefined;
+  [PROFILE_STACK.FRIEND_LIST]: undefined;
 };
 
 export type StoryTab = {
@@ -43,9 +50,9 @@ export type ChatStack = {
 export type MainTab = {
   [MAIN_TAB.CHAT]: NavigatorScreenParams<ChatStack>;
   [MAIN_TAB.NEAR_ME]: undefined;
-  [MAIN_TAB.CREATE_STORY]: NavigatorScreenParams<CreateStory>;
+  [MAIN_TAB.CREATE_STORY]: NavigatorScreenParams<CreateStoryStack>;
   [MAIN_TAB.STORY]: NavigatorScreenParams<StoryTab>;
-  [MAIN_TAB.PROFILE]: undefined;
+  [MAIN_TAB.PROFILE]: NavigatorScreenParams<ProfileStack>;
 };
 
 export type MainStack = {
@@ -75,9 +82,9 @@ export type StoryTabProps<T extends keyof StoryTab> = MaterialTopTabScreenProps<
   T
 >;
 
-export type CreateStoryProps<T extends keyof CreateStory> =
+export type CreateStoryStackProps<T extends keyof CreateStoryStack> =
   CompositeScreenProps<
-    StackScreenProps<CreateStory, T>,
+    StackScreenProps<CreateStoryStack, T>,
     StackScreenProps<MainTab>
   >;
 
@@ -91,6 +98,12 @@ export type MainStackProps<T extends keyof MainStack> = CompositeScreenProps<
   BottomTabScreenProps<MainTab>
 >;
 
+export type ProfileStackProps<T extends keyof ProfileStack> =
+  CompositeScreenProps<
+    StackScreenProps<ProfileStack, T>,
+    StackScreenProps<MainTab>
+  >;
+
 export type AuthStackNavigation<T extends keyof AuthStack> =
   AuthStackProps<T>['navigation'];
 
@@ -102,3 +115,6 @@ export type MainStackNavigation<T extends keyof MainStack> =
 
 export type ChatStackNavigation<T extends keyof ChatStack> =
   ChatStackProps<T>['navigation'];
+
+export type ProfileStackNavigation<T extends keyof ProfileStack> =
+  ProfileStackProps<T>['navigation'];

@@ -32,7 +32,6 @@ import { COLOR_PALETTE } from '../../utils/theme';
 const ChatView: React.FC<Props> = ({ route }) => {
   const { user: currentUser } = useCurrentUser();
   const [isRefteching, setIsRefetching] = useState(false);
-  const [topOffset, setTopOffset] = useState(0);
 
   const flatListRef = useRef<FlatList | null>(null);
   const flexSize = useRef(new Animated.Value(0)).current;
@@ -69,10 +68,8 @@ const ChatView: React.FC<Props> = ({ route }) => {
 
     if (!messages.length) return;
 
-    if (topOffset <= 10) return;
-
     flatListRef.current.scrollToEnd();
-  }, [flatListRef, messages, topOffset]);
+  }, [flatListRef, messages]);
 
   const onRefetching = useCallback(() => {
     if (isRefteching || isMaxReached) return;
@@ -104,7 +101,6 @@ const ChatView: React.FC<Props> = ({ route }) => {
           contentContainerStyle={{ paddingHorizontal: scale(10) }}
           onContentSizeChange={onContentSizeChange}
           onLayout={onContentSizeChange}
-          onScroll={(e) => setTopOffset(e?.nativeEvent?.contentOffset?.y ?? 0)}
           renderItem={({
             item,
             index,

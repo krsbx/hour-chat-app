@@ -3,7 +3,7 @@ import React from 'react';
 import { CREATE_STORY_STACK } from '../constants/screens';
 import { CreateStory } from '../screens';
 
-const Stack = createStackNavigator<HourChat.Navigation.CreateStory>();
+const Stack = createStackNavigator<HourChat.Navigation.CreateStoryStack>();
 
 const CreateStoryStack = () => {
   return (

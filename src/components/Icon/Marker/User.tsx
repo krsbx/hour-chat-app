@@ -1,42 +1,18 @@
 import { Text } from '@rneui/base';
 import _ from 'lodash';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MapMarker, MapMarkerProps, Marker } from 'react-native-maps';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { GENDER } from '../../../constants/resources';
+import useUserGenderIcon from '../../../hooks/useUserGenderIcon';
 import STYLES from '../../../styles';
 import { createFullName } from '../../../utils/common';
 import { COLOR_PALETTE } from '../../../utils/theme';
 
 const User = React.forwardRef<MapMarker | null, Props>(
   ({ user, onPress, ...props }, ref) => {
-    const iconName = useMemo(() => {
-      switch (user.gender) {
-        case GENDER.MALE:
-          return 'male';
-
-        case GENDER.FEMALE:
-          return 'female';
-
-        default:
-          return 'male-female';
-      }
-    }, [user]);
-
-    const iconColor = useMemo(() => {
-      switch (user.gender) {
-        case GENDER.MALE:
-          return COLOR_PALETTE.BLUE_10;
-
-        case GENDER.FEMALE:
-          return COLOR_PALETTE.DANGER_PRESSED;
-
-        default:
-          return COLOR_PALETTE.ROYAL_BLUE_100;
-      }
-    }, [user]);
+    const { iconColor, iconName } = useUserGenderIcon(user);
 
     return (
       <Marker {...props} onPress={onPress} ref={ref}>
