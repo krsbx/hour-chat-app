@@ -39,7 +39,7 @@ const ChatList: React.FC<Props> = ({ users }) => {
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
-      <Header.ChatList query={query} setQuery={setQuery} />
+      <Header.SearchHeader query={query} setQuery={setQuery} />
       <FlatList
         data={messages}
         style={{ flex: 1 }}

@@ -36,7 +36,13 @@ const useSingleChatListListener = <
         const messages = _.reduce(
           data,
           (prev, curr) => {
-            prev.push(curr as unknown as U);
+            prev.push(
+              _.defaults(curr, {
+                body: '',
+                files: [],
+                total: 0,
+              }) as unknown as U
+            );
 
             return prev;
           },

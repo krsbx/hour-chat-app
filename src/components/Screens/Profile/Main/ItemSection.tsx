@@ -76,7 +76,7 @@ const ItemSection: React.FC<Props> = ({ logoutUser }) => {
         <Buttons.Section
           style={{ backgroundColor: COLOR_PALETTE.NEUTRAL_20 }}
           onPress={navigateToSetting}
-          title={'Membership'}
+          title={'Coming Soon...'}
           disabled
         />
         <Buttons.Section onPress={logoutUser} title="Logout" />

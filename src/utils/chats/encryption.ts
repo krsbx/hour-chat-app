@@ -2,8 +2,8 @@ import aesjs from 'aes-js';
 
 export const encryptText = (text: string, config: HourChat.Type.Encryption) => {
   try {
-    if (!config.iv || !config.key) return text;
-    if (config.iv.length < 16 || config.key.length < 16) return text;
+    if (!config.iv || !config.key) return;
+    if (config.iv.length < 16 || config.key.length < 16) return;
 
     const textBytes = aesjs.utils.utf8.toBytes(text);
 
@@ -12,14 +12,14 @@ export const encryptText = (text: string, config: HourChat.Type.Encryption) => {
 
     return aesjs.utils.hex.fromBytes(encryptedBytes);
   } catch {
-    return text;
+    return;
   }
 };
 
 export const decryptText = (text: string, config: HourChat.Type.Encryption) => {
   try {
-    if (!config.iv || !config.key) return text;
-    if (config.iv.length < 16 || config.key.length < 16) return text;
+    if (!config.iv || !config.key) return;
+    if (config.iv.length < 16 || config.key.length < 16) return;
 
     const encryptedBytes = aesjs.utils.hex.toBytes(text);
 
@@ -28,6 +28,6 @@ export const decryptText = (text: string, config: HourChat.Type.Encryption) => {
 
     return aesjs.utils.utf8.fromBytes(decryptedBytes);
   } catch {
-    return text;
+    return;
   }
 };

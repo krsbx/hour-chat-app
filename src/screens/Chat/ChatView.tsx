@@ -115,24 +115,14 @@ const ChatView: React.FC<Props> = ({ route }) => {
             if (item.senderId === currentUser.id) {
               return (
                 <Wrapper.ChatBubbleContainer current={item} prev={prev}>
-                  <Bubble.Outgoing
-                    message={item.body}
-                    timestamp={item.timestamp}
-                    senderId={item.senderId}
-                    config={config}
-                  />
+                  <Bubble.Outgoing config={config} {...item} />
                 </Wrapper.ChatBubbleContainer>
               );
             }
 
             return (
               <Wrapper.ChatBubbleContainer current={item} prev={prev}>
-                <Bubble.Incoming
-                  message={item.body}
-                  timestamp={item.timestamp}
-                  senderId={item.senderId}
-                  config={config}
-                />
+                <Bubble.Incoming config={config} {...item} />
               </Wrapper.ChatBubbleContainer>
             );
           }}

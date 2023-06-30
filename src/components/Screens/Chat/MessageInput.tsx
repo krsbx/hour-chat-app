@@ -1,12 +1,9 @@
 import { useRoute } from '@react-navigation/native';
 import { useFormikContext } from 'formik';
+import _ from 'lodash';
 import React, { useCallback } from 'react';
-import {
-  GestureResponderEvent,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { GestureResponderEvent, TouchableOpacity, View } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
@@ -14,7 +11,7 @@ import { z } from 'zod';
 import { Input } from '../..';
 import { CHAT_TYPE } from '../../../constants/common';
 import { CHAT_STACK } from '../../../constants/screens';
-import useDebounce from '../../../hooks/useDebounce';
+import useOnUserTyping from '../../../hooks/useOnUserTyping';
 import { chats } from '../../../schema';
 import {
   sendGroupMessage as _sendGroupMessage,
@@ -22,37 +19,58 @@ import {
   setTypingGroupMessage as _setTypingGroupMessage,
   setTypingPrivateMessage as _setTypingPrivateMessage,
 } from '../../../store/actions/chats';
+import { uploadFiles as _uploadFiles } from '../../../store/actions/files';
 
 const InputForm: React.FC<Props> = ({
   sendGroupMessage,
   sendPrivateMessage,
-  setTypingGroupMessage,
-  setTypingPrivateMessage,
+  uploadFiles,
 }) => {
   const route =
     useRoute<
       HourChat.Navigation.ChatStackProps<typeof CHAT_STACK.VIEW>['route']
     >();
 
-  const { handleChange, handleBlur, values, setFieldValue } =
+  const { handleChange, handleBlur, values, setFieldValue, validate } =
     useFormikContext<z.infer<typeof chats.messageSchema>>();
 
+  useOnUserTyping(route.params);
+
   const onPressOnSend = useCallback(
-    (e: GestureResponderEvent) => {
+    async (e: GestureResponderEvent) => {
       e.stopPropagation();
 
       const { body } = values;
       const { type, uuid } = route.params;
 
-      if (!body) return;
-
-      setFieldValue('body', '');
-
       try {
+        await validate?.(values);
+
+        setFieldValue('body', '');
+        setFieldValue('files', []);
+
+        const files: HourChat.Type.File[] = [];
+
+        if (values.files?.length) {
+          const { data } = await uploadFiles(values.files as never);
+
+          files.push(
+            ..._.map(
+              data,
+              (uri, id) =>
+                ({
+                  ...(values.files?.[id] ?? {}),
+                  uri,
+                } as never)
+            )
+          );
+        }
+
         switch (type) {
           case CHAT_TYPE.GROUP: {
             sendGroupMessage({
-              body,
+              body: body ?? '',
+              files: files ?? [],
               uuid,
             });
 
@@ -61,7 +79,8 @@ const InputForm: React.FC<Props> = ({
 
           case CHAT_TYPE.PRIVATE: {
             sendPrivateMessage({
-              body,
+              body: body ?? '',
+              files: files ?? [],
               receiverId: uuid,
             });
 
@@ -72,63 +91,44 @@ const InputForm: React.FC<Props> = ({
         // Do nothing if there is an error
       }
     },
-    [values, route.params, setFieldValue, sendGroupMessage, sendPrivateMessage]
+    [
+      values,
+      route.params,
+      validate,
+      setFieldValue,
+      uploadFiles,
+      sendGroupMessage,
+      sendPrivateMessage,
+    ]
   );
 
-  const onUserTyping = useCallback(
-    (typing: boolean) => {
-      const { type, uuid } = route.params;
+  const onPressOnAttach = useCallback(async () => {
+    try {
+      const results = await DocumentPicker.pick({
+        allowMultiSelection: true,
+        type: [DocumentPicker.types.allFiles],
+        copyTo: 'cachesDirectory',
+      });
 
-      try {
-        switch (type) {
-          case CHAT_TYPE.GROUP: {
-            setTypingGroupMessage({
-              uuid,
-              typing,
-            });
+      const normalizedResults = [
+        ...(values?.files ?? []),
+        ..._.map(results, (result) => _.pick(result, ['uri', 'type', 'name'])),
+      ];
 
-            break;
-          }
-
-          case CHAT_TYPE.PRIVATE: {
-            setTypingPrivateMessage({
-              receiverId: uuid,
-              typing,
-            });
-
-            break;
-          }
-        }
-      } catch {
-        // Do nothing if there is an error
-      }
-    },
-    [route.params, setTypingGroupMessage, setTypingPrivateMessage]
-  );
-
-  useDebounce(() => {
-    onUserTyping(true);
-  }, [values.body]);
-
-  useDebounce(
-    () => {
-      onUserTyping(false);
-    },
-    [values.body],
-    3000
-  );
+      setFieldValue('files', normalizedResults);
+    } catch {
+      // Do nothing if there is an error
+    }
+  }, [values.files, setFieldValue]);
 
   return (
     <View
       style={{
-        flexDirection: 'row',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
       }}
     >
-      <View style={style.iconContainer}>
-        <TouchableOpacity activeOpacity={0.5} style={style.leftIcon}>
-          <Ionicons name="attach" size={scale(18)} />
-        </TouchableOpacity>
-      </View>
       <Input.InputField
         onChangeText={handleChange('body')}
         onBlur={handleBlur('body')}
@@ -136,19 +136,36 @@ const InputForm: React.FC<Props> = ({
         value={values.body}
         multiline
         containerStyle={{
-          flex: 10,
           maxHeight: scale(75),
         }}
+        leftIcon={
+          <TouchableOpacity activeOpacity={0.5} onPress={onPressOnAttach}>
+            <Ionicons name="attach" size={scale(18)} />
+          </TouchableOpacity>
+        }
+        rightIcon={
+          <TouchableOpacity activeOpacity={0.5} onPress={onPressOnSend}>
+            <Ionicons name="send" />
+          </TouchableOpacity>
+        }
+        inputStyle={{
+          borderLeftWidth: 1,
+          borderRightWidth: 1,
+          borderTopLeftRadius: scale(12),
+          borderBottomLeftRadius: scale(12),
+          borderTopRightRadius: scale(12),
+          borderBottomRightRadius: scale(12),
+        }}
+        inputContainerStyle={{
+          marginBottom: 0,
+        }}
+        leftIconContainerStyle={{
+          borderWidth: 0,
+        }}
+        rightIconContainerStyle={{
+          borderWidth: 0,
+        }}
       />
-      <View style={style.iconContainer}>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={style.rightIcon}
-          onPress={onPressOnSend}
-        >
-          <Ionicons name="send" />
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -158,26 +175,11 @@ const connector = connect(null, {
   sendGroupMessage: _sendGroupMessage,
   setTypingGroupMessage: _setTypingGroupMessage,
   setTypingPrivateMessage: _setTypingPrivateMessage,
-});
-
-const style = StyleSheet.create({
-  iconContainer: {
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flex: 1,
-  },
-  leftIcon: {
-    paddingBottom: scale(20),
-    paddingLeft: scale(5),
-  },
-  rightIcon: {
-    paddingBottom: scale(22),
-    paddingRight: scale(5),
-  },
+  uploadFiles: _uploadFiles,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type Props = ReduxProps & {};
+type Props = ReduxProps;
 
 export default connector(InputForm);

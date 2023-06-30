@@ -1,4 +1,3 @@
-import type { Timestamp } from '@firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from '@rneui/base';
 import moment from 'moment';
@@ -28,6 +27,7 @@ const Message: React.FC<Props> = ({
   type,
   uuid,
   user,
+  files,
 }) => {
   const navigation =
     useNavigation<
@@ -56,6 +56,13 @@ const Message: React.FC<Props> = ({
   }, [timestamp, today]);
 
   const messageBody = useDecryptedChatMessage(body, config);
+  const messagePreview = useMemo(() => {
+    if (messageBody) return messageBody;
+
+    if (files.length) return `${files.length} Files`;
+
+    return '';
+  }, [messageBody, files]);
 
   const onPress = useCallback(() => {
     navigation.push(CHAT_STACK.VIEW, {
@@ -92,7 +99,7 @@ const Message: React.FC<Props> = ({
         />
         <View style={{ flex: 1, gap: scale(5) }}>
           <Text style={style.title}>{name}</Text>
-          <Text style={STYLES.LABELS.DEFAULT_TEXT}>{messageBody}</Text>
+          <Text style={STYLES.LABELS.DEFAULT_TEXT}>{messagePreview}</Text>
         </View>
         <View>
           <Text style={style.timestamp}>{timestampLabel}</Text>
@@ -122,11 +129,9 @@ const style = StyleSheet.create({
   },
 });
 
-type Props = {
-  name: string;
-  timestamp: Timestamp;
-  body: string;
+type Props = HourChat.Chat.MessageData & {
   type: HourChat.Type.ChatType;
+  name: string;
   uuid: string;
   user?: HourChat.Resource.User;
 };

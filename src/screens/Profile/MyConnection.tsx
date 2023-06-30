@@ -58,7 +58,11 @@ const MyConnection: React.FC<Props> = ({ users, navigation }) => {
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
-      <Header.ChatList query={query} setQuery={setQuery} />
+      <Header.SearchHeader
+        title="My Connection"
+        query={query}
+        setQuery={setQuery}
+      />
       <FlatList
         style={{ flex: 1 }}
         data={messages}

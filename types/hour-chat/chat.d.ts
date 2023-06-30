@@ -4,6 +4,7 @@ export type MessageData = {
   senderId: string;
   timestamp: Timestamp;
   body: string;
+  files: HourChat.Type.File[];
 };
 
 export type PrivateMetadata = MessageData & {

@@ -1,12 +1,6 @@
 import { Input, InputProps } from '@rneui/themed';
 import React, { useCallback, useMemo, useState } from 'react';
-import {
-  StyleProp,
-  StyleSheet,
-  TextInput,
-  TextStyle,
-  View,
-} from 'react-native';
+import { StyleProp, TextInput, TextStyle, View, ViewStyle } from 'react-native';
 import MaskInput, { Mask } from 'react-native-mask-input';
 import { scale } from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -83,9 +77,7 @@ const InputField = React.forwardRef<TextInput, Props>(
     }, [isValid, isError, props.disabled, props.rightIconContainerStyle]);
 
     const leftIconContainerStyle = useMemo(() => {
-      const styles: StyleProp<TextStyle>[] = [
-        STYLES.CONTAINERS.RIGHT_ICON_ICON,
-      ];
+      const styles: StyleProp<TextStyle>[] = [STYLES.CONTAINERS.LEFT_ICON_ICON];
 
       if (isError) styles.push(STYLES.INPUTS.ERROR);
       if (isValid) styles.push(STYLES.INPUTS.VALID);
@@ -103,6 +95,19 @@ const InputField = React.forwardRef<TextInput, Props>(
 
       return styles;
     }, [props.errorStyle]);
+
+    const inputContainerStyle = useMemo(() => {
+      const styles: StyleProp<ViewStyle>[] = [
+        {
+          borderBottomWidth: 0,
+          marginBottom: scale(5),
+        },
+      ];
+
+      if (props.inputContainerStyle) styles.push(props.inputContainerStyle);
+
+      return styles;
+    }, [props.inputContainerStyle]);
 
     const onEyePress = useCallback(
       () => setIsSecureVisible((curr) => !curr),
@@ -125,7 +130,6 @@ const InputField = React.forwardRef<TextInput, Props>(
 
     return (
       <Input
-        inputContainerStyle={style.inputContainer}
         disabledInputStyle={STYLES.INPUTS.DISABLED}
         placeholderTextColor={COLOR_PALETTE.PLACEHOLDER}
         numberOfLines={1}
@@ -133,6 +137,7 @@ const InputField = React.forwardRef<TextInput, Props>(
         rightIcon={rightIcon}
         {...props}
         {...(props.mask ? { InputComponent: MaskInput } : {})}
+        inputContainerStyle={inputContainerStyle}
         errorStyle={errorStyle}
         inputStyle={inputStyle}
         leftIconContainerStyle={leftIconContainerStyle}
@@ -147,13 +152,6 @@ const InputField = React.forwardRef<TextInput, Props>(
     );
   }
 );
-
-const style = StyleSheet.create({
-  inputContainer: {
-    borderBottomWidth: 0,
-    marginBottom: scale(5),
-  },
-});
 
 type Props = Omit<InputProps, 'onChangeText'> & {
   isRequired?: boolean;

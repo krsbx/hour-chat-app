@@ -8,8 +8,8 @@ const useChatDecryptionPayload = ({ type, uuid }: Props) => {
 
   const payload = useMemo(() => {
     const payload = {
-      senderId: '' as number | string,
-      receiverId: '' as number | string,
+      senderId: '' as string,
+      receiverId: '' as string,
       type: type,
     };
 

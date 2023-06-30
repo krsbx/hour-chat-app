@@ -39,12 +39,21 @@ const useChatMessageSubscriber = <
       .limitToLast(limit)
       .onSnapshot((snap) => {
         const messages = _(snap.docs)
-          .map((doc) => doc.data())
+          .map((doc) => {
+            const data = doc.data() as U | undefined;
+
+            if (!data) return;
+
+            return _.defaults(data, {
+              body: '',
+              files: [],
+            });
+          })
           .compact()
           .value();
 
         setIsMaxReached(total === limit);
-        setMessages(messages as U);
+        setMessages(messages as never);
       });
 
     return subscribe;
