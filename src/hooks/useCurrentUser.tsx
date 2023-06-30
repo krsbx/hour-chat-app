@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { getAuth } from '../store/selectors/auth';
@@ -10,8 +11,13 @@ const useCurrentUser = () => {
 
     return createFullName(user);
   }, [user]);
+  const alias = useMemo(() => {
+    const names = fullName.split(/ /g);
 
-  return { user, fullName };
+    return _.compact(names.map((name) => name?.[0])).join('');
+  }, [fullName]);
+
+  return { user, fullName, alias };
 };
 
 export default useCurrentUser;

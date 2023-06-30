@@ -1,7 +1,13 @@
 import { useRoute } from '@react-navigation/native';
 import { useFormikContext } from 'formik';
 import React, { useCallback } from 'react';
-import { GestureResponderEvent, TouchableOpacity } from 'react-native';
+import {
+  GestureResponderEvent,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
@@ -37,6 +43,8 @@ const InputForm: React.FC<Props> = ({
 
       const { body } = values;
       const { type, uuid } = route.params;
+
+      if (!body) return;
 
       setFieldValue('body', '');
 
@@ -111,18 +119,37 @@ const InputForm: React.FC<Props> = ({
   );
 
   return (
-    <Input.InputField
-      onChangeText={handleChange('body')}
-      onBlur={handleBlur('body')}
-      placeholder={'Type a message...'}
-      value={values.body}
-      multiline
-      rightIcon={
-        <TouchableOpacity onPress={onPressOnSend}>
+    <View
+      style={{
+        flexDirection: 'row',
+      }}
+    >
+      <View style={style.iconContainer}>
+        <TouchableOpacity activeOpacity={0.5} style={style.leftIcon}>
+          <Ionicons name="attach" size={scale(18)} />
+        </TouchableOpacity>
+      </View>
+      <Input.InputField
+        onChangeText={handleChange('body')}
+        onBlur={handleBlur('body')}
+        placeholder={'Type a message...'}
+        value={values.body}
+        multiline
+        containerStyle={{
+          flex: 10,
+          maxHeight: scale(75),
+        }}
+      />
+      <View style={style.iconContainer}>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={style.rightIcon}
+          onPress={onPressOnSend}
+        >
           <Ionicons name="send" />
         </TouchableOpacity>
-      }
-    />
+      </View>
+    </View>
   );
 };
 
@@ -131,6 +158,22 @@ const connector = connect(null, {
   sendGroupMessage: _sendGroupMessage,
   setTypingGroupMessage: _setTypingGroupMessage,
   setTypingPrivateMessage: _setTypingPrivateMessage,
+});
+
+const style = StyleSheet.create({
+  iconContainer: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flex: 1,
+  },
+  leftIcon: {
+    paddingBottom: scale(20),
+    paddingLeft: scale(5),
+  },
+  rightIcon: {
+    paddingBottom: scale(22),
+    paddingRight: scale(5),
+  },
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

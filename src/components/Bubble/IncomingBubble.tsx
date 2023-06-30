@@ -3,6 +3,7 @@ import { ScreenWidth, Text } from '@rneui/base';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
+import { Icon } from '..';
 import useCachedUserData from '../../hooks/useCachedUserData';
 import useChatTimestamp from '../../hooks/useChatTimestamp';
 import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
@@ -39,6 +40,9 @@ const IncomingBubble: React.FC<Props> = ({
 
   return (
     <Animated.View style={[style.mainContainer, { left }]}>
+      <View style={style.avatarContainer}>
+        <Icon.DefaultAvatar name={fullName} user={user} size={scale(35)} />
+      </View>
       <View style={style.messageTail} />
       <View style={style.container}>
         <Text style={[STYLES.LABELS.DEFAULT_TEXT, style.username]}>
@@ -102,6 +106,13 @@ const style = StyleSheet.create({
     color: COLOR_PALETTE.NEUTRAL_100,
     paddingTop: scale(5),
     textAlign: 'right',
+  },
+  avatarContainer: {
+    transform: [
+      {
+        translateY: scale(15),
+      },
+    ],
   },
 });
 

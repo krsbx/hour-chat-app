@@ -3,6 +3,7 @@ import { ScreenWidth, Text } from '@rneui/base';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
+import { Icon } from '..';
 import useChatTimestamp from '../../hooks/useChatTimestamp';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
@@ -46,6 +47,9 @@ const OutgoingBubble: React.FC<Props> = ({ message, timestamp, config }) => {
         </View>
       </View>
       <View style={style.messageTail} />
+      <View style={style.avatarContainer}>
+        <Icon.DefaultAvatar name={fullName} user={user} size={scale(35)} />
+      </View>
     </Animated.View>
   );
 };
@@ -98,6 +102,13 @@ const style = StyleSheet.create({
     color: COLOR_PALETTE.WHITE,
     paddingTop: scale(5),
     textAlign: 'right',
+  },
+  avatarContainer: {
+    transform: [
+      {
+        translateY: scale(15),
+      },
+    ],
   },
 });
 

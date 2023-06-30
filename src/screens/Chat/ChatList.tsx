@@ -24,7 +24,7 @@ const ChatList: React.FC<Props> = ({ users }) => {
         return value.name.toLowerCase().includes(query.toLowerCase());
       }
 
-      const fullName = createFullName(users[+value.uuid]);
+      const fullName = createFullName(users[value.uuid]);
 
       if (_.isEmpty(fullName)) return false;
 

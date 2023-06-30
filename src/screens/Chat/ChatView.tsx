@@ -98,7 +98,10 @@ const ChatView: React.FC<Props> = ({ route }) => {
         <FlatList
           style={{ flex: 1 }}
           data={messages ?? []}
-          contentContainerStyle={{ paddingHorizontal: scale(10) }}
+          contentContainerStyle={{
+            paddingHorizontal: scale(10),
+            paddingBottom: scale(20),
+          }}
           onContentSizeChange={onContentSizeChange}
           onLayout={onContentSizeChange}
           renderItem={({

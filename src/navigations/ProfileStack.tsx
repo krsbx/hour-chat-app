@@ -5,8 +5,6 @@ import { Profile } from '../screens';
 
 const Stack = createStackNavigator<HourChat.Navigation.ProfileStack>();
 
-const Empty = () => null;
-
 const ProfileStack = () => {
   return (
     <Stack.Navigator
@@ -16,8 +14,11 @@ const ProfileStack = () => {
       }}
     >
       <Stack.Screen name={PROFILE_STACK.MAIN} component={Profile.MainProfile} />
-      <Stack.Screen name={PROFILE_STACK.SETTING} component={Empty} />
-      <Stack.Screen name={PROFILE_STACK.FRIEND_LIST} component={Empty} />
+      <Stack.Screen
+        name={PROFILE_STACK.MY_CONNECTION}
+        component={Profile.MyConnection}
+      />
+      <Stack.Screen name={PROFILE_STACK.SETTING} component={Profile.Setting} />
     </Stack.Navigator>
   );
 };

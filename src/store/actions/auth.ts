@@ -2,12 +2,14 @@ import jwtDecode from 'jwt-decode';
 import _ from 'lodash';
 import validator from 'validator';
 import { z } from 'zod';
-import { AppDispatch } from '..';
+import { AppDispatch, store } from '..';
 import { auths } from '../../schema';
-import { AuthActionType } from '../actions-types/auth';
+import { AuthActionType, AuthReducer } from '../actions-types/auth';
 import { ResourceAction } from '../actions-types/resources';
 import axios from '../axios';
+import { getAuth } from '../selectors/auth';
 import { resetEncryption } from './encryptions';
+import { updateUser } from './resources/users';
 import { resetStory } from './story';
 
 export const requestEmailOtp = (token?: string) => async () => {
@@ -23,6 +25,14 @@ export const requestEmailOtp = (token?: string) => async () => {
 
   return axios.post('/email-otps', {});
 };
+
+export const updateAuth =
+  (payload: Partial<AuthReducer>) => (dispatch: AppDispatch) => {
+    dispatch({
+      type: AuthActionType.UPDATE,
+      payload,
+    });
+  };
 
 export const loginUser =
   (payload: { identifier: string; password: string }) =>
@@ -83,22 +93,16 @@ export const verifyEmail =
   async (dispatch: AppDispatch) => {
     await axios.post(`/email-otps/verify?code=${code}`);
 
-    dispatch({
-      type: AuthActionType.UPDATE,
-      payload: {
-        isEmailVerified: true,
-      },
-    });
+    updateAuth({
+      isEmailVerified: true,
+    })(dispatch);
   };
 
 export const addDeviceToken =
   (id: string, deviceToken: string) => (dispatch: AppDispatch) => {
-    dispatch({
-      type: AuthActionType.UPDATE,
-      payload: {
-        deviceToken,
-      },
-    });
+    updateAuth({
+      deviceToken,
+    })(dispatch);
 
     axios
       .post(`/device-tokens/${id}`, {
@@ -118,3 +122,13 @@ export const logoutUser = () => (dispatch: AppDispatch) => {
   resetEncryption()(dispatch);
   resetStory()(dispatch);
 };
+
+export const updateMyData =
+  (payload: Partial<HourChat.Resource.User>, query = '', overwrite = false) =>
+  async (dispatch: AppDispatch) => {
+    const { id } = getAuth(store.getState());
+
+    const { data } = await updateUser(id, payload, query, overwrite)();
+
+    updateAuth(data)(dispatch);
+  };

@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
+import { Icon } from '..';
+import { CHAT_TYPE } from '../../constants/common';
 import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
 import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
@@ -25,6 +27,7 @@ const Message: React.FC<Props> = ({
   body,
   type,
   uuid,
+  user,
 }) => {
   const navigation =
     useNavigation<
@@ -82,6 +85,11 @@ const Message: React.FC<Props> = ({
         activeOpacity={0.5}
         onPress={onPress}
       >
+        <Icon.DefaultAvatar
+          name={name}
+          user={user}
+          noUser={type !== CHAT_TYPE.PRIVATE}
+        />
         <View style={{ flex: 1, gap: scale(5) }}>
           <Text style={style.title}>{name}</Text>
           <Text style={STYLES.LABELS.DEFAULT_TEXT}>{messageBody}</Text>
@@ -98,7 +106,7 @@ const style = StyleSheet.create({
   container: {
     paddingVertical: scale(10),
     flexDirection: 'row',
-    gap: scale(5),
+    gap: scale(10),
     borderBottomWidth: 1,
     borderBottomColor: COLOR_PALETTE.NEUTRAL_40,
     backgroundColor: COLOR_PALETTE.WHITE,
@@ -120,6 +128,7 @@ type Props = {
   body: string;
   type: HourChat.Type.ChatType;
   uuid: string;
+  user?: HourChat.Resource.User;
 };
 
 export default Message;

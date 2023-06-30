@@ -1,3 +1,4 @@
 import Story from './StoryCard';
+import User from './UserCard';
 
-export { Story };
+export { Story, User };
