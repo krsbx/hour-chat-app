@@ -3,7 +3,7 @@ import { CHAT_TYPE } from '../../constants/common';
 import useCachedUserData from '../../hooks/useCachedUserData';
 import Message from './Message';
 
-const PrivateMessage: React.FC<Props> = ({ uuid, body, timestamp }) => {
+const PrivateMessage: React.FC<Props> = ({ uuid, ...props }) => {
   const { fullName, user } = useCachedUserData(uuid);
 
   if (!user) return null;
@@ -11,11 +11,10 @@ const PrivateMessage: React.FC<Props> = ({ uuid, body, timestamp }) => {
   return (
     <Message
       name={fullName}
-      body={body}
-      timestamp={timestamp}
       type={CHAT_TYPE.PRIVATE}
       user={user}
       uuid={uuid}
+      {...props}
     />
   );
 };

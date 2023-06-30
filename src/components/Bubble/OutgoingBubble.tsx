@@ -1,4 +1,3 @@
-import type { Timestamp } from '@firebase/firestore';
 import { ScreenWidth, Text } from '@rneui/base';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
@@ -6,15 +5,20 @@ import { scale } from 'react-native-size-matters';
 import { Icon } from '..';
 import useChatTimestamp from '../../hooks/useChatTimestamp';
 import useCurrentUser from '../../hooks/useCurrentUser';
-import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
+import FileMessage from './FileMessage';
+import MessageBody from './MessageBody';
 
-const OutgoingBubble: React.FC<Props> = ({ message, timestamp, config }) => {
+const OutgoingBubble: React.FC<Props> = ({
+  body,
+  files,
+  timestamp,
+  config,
+}) => {
   const right = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCurrentUser();
   const datetime = useChatTimestamp(timestamp);
-  const messageBody = useDecryptedChatMessage(message, config);
 
   const startAnimation = useCallback(() => {
     Animated.timing(right, {
@@ -40,11 +44,10 @@ const OutgoingBubble: React.FC<Props> = ({ message, timestamp, config }) => {
           {fullName}
         </Text>
         <View style={style.messageTimestamp}>
-          <Text style={[STYLES.LABELS.DEFAULT_TEXT, style.message]}>
-            {messageBody}
-          </Text>
-          <Text style={style.timestamp}>{datetime}</Text>
+          <FileMessage files={files} />
+          <MessageBody body={body} config={config} />
         </View>
+        <Text style={style.timestamp}>{datetime}</Text>
       </View>
       <View style={style.messageTail} />
       <View style={style.avatarContainer}>
@@ -62,7 +65,6 @@ const style = StyleSheet.create({
     flexDirection: 'row',
   },
   container: {
-    gap: scale(5),
     minWidth: scale(ScreenWidth * 0.25),
     maxWidth: scale(ScreenWidth * 0.75),
     backgroundColor: COLOR_PALETTE.BLUE_10,
@@ -77,10 +79,6 @@ const style = StyleSheet.create({
   messageTimestamp: {
     flexDirection: 'row',
     gap: scale(10),
-  },
-  message: {
-    color: COLOR_PALETTE.WHITE,
-    maxWidth: '80%',
   },
   messageTail: {
     backgroundColor: COLOR_PALETTE.BLUE_10,
@@ -100,7 +98,6 @@ const style = StyleSheet.create({
   timestamp: {
     fontSize: 10,
     color: COLOR_PALETTE.WHITE,
-    paddingTop: scale(5),
     textAlign: 'right',
   },
   avatarContainer: {
@@ -112,10 +109,7 @@ const style = StyleSheet.create({
   },
 });
 
-type Props = {
-  message: string;
-  timestamp: Timestamp;
-  senderId: string;
+type Props = HourChat.Chat.MessageData & {
   config: HourChat.Type.Encryption;
 };
 

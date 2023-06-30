@@ -1,5 +1,6 @@
-import ChatList from './ChatListHeader';
+import BackHeader from './BackHeader';
 import ChatView from './ChatViewHeader';
 import Default from './DefaultHeader';
+import SearchHeader from './SearchHeader';
 
-export { ChatView, ChatList, Default };
+export { ChatView, SearchHeader, Default, BackHeader };

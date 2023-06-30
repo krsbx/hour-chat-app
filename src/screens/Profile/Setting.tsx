@@ -17,7 +17,7 @@ const Setting: React.FC = () => {
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
-      <Header.Default />
+      <Header.Default title={'My Setting'} />
     </View>
   );
 };

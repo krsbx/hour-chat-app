@@ -65,7 +65,7 @@ const style = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: scale(5),
+    paddingTop: scale(5),
   },
   date: {
     paddingHorizontal: scale(10),

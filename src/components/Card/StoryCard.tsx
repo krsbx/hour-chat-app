@@ -1,19 +1,18 @@
 import { Image, Text } from '@rneui/base';
 import _ from 'lodash';
 import moment from 'moment';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
-import { Buttons } from '..';
+import { Buttons, Icon } from '..';
 import useCachedUserData from '../../hooks/useCachedUserData';
 import {
   dislikeStory as _dislikeStory,
   likeStory as _likeStory,
 } from '../../store/actions/stories';
 import STYLES from '../../styles';
-import { createFullName } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const StoryCard: React.FC<Props> = ({
@@ -28,8 +27,7 @@ const StoryCard: React.FC<Props> = ({
   dislikeStory,
   likeStory,
 }) => {
-  const { user } = useCachedUserData(userId);
-  const fullName = useMemo(() => createFullName(user), [user]);
+  const { user, fullName } = useCachedUserData(userId);
 
   const onPressOnLike = useCallback(() => {
     if (!uuid || mocked) return;
@@ -46,7 +44,10 @@ const StoryCard: React.FC<Props> = ({
   return (
     <View style={style.card}>
       <View style={style.header}>
-        <Text style={STYLES.LABELS.DEFAULT_TEXT}>{fullName}</Text>
+        <View style={style.avatarName}>
+          <Icon.DefaultAvatar user={user} name={fullName} />
+          <Text style={STYLES.LABELS.DEFAULT_TEXT}>{fullName}</Text>
+        </View>
         <Text style={style.headerDateTime}>
           {moment(createdAt.toDate()).format('hh:mm A | Do MMMM YYYY')}
         </Text>
@@ -113,6 +114,11 @@ const style = StyleSheet.create({
   },
   footer: {
     flexDirection: 'row',
+    gap: scale(5),
+  },
+  avatarName: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: scale(5),
   },
 });

@@ -1,11 +1,11 @@
 import { Text } from '@rneui/base';
-import { Avatar } from '@rneui/themed';
 import React, { useCallback } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
+import { Icon } from '../../..';
 import { FONT_SIZE } from '../../../../constants/fonts';
 import useCurrentUser from '../../../../hooks/useCurrentUser';
 import useUserGenderIcon from '../../../../hooks/useUserGenderIcon';
@@ -15,7 +15,7 @@ import STYLES from '../../../../styles';
 import { COLOR_PALETTE, opacityColor } from '../../../../utils/theme';
 
 const UserAvatar: React.FC<Props> = ({ uploadFiles, updateMyData }) => {
-  const { fullName, user: currentUser, alias } = useCurrentUser();
+  const { fullName, user: currentUser } = useCurrentUser();
   const { iconColor, iconName } = useUserGenderIcon(currentUser);
 
   const onPressOnAvatar = useCallback(async () => {
@@ -44,16 +44,11 @@ const UserAvatar: React.FC<Props> = ({ uploadFiles, updateMyData }) => {
         style={style.avatarMainContainer}
         onPress={onPressOnAvatar}
       >
-        <Avatar
+        <Icon.DefaultAvatar
           containerStyle={style.avatarContainer}
-          {...(currentUser.avatar && {
-            source: {
-              uri: currentUser.avatar,
-            },
-          })}
-          title={alias}
+          user={currentUser}
+          name={fullName}
           size={scale(100)}
-          rounded
         />
         <View style={style.gender}>
           <Ionicons name={iconName} size={scale(15)} color={iconColor} />

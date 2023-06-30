@@ -1,4 +1,3 @@
-import type { Timestamp } from '@firebase/firestore';
 import { ScreenWidth, Text } from '@rneui/base';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
@@ -6,12 +5,14 @@ import { scale } from 'react-native-size-matters';
 import { Icon } from '..';
 import useCachedUserData from '../../hooks/useCachedUserData';
 import useChatTimestamp from '../../hooks/useChatTimestamp';
-import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
+import FileMessage from './FileMessage';
+import MessageBody from './MessageBody';
 
 const IncomingBubble: React.FC<Props> = ({
-  message,
+  body,
+  files,
   timestamp,
   senderId,
   config,
@@ -19,7 +20,6 @@ const IncomingBubble: React.FC<Props> = ({
   const left = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCachedUserData(senderId);
   const datetime = useChatTimestamp(timestamp);
-  const messageBody = useDecryptedChatMessage(message, config);
 
   const startAnimation = useCallback(() => {
     Animated.timing(left, {
@@ -49,11 +49,10 @@ const IncomingBubble: React.FC<Props> = ({
           {fullName}
         </Text>
         <View style={style.messageTimestamp}>
-          <Text style={[STYLES.LABELS.DEFAULT_TEXT, style.message]}>
-            {messageBody}
-          </Text>
-          <Text style={style.timestamp}>{datetime}</Text>
+          <FileMessage files={files} incoming />
+          <MessageBody body={body} config={config} incoming />
         </View>
+        <Text style={style.timestamp}>{datetime}</Text>
       </View>
     </Animated.View>
   );
@@ -81,10 +80,6 @@ const style = StyleSheet.create({
   messageTimestamp: {
     flexDirection: 'row',
     gap: scale(10),
-  },
-  message: {
-    color: COLOR_PALETTE.NEUTRAL_100,
-    maxWidth: '80%',
   },
   messageTail: {
     backgroundColor: COLOR_PALETTE.NEUTRAL_30,
@@ -116,10 +111,7 @@ const style = StyleSheet.create({
   },
 });
 
-type Props = {
-  message: string;
-  timestamp: Timestamp;
-  senderId: string;
+type Props = HourChat.Chat.MessageData & {
   config: HourChat.Type.Encryption;
 };
 

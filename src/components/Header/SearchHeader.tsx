@@ -5,7 +5,7 @@ import { Input } from '..';
 import STYLES from '../../styles';
 import { COLOR_PALETTE, opacityColor } from '../../utils/theme';
 
-const ChatListHeader: React.FC<Props> = ({ query, setQuery }) => {
+const SearchHeader: React.FC<Props> = ({ query, setQuery, title }) => {
   const [isFocus, setIsFocus] = useState(false);
 
   return (
@@ -16,7 +16,7 @@ const ChatListHeader: React.FC<Props> = ({ query, setQuery }) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         {...(!isFocus && {
-          placeholder: 'Hour Chat',
+          placeholder: title ?? 'Hour Chat',
         })}
         style={{ flex: 1 }}
         value={query}
@@ -56,6 +56,7 @@ const style = StyleSheet.create({
 type Props = {
   query: string;
   setQuery: (value: string) => void;
+  title?: string;
 };
 
-export default ChatListHeader;
+export default SearchHeader;

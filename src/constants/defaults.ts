@@ -29,4 +29,5 @@ export const DEFAULT_OTP_CODE: z.infer<typeof auths.otpSchema> = {
 
 export const DEFAULT_MESSAGE_VALUE: z.infer<typeof chats.messageSchema> = {
   body: '',
+  files: [],
 };

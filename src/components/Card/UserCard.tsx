@@ -22,18 +22,24 @@ const UserCard: React.FC<Props> = ({ uuid, onPress }) => {
   const startAnimation = useCallback(() => {
     Animated.parallel([
       Animated.timing(maxHeight, {
-        toValue: scale(60),
-        duration: 1000,
-        easing: Easing.circle,
+        toValue: scale(70),
+        duration: 500,
+        easing: Easing.linear,
         useNativeDriver: false,
       }),
     ]).start();
   }, [maxHeight]);
 
-  useEffect(startAnimation, [startAnimation]);
+  useEffect(() => {
+    if (!user) return;
+
+    startAnimation();
+  }, [startAnimation, user]);
+
+  if (!user) return null;
 
   return (
-    <Animated.View style={{ maxHeight }}>
+    <Animated.View style={{ maxHeight, overflow: 'hidden' }}>
       <TouchableOpacity
         activeOpacity={0.5}
         style={style.mainContainer}
@@ -51,13 +57,13 @@ const UserCard: React.FC<Props> = ({ uuid, onPress }) => {
 
 const style = StyleSheet.create({
   mainContainer: {
-    justifyContent: 'space-between',
+    paddingVertical: scale(10),
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: scale(10),
     borderBottomWidth: 1,
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(5),
-    borderColor: COLOR_PALETTE.NEUTRAL_40,
+    borderBottomColor: COLOR_PALETTE.NEUTRAL_40,
     backgroundColor: COLOR_PALETTE.WHITE,
   },
   cardContainer: {
