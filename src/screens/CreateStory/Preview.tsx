@@ -175,6 +175,6 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps &
-  HourChat.Navigation.CreateStoryProps<typeof CREATE_STORY_STACK.PREVIEW>;
+  HourChat.Navigation.CreateStoryStackProps<typeof CREATE_STORY_STACK.PREVIEW>;
 
 export default connector(Preview);

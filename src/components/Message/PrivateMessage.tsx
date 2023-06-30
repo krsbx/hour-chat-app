@@ -14,6 +14,7 @@ const PrivateMessage: React.FC<Props> = ({ uuid, body, timestamp }) => {
       body={body}
       timestamp={timestamp}
       type={CHAT_TYPE.PRIVATE}
+      user={user}
       uuid={uuid}
     />
   );

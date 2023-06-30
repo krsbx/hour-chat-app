@@ -29,7 +29,7 @@ export type CreateStoryStack = {
 export type ProfileStack = {
   [PROFILE_STACK.MAIN]: undefined;
   [PROFILE_STACK.SETTING]: undefined;
-  [PROFILE_STACK.FRIEND_LIST]: undefined;
+  [PROFILE_STACK.MY_CONNECTION]: undefined;
 };
 
 export type StoryTab = {

@@ -184,6 +184,6 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps &
-  HourChat.Navigation.CreateStoryProps<typeof CREATE_STORY_STACK.FORM>;
+  HourChat.Navigation.CreateStoryStackProps<typeof CREATE_STORY_STACK.FORM>;
 
 export default connector(Form);

@@ -3,17 +3,18 @@ import { GENDER } from '../../src/constants/resources';
 export type User = {
   id: string;
   firstName: string;
-  middleName: string;
-  lastName: string;
+  middleName: string | null;
+  lastName: string | null;
   username: string;
   email: string;
   phoneNumber: string;
   isEmailVerified: boolean;
   gender: ValueOf<typeof GENDER>;
   dob: string | Date;
-  createdAt: string;
-  updatedAt: string;
-  expiredAt: string;
+  avatar: string | null;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  expiredAt: string | Date;
 };
 
 export type DeviceToken = {

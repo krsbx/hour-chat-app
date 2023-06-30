@@ -1,3 +1,5 @@
 import MainProfile from './MainProfile';
+import MyConnection from './MyConnection';
+import Setting from './Setting';
 
-export { MainProfile };
+export { MainProfile, MyConnection, Setting };
