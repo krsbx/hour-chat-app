@@ -39,12 +39,8 @@ export type StoryTab = {
 
 export type ChatStack = {
   [CHAT_STACK.LIST]: undefined;
-  [CHAT_STACK.VIEW]: {
-    uuid: string;
-    type: HourChat.Type.ChatType;
-    name: string;
-  };
-  [CHAT_STACK.DETAIL]: undefined;
+  [CHAT_STACK.VIEW]: undefined;
+  [CHAT_STACK.MEDIA]: undefined;
 };
 
 export type MainTab = {
@@ -118,3 +114,6 @@ export type ChatStackNavigation<T extends keyof ChatStack> =
 
 export type ProfileStackNavigation<T extends keyof ProfileStack> =
   ProfileStackProps<T>['navigation'];
+
+export type ChatStackRoute<T extends keyof ChatStack> =
+  ChatStackProps<T>['route'];

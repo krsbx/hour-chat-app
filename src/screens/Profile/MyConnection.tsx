@@ -9,28 +9,28 @@ import { CHAT_TYPE, RESOURCE_NAME } from '../../constants/common';
 import { CHAT_STACK, MAIN_TAB, PROFILE_STACK } from '../../constants/screens';
 import useSingleChatListListener from '../../hooks/useSingleChatListListener';
 import { AppState } from '../../store';
+import { setEncryptor as _setEncryptor } from '../../store/actions/encryptor';
 import { getResourceData } from '../../store/selectors/resources';
 import { createFullName } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const MyConnection: React.FC<Props> = ({ users, navigation }) => {
+const MyConnection: React.FC<Props> = ({ users, navigation, setEncryptor }) => {
   const [_messages] = useSingleChatListListener(CHAT_TYPE.PRIVATE);
   const [query, setQuery] = useState('');
 
   const navigateToChat = useCallback(
     (uuid: string) => {
-      const fullName = createFullName(users[uuid]);
+      setEncryptor({
+        name: createFullName(users[uuid]),
+        type: CHAT_TYPE.PRIVATE,
+        uuid,
+      });
 
       navigation.navigate(MAIN_TAB.CHAT, {
         screen: CHAT_STACK.VIEW,
-        params: {
-          uuid,
-          type: CHAT_TYPE.PRIVATE,
-          name: fullName,
-        },
       });
     },
-    [navigation, users]
+    [navigation, users, setEncryptor]
   );
 
   const messages = useMemo(() => {
@@ -84,7 +84,9 @@ const mapStateToProps = (state: AppState) => ({
   users: getResourceData(RESOURCE_NAME.USERS)(state),
 });
 
-const connector = connect(mapStateToProps);
+const connector = connect(mapStateToProps, {
+  setEncryptor: _setEncryptor,
+});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 

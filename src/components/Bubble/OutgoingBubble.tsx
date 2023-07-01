@@ -10,12 +10,7 @@ import { COLOR_PALETTE } from '../../utils/theme';
 import FileMessage from './FileMessage';
 import MessageBody from './MessageBody';
 
-const OutgoingBubble: React.FC<Props> = ({
-  body,
-  files,
-  timestamp,
-  config,
-}) => {
+const OutgoingBubble: React.FC<Props> = ({ body, files, timestamp }) => {
   const right = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCurrentUser();
   const datetime = useChatTimestamp(timestamp);
@@ -43,9 +38,9 @@ const OutgoingBubble: React.FC<Props> = ({
         <Text style={[STYLES.LABELS.DEFAULT_TEXT, style.username]}>
           {fullName}
         </Text>
-        <View style={style.messageTimestamp}>
+        <View>
           <FileMessage files={files} />
-          <MessageBody body={body} config={config} />
+          <MessageBody body={body} />
         </View>
         <Text style={style.timestamp}>{datetime}</Text>
       </View>
@@ -76,10 +71,6 @@ const style = StyleSheet.create({
     fontWeight: 'bold',
     color: COLOR_PALETTE.WHITE,
   },
-  messageTimestamp: {
-    flexDirection: 'row',
-    gap: scale(10),
-  },
   messageTail: {
     backgroundColor: COLOR_PALETTE.BLUE_10,
     width: scale(10),
@@ -109,8 +100,6 @@ const style = StyleSheet.create({
   },
 });
 
-type Props = HourChat.Chat.MessageData & {
-  config: HourChat.Type.Encryption;
-};
+type Props = HourChat.Chat.MessageData;
 
 export default OutgoingBubble;

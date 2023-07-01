@@ -68,7 +68,7 @@ const Preview: React.FC<Props> = ({
       let uri = '';
 
       if (file.uri) {
-        const { data } = await uploadFiles(file);
+        const { data } = await uploadFiles(file as never);
 
         uri = data[0];
       }

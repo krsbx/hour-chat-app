@@ -1,4 +1,3 @@
-import { useRoute } from '@react-navigation/native';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
 import React, { useCallback } from 'react';
@@ -10,38 +9,33 @@ import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Input } from '../..';
 import { CHAT_TYPE } from '../../../constants/common';
-import { CHAT_STACK } from '../../../constants/screens';
 import useOnUserTyping from '../../../hooks/useOnUserTyping';
 import { chats } from '../../../schema';
+import { AppState } from '../../../store';
 import {
   sendGroupMessage as _sendGroupMessage,
   sendPrivateMessage as _sendPrivateMessage,
-  setTypingGroupMessage as _setTypingGroupMessage,
-  setTypingPrivateMessage as _setTypingPrivateMessage,
 } from '../../../store/actions/chats';
 import { uploadFiles as _uploadFiles } from '../../../store/actions/files';
+import { getEncryptor } from '../../../store/selectors/encryptor';
 
 const InputForm: React.FC<Props> = ({
   sendGroupMessage,
   sendPrivateMessage,
   uploadFiles,
+  encryptor,
 }) => {
-  const route =
-    useRoute<
-      HourChat.Navigation.ChatStackProps<typeof CHAT_STACK.VIEW>['route']
-    >();
-
+  const { type, uuid } = encryptor;
   const { handleChange, handleBlur, values, setFieldValue, validate } =
     useFormikContext<z.infer<typeof chats.messageSchema>>();
 
-  useOnUserTyping(route.params);
+  useOnUserTyping();
 
   const onPressOnSend = useCallback(
     async (e: GestureResponderEvent) => {
       e.stopPropagation();
 
       const { body } = values;
-      const { type, uuid } = route.params;
 
       try {
         await validate?.(values);
@@ -93,7 +87,8 @@ const InputForm: React.FC<Props> = ({
     },
     [
       values,
-      route.params,
+      type,
+      uuid,
       validate,
       setFieldValue,
       uploadFiles,
@@ -170,11 +165,13 @@ const InputForm: React.FC<Props> = ({
   );
 };
 
-const connector = connect(null, {
+const mapStateToProps = (state: AppState) => ({
+  encryptor: getEncryptor(state),
+});
+
+const connector = connect(mapStateToProps, {
   sendPrivateMessage: _sendPrivateMessage,
   sendGroupMessage: _sendGroupMessage,
-  setTypingGroupMessage: _setTypingGroupMessage,
-  setTypingPrivateMessage: _setTypingPrivateMessage,
   uploadFiles: _uploadFiles,
 });
 

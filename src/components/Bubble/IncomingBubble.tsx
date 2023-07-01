@@ -15,7 +15,6 @@ const IncomingBubble: React.FC<Props> = ({
   files,
   timestamp,
   senderId,
-  config,
 }) => {
   const left = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCachedUserData(senderId);
@@ -48,9 +47,9 @@ const IncomingBubble: React.FC<Props> = ({
         <Text style={[STYLES.LABELS.DEFAULT_TEXT, style.username]}>
           {fullName}
         </Text>
-        <View style={style.messageTimestamp}>
+        <View>
           <FileMessage files={files} incoming />
-          <MessageBody body={body} config={config} incoming />
+          <MessageBody body={body} incoming />
         </View>
         <Text style={style.timestamp}>{datetime}</Text>
       </View>
@@ -76,10 +75,6 @@ const style = StyleSheet.create({
   username: {
     fontWeight: 'bold',
     color: COLOR_PALETTE.NEUTRAL_100,
-  },
-  messageTimestamp: {
-    flexDirection: 'row',
-    gap: scale(10),
   },
   messageTail: {
     backgroundColor: COLOR_PALETTE.NEUTRAL_30,
@@ -111,8 +106,6 @@ const style = StyleSheet.create({
   },
 });
 
-type Props = HourChat.Chat.MessageData & {
-  config: HourChat.Type.Encryption;
-};
+type Props = HourChat.Chat.MessageData;
 
 export default IncomingBubble;
