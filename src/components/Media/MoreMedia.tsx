@@ -1,6 +1,7 @@
 import { ScreenWidth } from '@rneui/base';
 import React from 'react';
 import { View } from 'react-native';
+import { scale } from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { flattenStyle } from '../../styles/factory';
 import { COLOR_PALETTE } from '../../utils/theme';
@@ -23,6 +24,9 @@ const style = flattenStyle({
   position: 'relative',
   justifyContent: 'center',
   alignItems: 'center',
+  borderRadius: scale(5),
+  opacity: 0.8,
+  backgroundColor: COLOR_PALETTE.NEUTRAL_100,
 });
 
 export default MoreMedia;

@@ -17,15 +17,15 @@ import {
   sendPrivateMessage as _sendPrivateMessage,
 } from '../../../store/actions/chats';
 import { uploadFiles as _uploadFiles } from '../../../store/actions/files';
-import { getEncryptor } from '../../../store/selectors/encryptor';
+import { getConfig } from '../../../store/selectors/config';
 
 const InputForm: React.FC<Props> = ({
   sendGroupMessage,
   sendPrivateMessage,
   uploadFiles,
-  encryptor,
+  config,
 }) => {
-  const { type, uuid } = encryptor;
+  const { type, uuid } = config;
   const { handleChange, handleBlur, values, setFieldValue, validate } =
     useFormikContext<z.infer<typeof chats.messageSchema>>();
 
@@ -166,7 +166,7 @@ const InputForm: React.FC<Props> = ({
 };
 
 const mapStateToProps = (state: AppState) => ({
-  encryptor: getEncryptor(state),
+  config: getConfig(state),
 });
 
 const connector = connect(mapStateToProps, {
