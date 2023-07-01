@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getEncryptor } from '../store/selectors/encryptor';
+import { getConfig } from '../store/selectors/config';
 import { decryptText } from '../utils/chats/encryption';
 
-const useMessageDecryptor = (text: string) => {
-  const { config } = useSelector(getEncryptor);
+const useTextDecryptor = (text: string) => {
+  const { config } = useSelector(getConfig);
 
   const message = useMemo(() => {
     if (!config || !config?.iv || !config?.key) return;
@@ -16,4 +16,4 @@ const useMessageDecryptor = (text: string) => {
   return message;
 };
 
-export default useMessageDecryptor;
+export default useTextDecryptor;

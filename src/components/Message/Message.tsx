@@ -16,7 +16,7 @@ import { CHAT_TYPE } from '../../constants/common';
 import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
 import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
-import { setEncryptor as _setEncryptor } from '../../store/actions/encryptor';
+import { setConfig as _setConfig } from '../../store/actions/config';
 import { getCurrentEncryption } from '../../store/selectors/encryption';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
@@ -29,7 +29,7 @@ const Message: React.FC<Props> = ({
   uuid,
   user,
   files,
-  setEncryptor,
+  setConfig,
 }) => {
   const navigation =
     useNavigation<
@@ -67,14 +67,14 @@ const Message: React.FC<Props> = ({
   }, [messageBody, files]);
 
   const onPress = useCallback(() => {
-    setEncryptor({
+    setConfig({
       type: type,
       uuid: uuid,
       name: name,
       config,
     });
     navigation.push(CHAT_STACK.VIEW);
-  }, [type, uuid, name, config, navigation, setEncryptor]);
+  }, [type, uuid, name, config, navigation, setConfig]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
@@ -140,7 +140,7 @@ const style = StyleSheet.create({
 });
 
 const connector = connect(null, {
-  setEncryptor: _setEncryptor,
+  setConfig: _setConfig,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

@@ -8,6 +8,10 @@ export type File = {
   type?: string | null;
 };
 
+export type FileHref = File & {
+  href: string;
+};
+
 export type ChatType = ValueOf<typeof CHAT_TYPE>;
 
 export type Encryption = {

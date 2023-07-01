@@ -1,18 +1,25 @@
 import { StackActions } from '@react-navigation/native';
 import { ScreenWidth } from '@rneui/base';
+import _ from 'lodash';
 import React, { useCallback, useState } from 'react';
-import { FlatList, StatusBar, TouchableOpacity, View } from 'react-native';
-import ImageView from 'react-native-image-viewing';
+import {
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
 import { Header, Media } from '../../components';
+import ImageView from '../../components/ImageView';
 import { CHAT_STACK } from '../../constants/screens';
 import useOverwriteBack from '../../hooks/useOverwriteBack';
 import { AppState } from '../../store';
-import { getEncryptor } from '../../store/selectors/encryptor';
+import { getConfig } from '../../store/selectors/config';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatMedia: React.FC<Props> = ({ encryptor, navigation }) => {
+const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -36,21 +43,31 @@ const ChatMedia: React.FC<Props> = ({ encryptor, navigation }) => {
     [setIsVisible]
   );
 
+  const onImageIndexChange = useCallback(
+    (imageIndex: number) => {
+      setSelectedImage(imageIndex);
+    },
+    [setSelectedImage]
+  );
+
   return (
-    <View>
+    <View style={style.mainContainer}>
       <StatusBar
         animated
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
       <Header.BackHeader
-        title={`[${encryptor.type}] ${encryptor.name}`}
+        title={`[${_.capitalize(config.type)}] ${config.name}`}
         onBack={onPressOnBack}
       />
       <FlatList
-        data={encryptor.files}
+        data={config.files}
         renderItem={({ item, index }) => (
-          <TouchableOpacity onPress={() => onPressOnPreview(index)}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => onPressOnPreview(index)}
+          >
             <Media.Image
               file={item}
               style={{
@@ -67,18 +84,25 @@ const ChatMedia: React.FC<Props> = ({ encryptor, navigation }) => {
         }}
       />
       <ImageView
-        images={encryptor.files}
+        files={config.files}
+        isVisible={isVisible}
         imageIndex={selectedImage}
-        visible={isVisible}
+        onImageIndexChange={onImageIndexChange}
         onRequestClose={onPressOnPreview}
-        keyExtractor={(item, index) => `${item.toLocaleString()}-${index}`}
       />
     </View>
   );
 };
 
+const style = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: COLOR_PALETTE.WHITE,
+  },
+});
+
 const mapStateToProps = (state: AppState) => ({
-  encryptor: getEncryptor(state),
+  config: getConfig(state),
 });
 
 const connector = connect(mapStateToProps);

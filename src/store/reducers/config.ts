@@ -1,13 +1,12 @@
 import { CHAT_TYPE } from '../../constants/common';
 import {
-  DeleteEncryptor,
-  EncryptorActionType as ActionType,
-  EncryptorReducer,
-  SetEncryptor,
-} from '../actions-types/encryptor';
+  ConfigActionType as ActionType,
+  ConfigReducer,
+  DeleteConfig,
+  SetConfig,
+} from '../actions-types/config';
 
-const initialState: EncryptorReducer = {
-  instance: null,
+const initialState: ConfigReducer = {
   uuid: '',
   type: CHAT_TYPE.PRIVATE,
   name: '',
@@ -18,10 +17,7 @@ const initialState: EncryptorReducer = {
   },
 };
 
-const reducer = (
-  state = initialState,
-  action: SetEncryptor | DeleteEncryptor
-) => {
+const reducer = (state = initialState, action: SetConfig | DeleteConfig) => {
   switch (action.type) {
     case ActionType.SET: {
       return {
@@ -32,8 +28,7 @@ const reducer = (
 
     case ActionType.DELETE: {
       return {
-        ...state,
-        instance: null,
+        ...initialState,
       };
     }
 

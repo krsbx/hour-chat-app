@@ -1,6 +1,7 @@
 import * as Bubble from './Bubble';
 import * as Buttons from './Buttons';
 import * as Card from './Card';
+import * as Footer from './Footer';
 import * as Header from './Header';
 import * as Icon from './Icon';
 import * as Input from './Input';
@@ -14,6 +15,7 @@ export {
   Bubble,
   Buttons,
   Card,
+  Footer,
   Header,
   Icon,
   Input,

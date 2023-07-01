@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getEncryptor } from '../store/selectors/encryptor';
+import { getConfig } from '../store/selectors/config';
 import { decryptText } from '../utils/chats/encryption';
 
 const useFileDecryptor = (file: HourChat.Type.File | HourChat.Type.File[]) => {
-  const { config } = useSelector(getEncryptor);
+  const { config } = useSelector(getConfig);
 
   const files = useMemo(() => {
     if (!config || !config?.iv || !config?.key) return [];

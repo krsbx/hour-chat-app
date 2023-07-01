@@ -14,7 +14,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Buttons, Header, Input } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
 import { CREATE_STORY_STACK } from '../../constants/screens';
-import useImageStoryResoulution from '../../hooks/useImageStoryResoulution';
+import useImageStoryResolution from '../../hooks/useImageStoryResolution';
 import { AppState } from '../../store';
 import {
   deleteFile as _deleteFile,
@@ -92,7 +92,7 @@ const Form: React.FC<Props> = ({
     navigation.navigate(CREATE_STORY_STACK.PREVIEW);
   }, [navigation]);
 
-  const imageResolution = useImageStoryResoulution(resolution);
+  const imageResolution = useImageStoryResolution(resolution);
   const normalizedResolution = useMemo(
     () => ({
       ...imageResolution,

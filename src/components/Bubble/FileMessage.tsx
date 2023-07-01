@@ -7,17 +7,17 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import ImageView from 'react-native-image-viewing';
 import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
 import { Media } from '..';
 import { MAX_MEDIA, MIN_MEDIA } from '../../constants/common';
 import { CHAT_STACK } from '../../constants/screens';
 import useFileDecryptor from '../../hooks/useFileDecryptor';
-import { setEncryptor as _setEncryptor } from '../../store/actions/encryptor';
+import { setConfig as _setConfig } from '../../store/actions/config';
 import { isMediaPreviewable } from '../../utils/chats/media';
+import ImageView from '../ImageView';
 
-const FileMessage: React.FC<Props> = ({ files: _files, setEncryptor }) => {
+const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
@@ -46,11 +46,11 @@ const FileMessage: React.FC<Props> = ({ files: _files, setEncryptor }) => {
   }, [previewableMedias]);
 
   const onPressOnMore = useCallback(() => {
-    setEncryptor({
+    setConfig({
       files,
     });
     navigation.push(CHAT_STACK.MEDIA);
-  }, [navigation, files, setEncryptor]);
+  }, [navigation, files, setConfig]);
 
   const onPressOnPreview = useCallback(() => {
     setIsVisible((curr) => !curr);
@@ -65,9 +65,8 @@ const FileMessage: React.FC<Props> = ({ files: _files, setEncryptor }) => {
           <Media.Image file={firstMedia} />
         </TouchableOpacity>
         <ImageView
-          images={[firstMedia]}
-          imageIndex={0}
-          visible={isVisible}
+          files={firstMedia}
+          isVisible={isVisible}
           onRequestClose={onPressOnPreview}
         />
       </React.Fragment>
@@ -102,7 +101,7 @@ const style = StyleSheet.create({
 });
 
 const connector = connect(null, {
-  setEncryptor: _setEncryptor,
+  setConfig: _setConfig,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

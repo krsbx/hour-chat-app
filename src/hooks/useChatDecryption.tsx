@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../store';
 import { getChatEncryption } from '../store/actions/encryptions';
-import { getEncryptor } from '../store/selectors/encryptor';
+import { getConfig } from '../store/selectors/config';
 import useChatDecryptionPayload from './useChatDecryptionPayload';
 
 const useChatDecryption = (dep: unknown[] = []) => {
   const dispatch = useDispatch<AppDispatch>();
-  const config = useSelector(getEncryptor);
+  const config = useSelector(getConfig);
   const payload = useChatDecryptionPayload(config);
 
   useEffect(() => {

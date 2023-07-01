@@ -31,10 +31,10 @@ import useLastMessageListener from '../../hooks/useLastMessageListener';
 import useOverwriteBack from '../../hooks/useOverwriteBack';
 import { chats } from '../../schema';
 import { AppState } from '../../store';
-import { getEncryptor } from '../../store/selectors/encryptor';
+import { getConfig } from '../../store/selectors/config';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatView: React.FC<Props> = ({ encryptor }) => {
+const ChatView: React.FC<Props> = ({ config }) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
@@ -46,9 +46,9 @@ const ChatView: React.FC<Props> = ({ encryptor }) => {
   const flexSize = useRef(new Animated.Value(0)).current;
   const emptySize = useRef(new Animated.Value(1)).current;
 
-  const { total } = useLastMessageListener(encryptor);
+  const { total } = useLastMessageListener(config);
   const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber({
-    ..._.pick(encryptor, ['type', 'uuid']),
+    ..._.pick(config, ['type', 'uuid']),
     total,
   });
 
@@ -115,7 +115,7 @@ const ChatView: React.FC<Props> = ({ encryptor }) => {
       <Animated.View style={{ flex: emptySize }} />
       <Animated.View style={{ flex: flexSize }}>
         <Header.BackHeader
-          title={`[${encryptor.type}] [${encryptor.name}]`}
+          title={`[${_.capitalize(config.type)}] ${config.name}`}
           onBack={onPressOnBack}
         />
         <FlatList
@@ -182,7 +182,7 @@ const style = StyleSheet.create({
 });
 
 const mapStateToProps = (state: AppState) => ({
-  encryptor: getEncryptor(state),
+  config: getConfig(state),
 });
 
 const connector = connect(mapStateToProps);
