@@ -1,3 +1,4 @@
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { Formik } from 'formik';
 import _ from 'lodash';
 import React, {
@@ -18,6 +19,7 @@ import {
   View,
 } from 'react-native';
 import { scale } from 'react-native-size-matters';
+import { connect, ConnectedProps } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Bubble, Header, Screens, Wrapper } from '../../components';
 import { DEFAULT_MESSAGE_VALUE } from '../../constants/defaults';
@@ -26,10 +28,17 @@ import useChatDecryption from '../../hooks/useChatDecryption';
 import useChatMessageSubscriber from '../../hooks/useChatMessageSubscriber';
 import useCurrentUser from '../../hooks/useCurrentUser';
 import useLastMessageListener from '../../hooks/useLastMessageListener';
+import useOverwriteBack from '../../hooks/useOverwriteBack';
 import { chats } from '../../schema';
+import { AppState } from '../../store';
+import { getEncryptor } from '../../store/selectors/encryptor';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatView: React.FC<Props> = ({ route }) => {
+const ChatView: React.FC<Props> = ({ encryptor }) => {
+  const navigation =
+    useNavigation<
+      HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
+    >();
   const { user: currentUser } = useCurrentUser();
   const [isRefteching, setIsRefetching] = useState(false);
 
@@ -37,14 +46,25 @@ const ChatView: React.FC<Props> = ({ route }) => {
   const flexSize = useRef(new Animated.Value(0)).current;
   const emptySize = useRef(new Animated.Value(1)).current;
 
-  const { total } = useLastMessageListener(route.params);
+  const { total } = useLastMessageListener(encryptor);
   const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber({
-    ...route.params,
+    ..._.pick(encryptor, ['type', 'uuid']),
     total,
   });
 
+  const onPressOnBack = useCallback(() => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+
+    navigation.dispatch(StackActions.replace(CHAT_STACK.LIST));
+  }, [navigation]);
+
+  useOverwriteBack(onPressOnBack);
+
   const chatHasMessage = useMemo(() => messages.length > 0, [messages]);
-  const config = useChatDecryption(route.params, [chatHasMessage]);
+  useChatDecryption([chatHasMessage]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
@@ -94,7 +114,10 @@ const ChatView: React.FC<Props> = ({ route }) => {
       />
       <Animated.View style={{ flex: emptySize }} />
       <Animated.View style={{ flex: flexSize }}>
-        <Header.ChatView name={route.params.name} type={route.params.type} />
+        <Header.BackHeader
+          title={`[${encryptor.type}] [${encryptor.name}]`}
+          onBack={onPressOnBack}
+        />
         <FlatList
           style={{ flex: 1 }}
           data={messages ?? []}
@@ -115,14 +138,14 @@ const ChatView: React.FC<Props> = ({ route }) => {
             if (item.senderId === currentUser.id) {
               return (
                 <Wrapper.ChatBubbleContainer current={item} prev={prev}>
-                  <Bubble.Outgoing config={config} {...item} />
+                  <Bubble.Outgoing {...item} />
                 </Wrapper.ChatBubbleContainer>
               );
             }
 
             return (
               <Wrapper.ChatBubbleContainer current={item} prev={prev}>
-                <Bubble.Incoming config={config} {...item} />
+                <Bubble.Incoming {...item} />
               </Wrapper.ChatBubbleContainer>
             );
           }}
@@ -158,6 +181,14 @@ const style = StyleSheet.create({
   },
 });
 
-type Props = HourChat.Navigation.ChatStackProps<typeof CHAT_STACK.VIEW>;
+const mapStateToProps = (state: AppState) => ({
+  encryptor: getEncryptor(state),
+});
 
-export default ChatView;
+const connector = connect(mapStateToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps;
+
+export default connector(ChatView);

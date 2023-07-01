@@ -31,3 +31,12 @@ export const CHAT_BASE_PATH = {
 } as const;
 
 export const EXPIREABLE_RESOURCE = [RESOURCE_NAME.USERS] as const;
+
+export const PREVIEWABLE_MEDIA_MIME = {
+  IMAGE: 'image',
+  VIDEO: 'video',
+  AUDIO: 'audio',
+} as const;
+
+export const MIN_MEDIA = 1;
+export const MAX_MEDIA = 4;

@@ -10,12 +10,13 @@ import {
   View,
 } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import { useSelector } from 'react-redux';
+import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { Icon } from '..';
 import { CHAT_TYPE } from '../../constants/common';
 import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
 import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
+import { setEncryptor as _setEncryptor } from '../../store/actions/encryptor';
 import { getCurrentEncryption } from '../../store/selectors/encryption';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
@@ -28,6 +29,7 @@ const Message: React.FC<Props> = ({
   uuid,
   user,
   files,
+  setEncryptor,
 }) => {
   const navigation =
     useNavigation<
@@ -65,28 +67,36 @@ const Message: React.FC<Props> = ({
   }, [messageBody, files]);
 
   const onPress = useCallback(() => {
-    navigation.push(CHAT_STACK.VIEW, {
+    setEncryptor({
       type: type,
       uuid: uuid,
       name: name,
+      config,
     });
-  }, [type, uuid, name, navigation]);
+    navigation.push(CHAT_STACK.VIEW);
+  }, [type, uuid, name, config, navigation, setEncryptor]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
       Animated.timing(maxHeight, {
-        toValue: scale(60),
-        duration: 1000,
-        easing: Easing.circle,
+        toValue: scale(70),
+        duration: 500,
+        easing: Easing.cubic,
         useNativeDriver: false,
       }),
     ]).start();
   }, [maxHeight]);
 
-  useEffect(startAnimation, [startAnimation]);
+  useEffect(() => {
+    if (!user) return;
+
+    startAnimation();
+  }, [startAnimation, user]);
+
+  if (!user) return null;
 
   return (
-    <Animated.View style={{ maxHeight }}>
+    <Animated.View style={{ maxHeight, overflow: 'hidden' }}>
       <TouchableOpacity
         style={style.container}
         activeOpacity={0.5}
@@ -129,11 +139,18 @@ const style = StyleSheet.create({
   },
 });
 
-type Props = HourChat.Chat.MessageData & {
-  type: HourChat.Type.ChatType;
-  name: string;
-  uuid: string;
-  user?: HourChat.Resource.User;
-};
+const connector = connect(null, {
+  setEncryptor: _setEncryptor,
+});
 
-export default Message;
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps &
+  HourChat.Chat.MessageData & {
+    type: HourChat.Type.ChatType;
+    name: string;
+    uuid: string;
+    user?: HourChat.Resource.User;
+  };
+
+export default connector(Message);

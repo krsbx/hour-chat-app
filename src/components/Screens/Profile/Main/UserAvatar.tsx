@@ -27,7 +27,7 @@ const UserAvatar: React.FC<Props> = ({ uploadFiles, updateMyData }) => {
 
       if (!result.fileCopyUri) return;
 
-      const { data } = await uploadFiles(result);
+      const { data } = await uploadFiles(result as never);
       const [newAvatarUri] = data;
 
       await updateMyData({

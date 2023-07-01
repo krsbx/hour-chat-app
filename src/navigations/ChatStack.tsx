@@ -5,8 +5,6 @@ import { Chat } from '../screens';
 
 const Stack = createStackNavigator<HourChat.Navigation.ChatStack>();
 
-const Empty = () => null;
-
 const ChatStack = () => {
   return (
     <Stack.Navigator
@@ -17,7 +15,7 @@ const ChatStack = () => {
     >
       <Stack.Screen name={CHAT_STACK.LIST} component={Chat.ChatList} />
       <Stack.Screen name={CHAT_STACK.VIEW} component={Chat.ChatView} />
-      <Stack.Screen name={CHAT_STACK.DETAIL} component={Empty} />
+      <Stack.Screen name={CHAT_STACK.MEDIA} component={Chat.ChatMedia} />
     </Stack.Navigator>
   );
 };

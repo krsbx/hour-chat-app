@@ -1,17 +1,19 @@
 import { useFormikContext } from 'formik';
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { z } from 'zod';
 import { CHAT_TYPE } from '../constants/common';
-import { CHAT_STACK } from '../constants/screens';
 import { chats } from '../schema';
 import {
   setTypingGroupMessage,
   setTypingPrivateMessage,
 } from '../store/actions/chats';
+import { getEncryptor } from '../store/selectors/encryptor';
 import useDebounce from './useDebounce';
 
-const useOnUserTyping = ({ type, uuid }: Params) => {
+const useOnUserTyping = () => {
   const { values } = useFormikContext<z.infer<typeof chats.messageSchema>>();
+  const { type, uuid } = useSelector(getEncryptor);
 
   const onUserTyping = useCallback(
     (typing: boolean) => {
@@ -54,9 +56,5 @@ const useOnUserTyping = ({ type, uuid }: Params) => {
     3000
   );
 };
-
-type Params = HourChat.Navigation.ChatStackProps<
-  typeof CHAT_STACK.VIEW
->['route']['params'];
 
 export default useOnUserTyping;

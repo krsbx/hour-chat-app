@@ -10,7 +10,7 @@ const useDateTimeStyle = ({
   placeholder,
   isValid,
   isError,
-}: Props) => {
+}: Params) => {
   const style = useMemo(() => {
     const inputStyles: StyleProp<ViewStyle>[] = [STYLES.INPUTS.DATE_TIME];
     const textStyles: StyleProp<TextStyle>[] = [STYLES.LABELS.DATE_TIME];
@@ -39,7 +39,7 @@ const useDateTimeStyle = ({
   return style;
 };
 
-type Props = {
+type Params = {
   disabled?: boolean;
   isValidDate?: boolean;
   placeholder?: string;

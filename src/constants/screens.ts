@@ -15,7 +15,7 @@ export const AUTH_STACK = {
 export const CHAT_STACK = {
   LIST: 'chat.list.screen',
   VIEW: 'chat.view.screen',
-  DETAIL: 'chat.detail.screen',
+  MEDIA: 'chat.media.screen',
 } as const;
 
 export const MAIN_TAB = {

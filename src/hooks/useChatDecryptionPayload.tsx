@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 import { CHAT_TYPE } from '../constants/common';
-import { CHAT_STACK } from '../constants/screens';
 import useCurrentUser from './useCurrentUser';
 
-const useChatDecryptionPayload = ({ type, uuid }: Props) => {
+const useChatDecryptionPayload = ({ type, uuid }: Params) => {
   const { user: currentUser } = useCurrentUser();
 
   const payload = useMemo(() => {
     const payload = {
-      senderId: '' as string,
-      receiverId: '' as string,
+      senderId: '',
+      receiverId: '',
       type: type,
     };
 
@@ -35,8 +34,9 @@ const useChatDecryptionPayload = ({ type, uuid }: Props) => {
   return payload;
 };
 
-type Props = HourChat.Navigation.ChatStackProps<
-  typeof CHAT_STACK.VIEW
->['route']['params'];
+type Params = {
+  type: HourChat.Type.ChatType;
+  uuid: string;
+};
 
 export default useChatDecryptionPayload;

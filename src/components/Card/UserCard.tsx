@@ -24,7 +24,7 @@ const UserCard: React.FC<Props> = ({ uuid, onPress }) => {
       Animated.timing(maxHeight, {
         toValue: scale(70),
         duration: 500,
-        easing: Easing.linear,
+        easing: Easing.circle,
         useNativeDriver: false,
       }),
     ]).start();

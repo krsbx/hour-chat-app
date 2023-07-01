@@ -1,13 +1,16 @@
 import aesjs from 'aes-js';
 
+export const createEncryptor = (config: HourChat.Type.Encryption) => {
+  const aesOfb = new aesjs.ModeOfOperation.ofb(config.key, config.iv);
+
+  return aesOfb;
+};
+
 export const encryptText = (text: string, config: HourChat.Type.Encryption) => {
   try {
-    if (!config.iv || !config.key) return;
-    if (config.iv.length < 16 || config.key.length < 16) return;
-
     const textBytes = aesjs.utils.utf8.toBytes(text);
 
-    const aesOfb = new aesjs.ModeOfOperation.ofb(config.key, config.iv);
+    const aesOfb = createEncryptor(config);
     const encryptedBytes = aesOfb.encrypt(textBytes);
 
     return aesjs.utils.hex.fromBytes(encryptedBytes);
@@ -18,16 +21,34 @@ export const encryptText = (text: string, config: HourChat.Type.Encryption) => {
 
 export const decryptText = (text: string, config: HourChat.Type.Encryption) => {
   try {
-    if (!config.iv || !config.key) return;
-    if (config.iv.length < 16 || config.key.length < 16) return;
-
     const encryptedBytes = aesjs.utils.hex.toBytes(text);
 
-    const aesOfb = new aesjs.ModeOfOperation.ofb(config.key, config.iv);
+    const aesOfb = createEncryptor(config);
     const decryptedBytes = aesOfb.decrypt(encryptedBytes);
 
     return aesjs.utils.utf8.fromBytes(decryptedBytes);
   } catch {
     return;
   }
+};
+
+export const secureText = {
+  encrypt(text: string, instance: aesjs.ModeOfOperation.ModeOfOperationOFB) {
+    try {
+      const bytes = aesjs.utils.utf8.toBytes(text);
+      const encrypted = instance.encrypt(bytes);
+      return aesjs.utils.hex.fromBytes(encrypted);
+    } catch {
+      return;
+    }
+  },
+  decrypt(text: string, instance: aesjs.ModeOfOperation.ModeOfOperationOFB) {
+    try {
+      const bytes = aesjs.utils.hex.toBytes(text);
+      const decrypted = instance.decrypt(bytes);
+      return aesjs.utils.utf8.fromBytes(decrypted);
+    } catch {
+      return;
+    }
+  },
 };

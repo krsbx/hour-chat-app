@@ -10,7 +10,6 @@ import {
   STORY_TAB,
 } from '../../../../constants/screens';
 import { logoutUser as _logoutUser } from '../../../../store/actions/auth';
-import { COLOR_PALETTE } from '../../../../utils/theme';
 
 const ItemSection: React.FC<Props> = ({ logoutUser }) => {
   const navigation =
@@ -73,12 +72,6 @@ const ItemSection: React.FC<Props> = ({ logoutUser }) => {
       <View>
         <Label.SectionLabel>Misc</Label.SectionLabel>
         <Buttons.Section onPress={navigateToSetting} title={'Setting'} />
-        <Buttons.Section
-          style={{ backgroundColor: COLOR_PALETTE.NEUTRAL_20 }}
-          onPress={navigateToSetting}
-          title={'Coming Soon...'}
-          disabled
-        />
         <Buttons.Section onPress={logoutUser} title="Logout" />
       </View>
     </ScrollView>
