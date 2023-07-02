@@ -19,7 +19,7 @@ import { AppState } from '../../store';
 import { getConfig } from '../../store/selectors/config';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
+const ChatMedia: React.FC<Props> = ({ config, navigation, route }) => {
   const [selectedFile, setSelectedFile] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -38,7 +38,9 @@ const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
     (number?: number) => {
       setIsVisible((curr) => !curr);
 
-      if (number && number >= 0) setSelectedFile(number);
+      if (_.isNil(number)) return;
+
+      setSelectedFile(number);
     },
     [setIsVisible]
   );
@@ -62,7 +64,7 @@ const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
         onBack={onPressOnBack}
       />
       <FlatList
-        data={config.files}
+        data={route.params?.editable ? config.attachment : config.files}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             activeOpacity={0.8}
@@ -84,7 +86,7 @@ const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
         }}
       />
       <ImageView
-        files={config.files}
+        files={route.params?.editable ? config.attachment : config.files}
         isVisible={isVisible}
         fileIndex={selectedFile}
         onIndexChange={onIndexChange}

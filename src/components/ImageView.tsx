@@ -1,18 +1,18 @@
-import { Text } from '@rneui/base';
+import { useRoute } from '@react-navigation/native';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import RNFS from 'react-native-fs';
 import { connect, ConnectedProps } from 'react-redux';
-import { Footer, Header, Wrapper } from '.';
+import { Footer, Header } from '.';
 import {
   MEDIA_ICON_MAP_WHITE,
   PREVIEWABLE_MEDIA_MIME,
 } from '../constants/common';
+import { CHAT_STACK } from '../constants/screens';
 import { AppState } from '../store';
 import { getConfig } from '../store/selectors/config';
-import { hasOwnProperty } from '../utils/common';
-import { COLOR_PALETTE } from '../utils/theme';
 import ImageViewing from './ImageViewing';
+import MediaRenderer from './Media/MediaRenderer';
 
 const ImageView: React.FC<Props> = ({
   files: _files,
@@ -23,6 +23,8 @@ const ImageView: React.FC<Props> = ({
   config,
 }) => {
   const { uuid, type } = config;
+  const { params } =
+    useRoute<HourChat.Navigation.ChatStackRoute<typeof CHAT_STACK.MEDIA>>();
   const downloadJobId = useRef<number | null>(null);
   const downloadRef = useRef<RNFS.DownloadResult | null>(null);
   const files = useMemo(() => {
@@ -106,35 +108,14 @@ const ImageView: React.FC<Props> = ({
           imageIndex={fileIndex}
           onDownload={onDownload}
           onRequestClose={onRequestClose}
+          editable={params?.editable}
         />
       )}
       // eslint-disable-next-line react/no-unstable-nested-components
       FooterComponent={({ fileIndex }) => (
         <Footer.ImageView imageIndex={fileIndex} text={files[fileIndex].name} />
       )}
-      renderItem={({ item, onRequestClose, swipeToCloseEnabled }) => {
-        let type = '';
-
-        if (hasOwnProperty<string>(item, 'type'))
-          type = (item?.type ?? '').split('/').shift?.() ?? '';
-
-        switch (type) {
-          case PREVIEWABLE_MEDIA_MIME.IMAGE:
-            return null;
-
-          case PREVIEWABLE_MEDIA_MIME.AUDIO:
-            return (
-              <Wrapper.SwipeUpToClose
-                onRequestClose={onRequestClose}
-                swipeToCloseEnabled={swipeToCloseEnabled}
-              >
-                <Text style={{ color: COLOR_PALETTE.WHITE }}>Text</Text>
-              </Wrapper.SwipeUpToClose>
-            );
-          default:
-            return null;
-        }
-      }}
+      renderItem={MediaRenderer}
       keyExtractor={(item, index) => `${item.toLocaleString()}-${index}`}
     />
   );

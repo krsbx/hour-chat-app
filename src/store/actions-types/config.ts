@@ -3,6 +3,7 @@ export type ConfigReducer = {
   type: HourChat.Type.ChatType;
   name: string;
   files: HourChat.Type.File[];
+  attachment: HourChat.Type.File[];
   config: HourChat.Type.Encryption;
 };
 

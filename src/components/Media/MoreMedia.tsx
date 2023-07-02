@@ -1,14 +1,14 @@
 import { ScreenWidth } from '@rneui/base';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { flattenStyle } from '../../styles/factory';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const MoreMedia: React.FC = () => {
+const MoreMedia: React.FC<Props> = ({ style: _style }) => {
   return (
-    <View style={style}>
+    <View style={[style, _style]}>
       <Entypo
         name="circle-with-plus"
         size={ScreenWidth * 0.15}
@@ -28,5 +28,9 @@ const style = flattenStyle({
   opacity: 0.8,
   backgroundColor: COLOR_PALETTE.NEUTRAL_100,
 });
+
+type Props = {
+  style?: StyleProp<ViewStyle>;
+};
 
 export default MoreMedia;

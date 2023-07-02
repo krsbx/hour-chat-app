@@ -11,6 +11,7 @@ const initialState: ConfigReducer = {
   type: CHAT_TYPE.PRIVATE,
   name: '',
   files: [],
+  attachment: [],
   config: {
     iv: [],
     key: [],

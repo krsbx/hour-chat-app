@@ -49,7 +49,7 @@ const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
     setConfig({
       files,
     });
-    navigation.push(CHAT_STACK.MEDIA);
+    navigation.push(CHAT_STACK.MEDIA, {});
   }, [navigation, files, setConfig]);
 
   const onPressOnPreview = useCallback(() => {
