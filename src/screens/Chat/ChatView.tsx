@@ -31,10 +31,11 @@ import useLastMessageListener from '../../hooks/useLastMessageListener';
 import useOverwriteBack from '../../hooks/useOverwriteBack';
 import { chats } from '../../schema';
 import { AppState } from '../../store';
+import { setConfig as _setConfig } from '../../store/actions/config';
 import { getConfig } from '../../store/selectors/config';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatView: React.FC<Props> = ({ config }) => {
+const ChatView: React.FC<Props> = ({ config, setConfig }) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
@@ -53,13 +54,17 @@ const ChatView: React.FC<Props> = ({ config }) => {
   });
 
   const onPressOnBack = useCallback(() => {
+    setConfig({
+      attachment: [],
+    });
+
     if (navigation.canGoBack()) {
       navigation.goBack();
       return;
     }
 
     navigation.dispatch(StackActions.replace(CHAT_STACK.LIST));
-  }, [navigation]);
+  }, [navigation, setConfig]);
 
   useOverwriteBack(onPressOnBack);
 
@@ -185,7 +190,9 @@ const mapStateToProps = (state: AppState) => ({
   config: getConfig(state),
 });
 
-const connector = connect(mapStateToProps);
+const connector = connect(mapStateToProps, {
+  setConfig: _setConfig,
+});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 

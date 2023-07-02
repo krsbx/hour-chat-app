@@ -3,15 +3,7 @@ import axios from '../axios';
 import { getAuth } from '../selectors/auth';
 
 export const sendPrivateMessage =
-  ({
-    body,
-    receiverId,
-    files,
-  }: {
-    body: string;
-    receiverId: string;
-    files: HourChat.Type.File[];
-  }) =>
+  ({ body, receiverId, files }: HourChat.Chat.PrivateChatPayload) =>
   async () => {
     const { id } = getAuth(store.getState());
 
@@ -24,15 +16,7 @@ export const sendPrivateMessage =
   };
 
 export const sendGroupMessage =
-  ({
-    body,
-    uuid,
-    files,
-  }: {
-    body: string;
-    uuid: string;
-    files: HourChat.Type.File[];
-  }) =>
+  ({ body, uuid, files }: HourChat.Chat.GroupChatPayload) =>
   async () => {
     const { id } = getAuth(store.getState());
 
