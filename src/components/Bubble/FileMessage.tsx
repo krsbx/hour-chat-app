@@ -87,7 +87,31 @@ const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
       </TouchableOpacity>
     );
 
-  return null;
+  return (
+    <TouchableOpacity
+      style={[
+        mediaContainerStyle,
+        { flexDirection: files.length % 2 !== 0 ? 'row' : 'column' },
+      ]}
+      onPress={onPressOnMore}
+    >
+      <FlatList
+        data={files}
+        style={style.column}
+        columnWrapperStyle={style.column}
+        renderItem={({ item, index }) => {
+          if (index < 3) {
+            return <Media.Image file={item} />;
+          }
+
+          return null;
+        }}
+        numColumns={2}
+        keyExtractor={(item, index) => `${item.uri}-${index}`}
+      />
+      {(files.length - 1) % 2 !== 0 && <Media.More />}
+    </TouchableOpacity>
+  );
 };
 
 const style = StyleSheet.create({
