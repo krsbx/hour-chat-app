@@ -5,7 +5,14 @@ import { decryptText } from './encryption';
 export const isMediaPreviewable = (file: HourChat.Type.File) => {
   const type = (file.type ?? '').split('/').shift() ?? '';
 
-  return _.includes([PREVIEWABLE_MEDIA_MIME.IMAGE], type);
+  return _.includes(
+    [
+      PREVIEWABLE_MEDIA_MIME.IMAGE,
+      PREVIEWABLE_MEDIA_MIME.VIDEO,
+      PREVIEWABLE_MEDIA_MIME.AUDIO,
+    ],
+    type
+  );
 };
 
 export const decryptFile = (

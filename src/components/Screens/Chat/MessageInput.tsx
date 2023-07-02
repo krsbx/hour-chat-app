@@ -1,14 +1,23 @@
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { ScreenHeight, ScreenWidth } from '@rneui/base';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
-import React, { useCallback } from 'react';
-import { GestureResponderEvent, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import {
+  FlatList,
+  GestureResponderEvent,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
-import { Input } from '../..';
+import { Input, Media } from '../..';
 import { CHAT_TYPE } from '../../../constants/common';
+import { CHAT_STACK } from '../../../constants/screens';
 import useOnUserTyping from '../../../hooks/useOnUserTyping';
 import { chats } from '../../../schema';
 import { AppState } from '../../../store';
@@ -16,6 +25,7 @@ import {
   sendGroupMessage as _sendGroupMessage,
   sendPrivateMessage as _sendPrivateMessage,
 } from '../../../store/actions/chats';
+import { setConfig as _setConfig } from '../../../store/actions/config';
 import { uploadFiles as _uploadFiles } from '../../../store/actions/files';
 import { getConfig } from '../../../store/selectors/config';
 
@@ -23,11 +33,17 @@ const InputForm: React.FC<Props> = ({
   sendGroupMessage,
   sendPrivateMessage,
   uploadFiles,
+  setConfig,
   config,
 }) => {
-  const { type, uuid } = config;
+  const isScreenFocused = useIsFocused();
+  const navigation =
+    useNavigation<
+      HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
+    >();
   const { handleChange, handleBlur, values, setFieldValue, validate } =
     useFormikContext<z.infer<typeof chats.messageSchema>>();
+  const { type, uuid } = config;
 
   useOnUserTyping();
 
@@ -42,6 +58,9 @@ const InputForm: React.FC<Props> = ({
 
         setFieldValue('body', '');
         setFieldValue('files', []);
+        setConfig({
+          attachment: [],
+        });
 
         const files: HourChat.Type.File[] = [];
 
@@ -94,6 +113,7 @@ const InputForm: React.FC<Props> = ({
       uploadFiles,
       sendGroupMessage,
       sendPrivateMessage,
+      setConfig,
     ]
   );
 
@@ -107,23 +127,70 @@ const InputForm: React.FC<Props> = ({
 
       const normalizedResults = [
         ...(values?.files ?? []),
-        ..._.map(results, (result) => _.pick(result, ['uri', 'type', 'name'])),
+        ..._.map(
+          results,
+          (result) =>
+            _.pick(result, ['uri', 'type', 'name']) as HourChat.Type.File
+        ),
       ];
 
       setFieldValue('files', normalizedResults);
+      setConfig({
+        attachment: normalizedResults,
+      });
     } catch {
       // Do nothing if there is an error
     }
-  }, [values.files, setFieldValue]);
+  }, [values.files, setFieldValue, setConfig]);
+
+  const onPressOnMedia = useCallback(() => {
+    setConfig({
+      files: values.files ?? [],
+    });
+    navigation.push(CHAT_STACK.MEDIA, {
+      editable: true,
+    });
+  }, [navigation, values.files, setConfig]);
+
+  useEffect(() => {
+    if (_.isEqual(values.files, config.attachment)) return;
+
+    setFieldValue('files', config.attachment);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isScreenFocused]);
 
   return (
     <View
       style={{
         flexDirection: 'column',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
+        gap: scale(5),
       }}
     >
+      <TouchableOpacity
+        style={{ paddingBottom: 0, alignItems: 'center' }}
+        onPress={onPressOnMedia}
+      >
+        <FlatList
+          data={values.files}
+          style={{
+            minHeight: 0,
+            maxHeight: scale(ScreenHeight * 0.15),
+          }}
+          columnWrapperStyle={{ gap: scale(4) }}
+          numColumns={4}
+          renderItem={({ item, index }) => {
+            if (index < 3)
+              return (
+                <Media.Image style={{ width: ScreenWidth * 0.2 }} file={item} />
+              );
+
+            if (index === 3)
+              return <Media.More style={{ width: ScreenWidth * 0.2 }} />;
+
+            return null;
+          }}
+        />
+      </TouchableOpacity>
       <Input.InputField
         onChangeText={handleChange('body')}
         onBlur={handleBlur('body')}
@@ -143,23 +210,10 @@ const InputForm: React.FC<Props> = ({
             <Ionicons name="send" />
           </TouchableOpacity>
         }
-        inputStyle={{
-          borderLeftWidth: 1,
-          borderRightWidth: 1,
-          borderTopLeftRadius: scale(12),
-          borderBottomLeftRadius: scale(12),
-          borderTopRightRadius: scale(12),
-          borderBottomRightRadius: scale(12),
-        }}
-        inputContainerStyle={{
-          marginBottom: 0,
-        }}
-        leftIconContainerStyle={{
-          borderWidth: 0,
-        }}
-        rightIconContainerStyle={{
-          borderWidth: 0,
-        }}
+        inputStyle={style.inputStyle}
+        inputContainerStyle={style.inputContainer}
+        leftIconContainerStyle={style.resetBorderWidth}
+        rightIconContainerStyle={style.resetBorderWidth}
       />
     </View>
   );
@@ -172,7 +226,25 @@ const mapStateToProps = (state: AppState) => ({
 const connector = connect(mapStateToProps, {
   sendPrivateMessage: _sendPrivateMessage,
   sendGroupMessage: _sendGroupMessage,
+  setConfig: _setConfig,
   uploadFiles: _uploadFiles,
+});
+
+const style = StyleSheet.create({
+  inputStyle: {
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderTopLeftRadius: scale(12),
+    borderBottomLeftRadius: scale(12),
+    borderTopRightRadius: scale(12),
+    borderBottomRightRadius: scale(12),
+  },
+  inputContainer: {
+    marginBottom: 0,
+  },
+  resetBorderWidth: {
+    borderWidth: 0,
+  },
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

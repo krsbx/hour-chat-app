@@ -29,7 +29,7 @@ const DEFAULT_DELAY_LONG_PRESS = 800;
 const SCREEN = Dimensions.get('screen');
 const SCREEN_WIDTH = SCREEN.width;
 
-function ImageViewing({
+const ImageViewing: React.FC<Props> = ({
   items,
   keyExtractor,
   viewIndex,
@@ -46,7 +46,7 @@ function ImageViewing({
   HeaderComponent,
   FooterComponent,
   renderItem: RenderItem,
-}: Props) {
+}) => {
   const itemList = useRef<VirtualizedList<HourChat.Type.ImageSource>>(null);
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
   const [currentIndex, onScroll] = useImageIndexChange(viewIndex, SCREEN);
@@ -148,7 +148,7 @@ function ImageViewing({
       </View>
     </Modal>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -193,7 +193,7 @@ type Props = {
   }) => JSX.Element | null;
 };
 
-const EnhancedImageViewing = (props: Props) => (
+const EnhancedImageViewing: React.FC<Props> = (props) => (
   <ImageViewing key={props.viewIndex} {...props} />
 );
 

@@ -14,7 +14,9 @@ const LaunchScreen = () => {
       duration: 1000,
       easing: Easing.elastic(0.5),
       useNativeDriver: false,
-    }).start(() => setIsCompleted(true));
+    }).start(async () => {
+      setIsCompleted(true);
+    });
   }, [opacity]);
 
   useTokenListener(isCompleted);
