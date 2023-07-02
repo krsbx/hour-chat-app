@@ -20,7 +20,7 @@ import { getConfig } from '../../store/selectors/config';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
-  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedFile, setSelectedFile] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
   const onPressOnBack = useCallback(() => {
@@ -38,16 +38,16 @@ const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
     (number?: number) => {
       setIsVisible((curr) => !curr);
 
-      if (number && number >= 0) setSelectedImage(number);
+      if (number && number >= 0) setSelectedFile(number);
     },
     [setIsVisible]
   );
 
-  const onImageIndexChange = useCallback(
+  const onIndexChange = useCallback(
     (imageIndex: number) => {
-      setSelectedImage(imageIndex);
+      setSelectedFile(imageIndex);
     },
-    [setSelectedImage]
+    [setSelectedFile]
   );
 
   return (
@@ -86,8 +86,8 @@ const ChatMedia: React.FC<Props> = ({ config, navigation }) => {
       <ImageView
         files={config.files}
         isVisible={isVisible}
-        imageIndex={selectedImage}
-        onImageIndexChange={onImageIndexChange}
+        fileIndex={selectedFile}
+        onIndexChange={onIndexChange}
         onRequestClose={onPressOnPreview}
       />
     </View>

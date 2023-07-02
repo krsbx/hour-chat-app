@@ -1,22 +1,25 @@
+import { Text } from '@rneui/base';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import RNFS from 'react-native-fs';
-import RNImageView from 'react-native-image-viewing';
 import { connect, ConnectedProps } from 'react-redux';
-import { Footer, Header } from '.';
+import { Footer, Header, Wrapper } from '.';
 import {
   MEDIA_ICON_MAP_WHITE,
   PREVIEWABLE_MEDIA_MIME,
 } from '../constants/common';
 import { AppState } from '../store';
 import { getConfig } from '../store/selectors/config';
+import { hasOwnProperty } from '../utils/common';
+import { COLOR_PALETTE } from '../utils/theme';
+import ImageViewing from './ImageViewing';
 
 const ImageView: React.FC<Props> = ({
   files: _files,
   isVisible,
-  imageIndex = 0,
+  fileIndex = 0,
   onRequestClose,
-  onImageIndexChange,
+  onIndexChange,
   config,
 }) => {
   const { uuid, type } = config;
@@ -49,7 +52,7 @@ const ImageView: React.FC<Props> = ({
       return clone;
     });
   }, [_files]);
-  const file = useMemo(() => files[imageIndex], [files, imageIndex]);
+  const file = useMemo(() => files[fileIndex], [files, fileIndex]);
   const doubleTapToZoomEnabled = useMemo(() => {
     const type = (file?.type ?? '').split('/').shift?.() ?? '';
 
@@ -57,18 +60,18 @@ const ImageView: React.FC<Props> = ({
   }, [file]);
 
   const onDownload = useCallback(
-    async (imageIndex: number) => {
+    async (fileIndex: number) => {
       try {
         const dirPath = `${RNFS.DownloadDirectoryPath}/HourChat/${type}/${uuid}`;
         const isDirExist = await RNFS.exists(dirPath);
-        const filePath = `${dirPath}/${files[imageIndex].name}`;
+        const filePath = `${dirPath}/${files[fileIndex].name}`;
         const isFileExist = await RNFS.exists(filePath);
 
         if (!isDirExist) await RNFS.mkdir(dirPath);
         if (isFileExist) return;
 
         const { jobId, promise } = RNFS.downloadFile({
-          fromUrl: files[imageIndex].href,
+          fromUrl: files[fileIndex].href,
           toFile: filePath,
         });
 
@@ -90,28 +93,48 @@ const ImageView: React.FC<Props> = ({
   }, []);
 
   return (
-    <RNImageView
-      images={files}
-      imageIndex={imageIndex}
-      onImageIndexChange={onImageIndexChange}
+    <ImageViewing
+      items={files}
+      viewIndex={fileIndex}
+      onIndexChange={onIndexChange}
       visible={isVisible}
       doubleTapToZoomEnabled={doubleTapToZoomEnabled}
       onRequestClose={onRequestClose}
       // eslint-disable-next-line react/no-unstable-nested-components
-      HeaderComponent={({ imageIndex }) => (
+      HeaderComponent={({ fileIndex }) => (
         <Header.ImageView
-          imageIndex={imageIndex}
+          imageIndex={fileIndex}
           onDownload={onDownload}
           onRequestClose={onRequestClose}
         />
       )}
       // eslint-disable-next-line react/no-unstable-nested-components
-      FooterComponent={({ imageIndex }) => (
-        <Footer.ImageView
-          imageIndex={imageIndex}
-          text={files[imageIndex].name}
-        />
+      FooterComponent={({ fileIndex }) => (
+        <Footer.ImageView imageIndex={fileIndex} text={files[fileIndex].name} />
       )}
+      renderItem={({ item, onRequestClose, swipeToCloseEnabled }) => {
+        let type = '';
+
+        if (hasOwnProperty<string>(item, 'type'))
+          type = (item?.type ?? '').split('/').shift?.() ?? '';
+
+        switch (type) {
+          case PREVIEWABLE_MEDIA_MIME.IMAGE:
+            return null;
+
+          case PREVIEWABLE_MEDIA_MIME.AUDIO:
+            return (
+              <Wrapper.SwipeUpToClose
+                onRequestClose={onRequestClose}
+                swipeToCloseEnabled={swipeToCloseEnabled}
+              >
+                <Text style={{ color: COLOR_PALETTE.WHITE }}>Text</Text>
+              </Wrapper.SwipeUpToClose>
+            );
+          default:
+            return null;
+        }
+      }}
       keyExtractor={(item, index) => `${item.toLocaleString()}-${index}`}
     />
   );
@@ -127,8 +150,8 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps & {
   files: HourChat.Type.File | HourChat.Type.File[];
-  imageIndex?: number;
-  onImageIndexChange?: (imageIndex: number) => void;
+  fileIndex?: number;
+  onIndexChange?: (fileIndex: number) => void;
   isVisible: boolean;
   onRequestClose: () => void;
 };
