@@ -86,7 +86,7 @@ const ChatMedia: React.FC<Props> = ({ config, navigation, route }) => {
         }}
       />
       <ImageView
-        files={route.params?.editable ? config.attachment : config.files}
+        files={config.files}
         isVisible={isVisible}
         fileIndex={selectedFile}
         onIndexChange={onIndexChange}

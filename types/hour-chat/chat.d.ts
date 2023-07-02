@@ -32,3 +32,17 @@ export type ChatMessageHistory = PrivateMetadata | GroupMetadata;
 export type PrivateMessageHistory = Record<string, PrivateMetadata>;
 
 export type GroupMessageHistory = Record<string, GroupMetadata>;
+
+export type BaseChatPayload = Pick<MessageData, 'body' | 'files'>;
+
+export type PrivateChatPayload = BaseChatPayload & {
+  receiverId: string;
+};
+
+export type GroupChatPayload = BaseChatPayload & {
+  uuid: string;
+};
+
+export type MessageQueuePayload = GroupChatPayload & {
+  type: HourChat.Type.ChatType;
+};

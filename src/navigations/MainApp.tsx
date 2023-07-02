@@ -5,6 +5,7 @@ import React from 'react';
 import { scale } from 'react-native-size-matters';
 import { Buttons, Icon } from '../components';
 import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
+import useChatMessageQueue from '../hooks/useChatMessageQueue';
 import useWatchAuthToken from '../hooks/useWatchAuthToken';
 import useWatchPosition from '../hooks/useWatchPosition';
 import { Content } from '../screens';
@@ -18,6 +19,7 @@ const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
 const MainApp = () => {
   useWatchPosition();
   useWatchAuthToken();
+  useChatMessageQueue();
 
   return (
     <Tab.Navigator

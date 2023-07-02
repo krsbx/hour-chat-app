@@ -16,26 +16,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Input, Media } from '../..';
-import { CHAT_TYPE } from '../../../constants/common';
 import { CHAT_STACK } from '../../../constants/screens';
 import useOnUserTyping from '../../../hooks/useOnUserTyping';
 import { chats } from '../../../schema';
 import { AppState } from '../../../store';
-import {
-  sendGroupMessage as _sendGroupMessage,
-  sendPrivateMessage as _sendPrivateMessage,
-} from '../../../store/actions/chats';
 import { setConfig as _setConfig } from '../../../store/actions/config';
-import { uploadFiles as _uploadFiles } from '../../../store/actions/files';
+import { enqueuMessage as _enqueuMessage } from '../../../store/actions/messageQueue';
 import { getConfig } from '../../../store/selectors/config';
 
-const InputForm: React.FC<Props> = ({
-  sendGroupMessage,
-  sendPrivateMessage,
-  uploadFiles,
-  setConfig,
-  config,
-}) => {
+const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
   const isScreenFocused = useIsFocused();
   const navigation =
     useNavigation<
@@ -51,70 +40,26 @@ const InputForm: React.FC<Props> = ({
     async (e: GestureResponderEvent) => {
       e.stopPropagation();
 
-      const { body } = values;
-
       try {
         await validate?.(values);
+
+        enqueuMessage({
+          body: values.body ?? '',
+          files: values.files ?? [],
+          uuid,
+          type,
+        });
 
         setFieldValue('body', '');
         setFieldValue('files', []);
         setConfig({
           attachment: [],
         });
-
-        const files: HourChat.Type.File[] = [];
-
-        if (values.files?.length) {
-          const { data } = await uploadFiles(values.files as never);
-
-          files.push(
-            ..._.map(
-              data,
-              (uri, id) =>
-                ({
-                  ...(values.files?.[id] ?? {}),
-                  uri,
-                } as never)
-            )
-          );
-        }
-
-        switch (type) {
-          case CHAT_TYPE.GROUP: {
-            sendGroupMessage({
-              body: body ?? '',
-              files: files ?? [],
-              uuid,
-            });
-
-            break;
-          }
-
-          case CHAT_TYPE.PRIVATE: {
-            sendPrivateMessage({
-              body: body ?? '',
-              files: files ?? [],
-              receiverId: uuid,
-            });
-
-            break;
-          }
-        }
       } catch {
         // Do nothing if there is an error
       }
     },
-    [
-      values,
-      type,
-      uuid,
-      validate,
-      setFieldValue,
-      uploadFiles,
-      sendGroupMessage,
-      sendPrivateMessage,
-      setConfig,
-    ]
+    [values, validate, enqueuMessage, uuid, type, setFieldValue, setConfig]
   );
 
   const onPressOnAttach = useCallback(async () => {
@@ -224,10 +169,8 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const connector = connect(mapStateToProps, {
-  sendPrivateMessage: _sendPrivateMessage,
-  sendGroupMessage: _sendGroupMessage,
   setConfig: _setConfig,
-  uploadFiles: _uploadFiles,
+  enqueuMessage: _enqueuMessage,
 });
 
 const style = StyleSheet.create({
