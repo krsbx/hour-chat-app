@@ -1,20 +1,10 @@
-// import Slider from '@react-native-community/slider';
 import { Slider } from '@rneui/themed';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { TouchableOpacity, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import TrackPlayer, {
-  usePlaybackState,
-  useProgress,
-} from 'react-native-track-player';
-import { State as PlaybackState } from 'react-native-track-player/lib/interfaces';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Video, { OnLoadData, OnProgressData } from 'react-native-video';
 import { Wrapper } from '..';
-import {
-  addTracks,
-  clearTrack,
-  setupPlayer,
-} from '../../utils/services/track-player';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const FileAudio: React.FC<Props> = ({
@@ -22,130 +12,106 @@ const FileAudio: React.FC<Props> = ({
   swipeToCloseEnabled,
   item,
 }) => {
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
-  const { position, duration } = useProgress();
-  const playbackState = usePlaybackState();
+  const playerRef = useRef<Video | null>(null);
+  const [progressData, setProgressData] = useState<OnProgressData>();
+  const [isPaused, setIsPaused] = useState(true);
+  const [isEnded, setIsEnded] = useState(false);
 
-  const progressValue = useMemo(() => {
-    return (position || 0) / duration || 0 || 0;
+  const position = useMemo(
+    () => progressData?.currentTime ?? 0,
+    [progressData?.currentTime]
+  );
+  const duration = useMemo(
+    () => progressData?.playableDuration ?? 0,
+    [progressData?.playableDuration]
+  );
+  const progress = useMemo(() => {
+    if (duration <= 0) return 0;
+
+    return position / duration;
   }, [position, duration]);
 
-  const setupTrackPlayer = useCallback(async () => {
-    try {
-      const isSetup = await setupPlayer();
-
-      const queue = await TrackPlayer.getQueue();
-      if (isSetup) {
-        if (queue.length > 0) await clearTrack();
-
-        const audio = item as HourChat.Type.FileHref;
-
-        await addTracks({
-          url: audio.href,
-        });
-      }
-
-      setIsPlayerReady(isSetup);
-    } catch {
-      // Do nothing if there is an error
-    }
-  }, [item]);
-
-  const onAudioSeek = useCallback(
+  const onSeek = useCallback(
     (value: number) => {
-      if (!isPlayerReady) return;
+      if (!duration) return 0;
 
-      const requestedPost = value * duration;
-
-      TrackPlayer.seekTo(requestedPost).catch(() => {
-        // Do nothing if there is an error
-      });
+      const seekTime = duration * value;
+      playerRef.current?.seek?.(seekTime);
     },
-    [isPlayerReady, duration]
+    [duration]
   );
 
-  const onChangeState = useCallback(async () => {
-    if (!isPlayerReady) return;
+  const onLoad = useCallback(
+    (data: OnLoadData) =>
+      setProgressData({
+        currentTime: data.currentTime,
+        playableDuration: data.duration,
+        seekableDuration: data.duration,
+      }),
+    [setProgressData]
+  );
 
-    try {
-      switch (playbackState) {
-        case PlaybackState.Playing: {
-          TrackPlayer.pause();
-          break;
-        }
+  const onEnd = useCallback(() => {
+    setIsEnded(true);
+    setIsPaused(true);
+  }, [setIsEnded]);
 
-        case PlaybackState.Stopped: {
-          if (position >= 1) {
-            await setupTrackPlayer();
-          }
-          await TrackPlayer.play();
-          break;
-        }
+  const onPressOnAction = useCallback(() => {
+    setIsPaused((curr) => !curr);
 
-        default: {
-          TrackPlayer.play();
-          break;
-        }
-      }
-    } catch {
-      // Do nothing if there is an error
-    }
-  }, [isPlayerReady, playbackState, position, setupTrackPlayer]);
-
-  useEffect(() => {
-    setupTrackPlayer();
-  }, [setupTrackPlayer]);
-
-  useEffect(() => {
-    return () => {
-      if (!isPlayerReady) return;
-
-      TrackPlayer.reset().catch(() => {
-        // Do nothing if there is an error
-      });
-    };
-  }, [isPlayerReady]);
+    if (isEnded) setIsEnded(false);
+  }, [setIsPaused, isEnded, setIsEnded]);
 
   return (
     <Wrapper.SwipeUpToClose
       onRequestClose={onRequestClose}
       swipeToCloseEnabled={swipeToCloseEnabled}
     >
-      {!isPlayerReady ? (
-        <ActivityIndicator size="large" color="#bbb" />
-      ) : (
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: scale(10),
+      <View
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: scale(10),
+        }}
+      >
+        <Video
+          source={{
+            uri: item.href,
           }}
-        >
-          <TouchableOpacity onPress={onChangeState}>
-            <FontAwesome5
-              name={playbackState === PlaybackState.Playing ? 'pause' : 'play'}
-              size={scale(26)}
-              color={COLOR_PALETTE.WHITE}
-            />
-          </TouchableOpacity>
-          <Slider
-            minimumValue={0}
-            value={progressValue}
-            onValueChange={onAudioSeek}
-            maximumValue={1}
-            allowTouchTrack
-            thumbStyle={{
-              height: scale(20),
-              width: scale(20),
-            }}
-            style={{ width: '75%', height: scale(25) }}
-            minimumTrackTintColor={COLOR_PALETTE.WHITE}
-            thumbTintColor={COLOR_PALETTE.WHITE}
-            maximumTrackTintColor={COLOR_PALETTE.BLUE_10}
+          onLoad={onLoad}
+          onEnd={onEnd}
+          onProgress={setProgressData}
+          repeat={false}
+          progressUpdateInterval={1}
+          ref={playerRef}
+          paused={isPaused}
+          controls={false}
+          fullscreen={false}
+        />
+        <TouchableOpacity onPress={onPressOnAction}>
+          <FontAwesome5
+            name={isPaused ? 'play' : 'pause'}
+            size={scale(26)}
+            color={COLOR_PALETTE.WHITE}
           />
-        </View>
-      )}
+        </TouchableOpacity>
+        <Slider
+          minimumValue={0}
+          value={progress}
+          onValueChange={onSeek}
+          maximumValue={1}
+          allowTouchTrack
+          thumbStyle={{
+            height: scale(20),
+            width: scale(20),
+          }}
+          style={{ width: '75%', height: scale(25) }}
+          minimumTrackTintColor={COLOR_PALETTE.WHITE}
+          thumbTintColor={COLOR_PALETTE.WHITE}
+          maximumTrackTintColor={COLOR_PALETTE.BLUE_10}
+        />
+      </View>
     </Wrapper.SwipeUpToClose>
   );
 };
@@ -153,7 +119,7 @@ const FileAudio: React.FC<Props> = ({
 type Props = {
   onRequestClose?: () => void;
   swipeToCloseEnabled?: boolean;
-  item: HourChat.Type.ImageSource;
+  item: HourChat.Type.FileHref;
 };
 
 export default FileAudio;

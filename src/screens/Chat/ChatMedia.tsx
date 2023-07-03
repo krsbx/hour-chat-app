@@ -71,7 +71,7 @@ const ChatMedia: React.FC<Props> = ({ config, navigation, route }) => {
             onPress={() => onPressOnPreview(index)}
           >
             <Media.Image
-              file={item}
+              item={item}
               style={{
                 width: ScreenWidth,
                 opacity: 1,

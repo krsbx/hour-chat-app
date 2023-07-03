@@ -45,7 +45,7 @@ const useChatMessageQueue = () => {
           })();
           break;
       }
-    } catch {
+    } catch (e) {
       // Do nothing if there is an error
     } finally {
       dequeueMessage()(dispatch);

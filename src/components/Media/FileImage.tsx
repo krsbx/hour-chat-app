@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 import { MEDIA_ICON_MAP, PREVIEWABLE_MEDIA_MIME } from '../../constants/common';
 import { flattenStyle } from '../../styles/factory';
 
-const FileImage: React.FC<Props> = ({ file: _file, ...props }) => {
+const FileImage: React.FC<Props> = ({ item: _item, ...props }) => {
   const styles = useMemo(() => {
     const styles: StyleProp<ImageStyle>[] = [imageStyle];
 
@@ -13,32 +13,32 @@ const FileImage: React.FC<Props> = ({ file: _file, ...props }) => {
 
     return styles;
   }, [props.style]);
-  const fileType = useMemo(() => {
-    const type = (_file.type ?? '').split('/').shift?.() ?? '';
+  const itemType = useMemo(() => {
+    const type = (_item?.type ?? '').split('/').shift?.() ?? '';
 
     return type;
-  }, [_file]);
+  }, [_item]);
 
-  const file = useMemo(() => {
-    const file = { ..._file };
-    switch (fileType) {
+  const item = useMemo(() => {
+    const item = { ..._item };
+    switch (itemType) {
       case PREVIEWABLE_MEDIA_MIME.IMAGE:
         break;
       case PREVIEWABLE_MEDIA_MIME.AUDIO:
-        file.uri = MEDIA_ICON_MAP.audio;
+        item.uri = MEDIA_ICON_MAP.audio;
         break;
       case PREVIEWABLE_MEDIA_MIME.VIDEO:
-        file.uri = MEDIA_ICON_MAP.video;
+        item.uri = MEDIA_ICON_MAP.video;
         break;
       default:
-        file.uri = MEDIA_ICON_MAP.document;
+        item.uri = MEDIA_ICON_MAP.document;
         break;
     }
 
-    return file;
-  }, [_file, fileType]);
+    return item;
+  }, [_item, itemType]);
 
-  return <Image source={file} {...props} style={styles} />;
+  return <Image source={item} {...props} style={styles} />;
 };
 
 const imageStyle = flattenStyle({
@@ -49,7 +49,7 @@ const imageStyle = flattenStyle({
 });
 
 type Props = Omit<ImageProps, 'source'> & {
-  file: HourChat.Type.File;
+  item: HourChat.Type.File;
 };
 
 export default FileImage;

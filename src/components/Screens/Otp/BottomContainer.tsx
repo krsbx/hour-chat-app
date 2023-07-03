@@ -1,8 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { Text } from '@rneui/base';
 import React, { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { AUTH_STACK } from '../../../constants/screens';
 import STYLES from '../../../styles';

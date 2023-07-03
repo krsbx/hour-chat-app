@@ -67,7 +67,6 @@ const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
       const results = await DocumentPicker.pick({
         allowMultiSelection: true,
         type: [DocumentPicker.types.allFiles],
-        copyTo: 'cachesDirectory',
       });
 
       const normalizedResults = [
@@ -126,7 +125,7 @@ const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
           renderItem={({ item, index }) => {
             if (index < 3)
               return (
-                <Media.Image style={{ width: ScreenWidth * 0.2 }} file={item} />
+                <Media.Image style={{ width: ScreenWidth * 0.2 }} item={item} />
               );
 
             if (index === 3)
