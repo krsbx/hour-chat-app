@@ -4,17 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CHAT_TYPE } from '../constants/common';
 import { sendGroupMessage, sendPrivateMessage } from '../store/actions/chats';
 import { uploadFiles } from '../store/actions/files';
-import { dequeueMessage } from '../store/actions/messageQueue';
-import { getMessageQueue } from '../store/selectors/messageQueue';
+import { dequeueMessage } from '../store/actions/queue';
+import { getMessageQueue } from '../store/selectors/queue';
 import usePrevious from './usePrevious';
 
 const useChatMessageQueue = () => {
   const dispatch = useDispatch();
-  const { queue } = useSelector(getMessageQueue);
-  const prevQueue = usePrevious(queue);
+  const messages = useSelector(getMessageQueue);
+  const prevMessages = usePrevious(messages);
 
   const handleMessageQueue = useCallback(async () => {
-    const message = queue[0];
+    const message = messages[0];
     const files: HourChat.Type.File[] = [];
 
     try {
@@ -45,23 +45,23 @@ const useChatMessageQueue = () => {
           })();
           break;
       }
-    } catch (e) {
+    } catch {
       // Do nothing if there is an error
     } finally {
       dequeueMessage()(dispatch);
     }
-  }, [queue, dispatch]);
+  }, [messages, dispatch]);
 
   useEffect(() => {
     // Do nothing if there is no changes
-    if (_.isEqual(queue, prevQueue)) return;
+    if (_.isEqual(messages, prevMessages)) return;
 
     // Do nothing if there is no data in queue
-    if (_.isEmpty(queue)) return;
+    if (_.isEmpty(messages)) return;
 
     handleMessageQueue();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queue]);
+  }, [messages]);
 };
 
 export default useChatMessageQueue;

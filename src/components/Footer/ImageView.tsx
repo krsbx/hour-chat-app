@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 import { FONT_SIZE } from '../../constants/fonts';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ImageView: React.FC<Props> = ({ text }) => {
+const ImageView: React.FC<Props> = ({ item }) => {
   return (
     <View
       style={{
@@ -20,15 +20,15 @@ const ImageView: React.FC<Props> = ({ text }) => {
           fontSize: scale(FONT_SIZE.EXTRA_EXTRA_SMALL),
         }}
       >
-        {text}
+        {item.name}
       </Text>
     </View>
   );
 };
 
 type Props = {
-  text: string;
-  imageIndex: number;
+  item: HourChat.Type.FileHref;
+  fileIndex: number;
 };
 
 export default ImageView;

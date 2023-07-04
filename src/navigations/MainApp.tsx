@@ -5,6 +5,7 @@ import React from 'react';
 import { scale } from 'react-native-size-matters';
 import { Buttons, Icon } from '../components';
 import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
+import useChatMediaQueue from '../hooks/useChatMediaQueue';
 import useChatMessageQueue from '../hooks/useChatMessageQueue';
 import useWatchAuthToken from '../hooks/useWatchAuthToken';
 import useWatchPosition from '../hooks/useWatchPosition';
@@ -20,6 +21,7 @@ const MainApp = () => {
   useWatchPosition();
   useWatchAuthToken();
   useChatMessageQueue();
+  useChatMediaQueue();
 
   return (
     <Tab.Navigator
