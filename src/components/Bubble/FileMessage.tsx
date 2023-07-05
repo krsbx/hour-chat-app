@@ -72,44 +72,22 @@ const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
       </React.Fragment>
     );
 
-  if (previewableMedias.length)
-    return (
-      <TouchableOpacity style={mediaContainerStyle} onPress={onPressOnMore}>
-        <FlatList
-          data={previewableMedias}
-          style={style.column}
-          columnWrapperStyle={style.column}
-          renderItem={({ item }) => <Media.Image item={item} />}
-          numColumns={2}
-          keyExtractor={(item, index) => `${item.uri}-${index}`}
-        />
-        <Media.More />
-      </TouchableOpacity>
-    );
-
   return (
-    <TouchableOpacity
-      style={[
-        mediaContainerStyle,
-        { flexDirection: files.length % 2 !== 0 ? 'row' : 'column' },
-      ]}
-      onPress={onPressOnMore}
-    >
+    <TouchableOpacity style={mediaContainerStyle} onPress={onPressOnMore}>
       <FlatList
-        data={files}
+        data={previewableMedias.length ? previewableMedias : files}
         style={style.column}
         columnWrapperStyle={style.column}
         renderItem={({ item, index }) => {
-          if (index < 3) {
-            return <Media.Image item={item} />;
-          }
+          if (index < 3) return <Media.Image item={item} />;
+
+          if (index === 3) return <Media.More />;
 
           return null;
         }}
         numColumns={2}
         keyExtractor={(item, index) => `${item.uri}-${index}`}
       />
-      {(files.length - 1) % 2 !== 0 && <Media.More />}
     </TouchableOpacity>
   );
 };

@@ -17,11 +17,10 @@ import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Input, Media } from '../..';
 import { CHAT_STACK } from '../../../constants/screens';
-import useOnUserTyping from '../../../hooks/useOnUserTyping';
 import { chats } from '../../../schema';
 import { AppState } from '../../../store';
 import { setConfig as _setConfig } from '../../../store/actions/config';
-import { enqueuMessage as _enqueuMessage } from '../../../store/actions/messageQueue';
+import { enqueuMessage as _enqueuMessage } from '../../../store/actions/queue';
 import { getConfig } from '../../../store/selectors/config';
 
 const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
@@ -33,8 +32,6 @@ const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
   const { handleChange, handleBlur, values, setFieldValue, validate } =
     useFormikContext<z.infer<typeof chats.messageSchema>>();
   const { type, uuid } = config;
-
-  useOnUserTyping();
 
   const onPressOnSend = useCallback(
     async (e: GestureResponderEvent) => {

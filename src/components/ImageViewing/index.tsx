@@ -16,9 +16,7 @@ import {
   View,
   VirtualizedList,
 } from 'react-native';
-
 import ImageItem from './component/ImageItem';
-
 import useAnimatedComponents from './hooks/useAnimatedComponents';
 import useImageIndexChange from './hooks/useImageIndexChange';
 import useRequestClose from './hooks/useRequestClose';
@@ -40,8 +38,8 @@ const ImageViewing: React.FC<Props> = ({
   animationType = DEFAULT_ANIMATION_TYPE,
   backgroundColor = DEFAULT_BG_COLOR,
   presentationStyle,
-  swipeToCloseEnabled,
-  doubleTapToZoomEnabled,
+  swipeToCloseEnabled = true,
+  doubleTapToZoomEnabled = true,
   delayLongPress = DEFAULT_DELAY_LONG_PRESS,
   HeaderComponent,
   FooterComponent,
@@ -83,7 +81,11 @@ const ImageViewing: React.FC<Props> = ({
           <Animated.View
             style={[styles.header, { transform: headerTransform }]}
           >
-            <HeaderComponent fileIndex={currentIndex} />
+            <HeaderComponent
+              fileIndex={currentIndex}
+              item={items[currentIndex] as never}
+              onRequestClose={onRequestCloseEnhanced}
+            />
           </Animated.View>
         )}
         <VirtualizedList
@@ -134,15 +136,18 @@ const ImageViewing: React.FC<Props> = ({
             keyExtractor
               ? keyExtractor(item, index)
               : typeof item === 'number'
-              ? `${item}`
-              : item.uri
+              ? `${item}-${index}`
+              : `${item.uri}-${index}`
           }
         />
         {FooterComponent && (
           <Animated.View
             style={[styles.footer, { transform: footerTransform }]}
           >
-            <FooterComponent fileIndex={currentIndex} />
+            <FooterComponent
+              fileIndex={currentIndex}
+              item={items[currentIndex] as never}
+            />
           </Animated.View>
         )}
       </View>
@@ -175,7 +180,7 @@ type Props = {
   viewIndex: number;
   visible: boolean;
   onRequestClose: () => void;
-  onLongPress?: (image: HourChat.Type.ImageSource) => void;
+  onLongPress?: (item: HourChat.Type.ImageSource) => void;
   onIndexChange?: (fileIndex: number) => void;
   presentationStyle?: ModalProps['presentationStyle'];
   animationType?: ModalProps['animationType'];
@@ -183,8 +188,15 @@ type Props = {
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
   delayLongPress?: number;
-  HeaderComponent?: React.FC<{ fileIndex: number }>;
-  FooterComponent?: React.FC<{ fileIndex: number }>;
+  HeaderComponent?: (props: {
+    fileIndex: number;
+    item: HourChat.Type.FileHref;
+    onRequestClose: () => void;
+  }) => JSX.Element;
+  FooterComponent?: (props: {
+    fileIndex: number;
+    item: HourChat.Type.FileHref;
+  }) => JSX.Element;
   renderItem?: (Props: {
     index: number;
     item: HourChat.Type.ImageSource;
