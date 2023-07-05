@@ -7,11 +7,17 @@ export enum AuthActionType {
 export type AuthReducer = HourChat.Resource.User & {
   token: string | null;
   deviceToken: string | null;
+  firebaseToken: string | null;
 };
 
 export type SetAuthToken = {
   type: AuthActionType.LOGIN;
-  payload: string;
+  payload:
+    | {
+        token: string;
+        firebaseToken: string;
+      }
+    | string;
 };
 
 export type RemoveAuthToken = {

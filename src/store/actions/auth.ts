@@ -1,3 +1,4 @@
+import auth from '@react-native-firebase/auth';
 import jwtDecode from 'jwt-decode';
 import _ from 'lodash';
 import validator from 'validator';
@@ -45,13 +46,16 @@ export const loginUser =
     });
 
     const { data } = await axios.post<
-      HourChat.Response.Resource<{ token: string }>
+      HourChat.Response.Resource<{ token: string; firebaseToken: string }>
     >('/auth/login', payload);
-    const { token } = data.data;
+
+    const { token, firebaseToken } = data.data;
+
+    await auth().signInWithCustomToken(firebaseToken);
 
     dispatch({
       type: AuthActionType.LOGIN,
-      payload: token,
+      payload: data.data,
     });
 
     const decoded = jwtDecode<HourChat.Resource.User>(token);
@@ -73,14 +77,14 @@ export const registerUser =
     );
 
     const { data } = await axios.post<
-      HourChat.Response.Resource<{ token: string }>
+      HourChat.Response.Resource<{ token: string; firebaseToken: string }>
     >('/auth/register', newPayload);
 
     const { token } = data.data;
 
     dispatch({
       type: AuthActionType.LOGIN,
-      payload: token,
+      payload: data.data,
     });
 
     await requestEmailOtp(token)();
@@ -113,7 +117,9 @@ export const addDeviceToken =
       });
   };
 
-export const logoutUser = () => (dispatch: AppDispatch) => {
+export const logoutUser = () => async (dispatch: AppDispatch) => {
+  if (store.getState().auth.firebaseToken) await auth().signOut();
+
   dispatch({ type: AuthActionType.LOGOUT });
   dispatch({
     type: ResourceAction.users.OVERWRITE,

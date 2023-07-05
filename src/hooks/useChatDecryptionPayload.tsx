@@ -1,8 +1,11 @@
 import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { CHAT_TYPE } from '../constants/common';
+import { getConfig } from '../store/selectors/config';
 import useCurrentUser from './useCurrentUser';
 
-const useChatDecryptionPayload = ({ type, uuid }: Params) => {
+const useChatDecryptionPayload = () => {
+  const { type, uuid } = useSelector(getConfig);
   const { user: currentUser } = useCurrentUser();
 
   const payload = useMemo(() => {
@@ -32,11 +35,6 @@ const useChatDecryptionPayload = ({ type, uuid }: Params) => {
   }, [currentUser.id, type, uuid]);
 
   return payload;
-};
-
-type Params = {
-  type: HourChat.Type.ChatType;
-  uuid: string;
 };
 
 export default useChatDecryptionPayload;

@@ -11,7 +11,6 @@ import {
   Animated,
   Dimensions,
   GestureResponderEvent,
-  GestureResponderHandlers,
   NativeTouchEvent,
   PanResponderGestureState,
 } from 'react-native';
@@ -31,6 +30,7 @@ const MIN_DIMENSION = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT);
 const SCALE_MAX = 2;
 const DOUBLE_TAP_DELAY = 300;
 const OUT_BOUND_MULTIPLIER = 0.75;
+const MEANINGFUL_SHIFT = MIN_DIMENSION * 0.01;
 
 const usePanResponder = ({
   initialScale,
@@ -39,9 +39,7 @@ const usePanResponder = ({
   doubleTapToZoomEnabled,
   onLongPress,
   delayLongPress,
-}: Props): Readonly<
-  [GestureResponderHandlers, Animated.Value, Animated.ValueXY]
-> => {
+}: Props) => {
   let numberInitialTouches = 1;
   let initialTouches: NativeTouchEvent[] = [];
   let currentScale = initialScale;
@@ -52,7 +50,6 @@ const usePanResponder = ({
   let lastTapTS: number | null = null;
   let longPressHandlerRef: NodeJS.Timer | null = null;
 
-  const meaningfulShift = MIN_DIMENSION * 0.01;
   const scaleValue = new Animated.Value(initialScale);
   const translateValue = new Animated.ValueXY(initialTranslate);
 
@@ -201,7 +198,10 @@ const usePanResponder = ({
     ) => {
       const { dx, dy } = gestureState;
 
-      if (Math.abs(dx) >= meaningfulShift || Math.abs(dy) >= meaningfulShift) {
+      if (
+        Math.abs(dx) >= MEANINGFUL_SHIFT ||
+        Math.abs(dy) >= MEANINGFUL_SHIFT
+      ) {
         cancelLongPressHandle();
       }
 
@@ -383,7 +383,7 @@ const usePanResponder = ({
 
   const panResponder = useMemo(() => createPanResponder(handlers), [handlers]);
 
-  return [panResponder.panHandlers, scaleValue, translateValue];
+  return [panResponder.panHandlers, scaleValue, translateValue] as const;
 };
 
 type Props = {

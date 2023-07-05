@@ -15,7 +15,7 @@ const initialState: QueuReducer = {
 const reducer = (
   state = initialState,
   action: EnqueueMessage | DequeuMessage | EnqueueFile | DequeueFile
-) => {
+): QueuReducer => {
   switch (action.type) {
     case ActionType.ENQUEUE_MESSAGE: {
       if (!state.messages.length)

@@ -18,7 +18,10 @@ const initialState: ConfigReducer = {
   },
 };
 
-const reducer = (state = initialState, action: SetConfig | DeleteConfig) => {
+const reducer = (
+  state = initialState,
+  action: SetConfig | DeleteConfig
+): ConfigReducer => {
   switch (action.type) {
     case ActionType.SET: {
       return {

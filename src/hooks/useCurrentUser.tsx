@@ -6,11 +6,7 @@ import { createFullName } from '../utils/common';
 
 const useCurrentUser = () => {
   const user = useSelector(getAuth);
-  const fullName = useMemo(() => {
-    if (!user) return '';
-
-    return createFullName(user);
-  }, [user]);
+  const fullName = useMemo(() => createFullName(user), [user]);
   const alias = useMemo(() => {
     const names = fullName.split(/ /g);
 
