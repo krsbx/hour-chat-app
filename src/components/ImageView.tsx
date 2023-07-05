@@ -102,6 +102,7 @@ const ImageView: React.FC<Props> = ({
       visible={isVisible}
       doubleTapToZoomEnabled={doubleTapToZoomEnabled}
       onRequestClose={onRequestClose}
+      swipeToCloseEnabled
       // eslint-disable-next-line react/no-unstable-nested-components
       HeaderComponent={({ fileIndex }) => (
         <Header.ImageView

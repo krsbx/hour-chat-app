@@ -62,7 +62,7 @@ const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
     return (
       <React.Fragment>
         <TouchableOpacity style={style.button} onPress={onPressOnPreview}>
-          <Media.Image file={firstMedia} />
+          <Media.Image item={firstMedia} />
         </TouchableOpacity>
         <ImageView
           files={firstMedia}
@@ -79,7 +79,7 @@ const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
           data={previewableMedias}
           style={style.column}
           columnWrapperStyle={style.column}
-          renderItem={({ item }) => <Media.Image file={item} />}
+          renderItem={({ item }) => <Media.Image item={item} />}
           numColumns={2}
           keyExtractor={(item, index) => `${item.uri}-${index}`}
         />
@@ -101,7 +101,7 @@ const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
         columnWrapperStyle={style.column}
         renderItem={({ item, index }) => {
           if (index < 3) {
-            return <Media.Image file={item} />;
+            return <Media.Image item={item} />;
           }
 
           return null;

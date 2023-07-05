@@ -2,8 +2,13 @@ import { Text } from '@rneui/base';
 import { Formik } from 'formik';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Animated, StatusBar, StyleSheet, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  Animated,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import useAuthFormAnimation from '../../animations/useAuthFormAnimation';

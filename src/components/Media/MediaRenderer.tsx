@@ -15,7 +15,7 @@ const MediaRenderer: React.FC<Props> = ({ item, ...props }) => {
       return null;
 
     case PREVIEWABLE_MEDIA_MIME.AUDIO:
-      return <FileAudio item={item} {...props} />;
+      return <FileAudio item={item as never} {...props} />;
 
     case PREVIEWABLE_MEDIA_MIME.VIDEO:
       return <FileVideo item={item as never} {...props} />;
