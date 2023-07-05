@@ -6,14 +6,13 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Header, Message } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
 import { RESOURCE_NAME } from '../../constants/common';
-import useChatListListener from '../../hooks/useChatListListener';
 import { AppState } from '../../store';
+import { getLastMessages } from '../../store/selectors/lastMessage';
 import { getResourceData } from '../../store/selectors/resources';
 import { createFullName, hasOwnProperty } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatList: React.FC<Props> = ({ users }) => {
-  const _messages = useChatListListener();
+const ChatList: React.FC<Props> = ({ users, messages: _messages }) => {
   const [query, setQuery] = useState('');
 
   const messages = useMemo(() => {
@@ -61,6 +60,7 @@ const ChatList: React.FC<Props> = ({ users }) => {
 
 const mapStateToProps = (state: AppState) => ({
   users: getResourceData(RESOURCE_NAME.USERS)(state),
+  messages: getLastMessages(state),
 });
 
 const connector = connect(mapStateToProps);

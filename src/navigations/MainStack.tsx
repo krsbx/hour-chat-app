@@ -1,7 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { MAIN_STACK } from '../constants/screens';
-import useFirebaseDeviceToken from '../hooks/useFirebaseDeviceToken';
 import LaunchScreen from '../screens/LaunchScreen';
 import AuthStack from './AuthStack';
 import MainApp from './MainApp';
@@ -9,8 +8,6 @@ import MainApp from './MainApp';
 const Stack = createStackNavigator<HourChat.Navigation.MainStack>();
 
 const MainStack = () => {
-  useFirebaseDeviceToken();
-
   return (
     <Stack.Navigator
       initialRouteName={MAIN_STACK.LAUNCH}

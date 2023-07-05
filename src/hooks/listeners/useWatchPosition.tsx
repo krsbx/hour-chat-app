@@ -1,17 +1,16 @@
 import GeoLocation from '@react-native-community/geolocation';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store';
-import { updateLocation } from '../store/actions/location';
+import { AppDispatch } from '../../store';
+import { updateLocation } from '../../store/actions/location';
 
 const useWatchPosition = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const watchPositionRef =
-    useRef<ReturnType<typeof GeoLocation.watchPosition>>();
+  const watchRef = useRef<ReturnType<typeof GeoLocation.watchPosition>>();
 
   useEffect(() => {
-    watchPositionRef.current = GeoLocation.watchPosition(
+    watchRef.current = GeoLocation.watchPosition(
       (position) => {
         updateLocation(position)(dispatch);
       },
@@ -24,7 +23,7 @@ const useWatchPosition = () => {
     );
 
     return () => {
-      const ref = watchPositionRef.current;
+      const ref = watchRef.current;
 
       if (!ref) return;
 

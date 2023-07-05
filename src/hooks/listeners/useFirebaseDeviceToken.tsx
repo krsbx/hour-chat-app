@@ -1,10 +1,12 @@
 import notifee, { AuthorizationStatus } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import { useCallback, useEffect } from 'react';
-import { addDeviceToken } from '../store/actions/auth';
-import useCurrentUser from './useCurrentUser';
+import { useDispatch } from 'react-redux';
+import { addDeviceToken } from '../../store/actions/auth';
+import useCurrentUser from '../caches/useCurrentUser';
 
 const useFirebaseDeviceToken = () => {
+  const dispatch = useDispatch();
   const { user: currentUser } = useCurrentUser();
 
   const requestPermission = useCallback(async () => {
@@ -22,18 +24,22 @@ const useFirebaseDeviceToken = () => {
   }, []);
 
   const getDeviceToken = useCallback(async () => {
-    // Register the device with FCM
-    await messaging().registerDeviceForRemoteMessages();
+    try {
+      // Register the device with FCM
+      await messaging().registerDeviceForRemoteMessages();
 
-    // Get the token
-    const deviceToken = await messaging().getToken();
+      // Get the token
+      const deviceToken = await messaging().getToken();
 
-    if (!deviceToken) return;
+      if (!deviceToken) return;
 
-    addDeviceToken(currentUser.id, deviceToken);
+      addDeviceToken(currentUser.id, deviceToken)(dispatch);
 
-    return deviceToken;
-  }, [currentUser.id]);
+      return deviceToken;
+    } catch {
+      // Do nothing if there is an error
+    }
+  }, [currentUser.id, dispatch]);
 
   useEffect(() => {
     requestPermission()

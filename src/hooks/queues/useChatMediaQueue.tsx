@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { useCallback, useEffect, useRef } from 'react';
 import RNFS from 'react-native-fs';
 import { useDispatch, useSelector } from 'react-redux';
-import { dequeueFile } from '../store/actions/queue';
-import { getFileQueue } from '../store/selectors/queue';
-import usePrevious from './usePrevious';
+import { dequeueFile } from '../../store/actions/queue';
+import { getFileQueue } from '../../store/selectors/queue';
+import usePrevious from '../common/usePrevious';
 
 const useChatMediaQueue = () => {
   const dispatch = useDispatch();

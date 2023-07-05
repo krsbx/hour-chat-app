@@ -6,8 +6,8 @@ import {
   CHAT_STACK,
   MAIN_STACK,
   MAIN_TAB,
-} from '../constants/screens';
-import { getAuth } from '../store/selectors/auth';
+} from '../../constants/screens';
+import { getAuth } from '../../store/selectors/auth';
 
 const useTokenListener = (isCallable: boolean) => {
   const { token, isEmailVerified } = useSelector(getAuth);

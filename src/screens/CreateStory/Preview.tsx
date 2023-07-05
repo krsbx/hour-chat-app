@@ -12,7 +12,7 @@ import {
   MAIN_TAB,
   STORY_TAB,
 } from '../../constants/screens';
-import useCurrentUser from '../../hooks/useCurrentUser';
+import useCurrentUser from '../../hooks/caches/useCurrentUser';
 import { AppState } from '../../store';
 import { uploadFiles as _uploadFiles } from '../../store/actions/files';
 import { createStory as _createStory } from '../../store/actions/stories';

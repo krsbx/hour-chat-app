@@ -8,7 +8,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Buttons, Input } from '../..';
 import { AUTH_STACK } from '../../../constants/screens';
-import useOverwriteBack from '../../../hooks/useOverwriteBack';
+import useOverwriteBack from '../../../hooks/common/useOverwriteBack';
 import { auths } from '../../../schema';
 import { registerUser as _registerUser } from '../../../store/actions/auth';
 import { onRegisterError } from '../../../utils/errors/auth';

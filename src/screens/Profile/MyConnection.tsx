@@ -2,20 +2,20 @@ import _ from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { Card, Header } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
 import { CHAT_TYPE, RESOURCE_NAME } from '../../constants/common';
 import { CHAT_STACK, MAIN_TAB, PROFILE_STACK } from '../../constants/screens';
-import useSingleChatListListener from '../../hooks/useSingleChatListListener';
 import { AppState } from '../../store';
 import { setConfig as _setConfig } from '../../store/actions/config';
+import { getPrivateLastMessages } from '../../store/selectors/lastMessage';
 import { getResourceData } from '../../store/selectors/resources';
 import { createFullName } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const MyConnection: React.FC<Props> = ({ users, navigation, setConfig }) => {
-  const [_messages] = useSingleChatListListener(CHAT_TYPE.PRIVATE);
+  const _messages = useSelector(getPrivateLastMessages);
   const [query, setQuery] = useState('');
 
   const navigateToChat = useCallback(

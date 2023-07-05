@@ -2,14 +2,14 @@ import { useFormikContext } from 'formik';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { z } from 'zod';
-import { CHAT_TYPE } from '../constants/common';
-import { chats } from '../schema';
+import { CHAT_TYPE } from '../../constants/common';
+import { chats } from '../../schema';
 import {
   setTypingGroupMessage,
   setTypingPrivateMessage,
-} from '../store/actions/chats';
-import { getConfig } from '../store/selectors/config';
-import useDebounce from './useDebounce';
+} from '../../store/actions/chats';
+import { getConfig } from '../../store/selectors/config';
+import useDebounce from '../common/useDebounce';
 
 const useOnUserTyping = () => {
   const { values } = useFormikContext<z.infer<typeof chats.messageSchema>>();

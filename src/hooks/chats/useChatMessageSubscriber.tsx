@@ -1,9 +1,12 @@
 import firestore from '@react-native-firebase/firestore';
 import _ from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Config } from 'react-native-config';
-import { CHAT_TYPE } from '../constants/common';
-import useCurrentUser from './useCurrentUser';
+import { useSelector } from 'react-redux';
+import { CHAT_TYPE } from '../../constants/common';
+import { getConfig } from '../../store/selectors/config';
+import { getLastMessageMetadata } from '../../store/selectors/lastMessage';
+import useCurrentUser from '../caches/useCurrentUser';
 
 const DEFAULT_LIMIT = 25;
 
@@ -12,16 +15,16 @@ const useChatMessageSubscriber = <
   U extends T extends typeof CHAT_TYPE.PRIVATE
     ? HourChat.Chat.PrivateMetadata[]
     : HourChat.Chat.GroupMetadata[]
->({
-  type,
-  uuid,
-  total = DEFAULT_LIMIT,
-}: {
-  type: T;
-  uuid: string;
-  total?: number;
-}) => {
+>() => {
+  const { type, uuid } = useSelector(getConfig);
+  const metadata = useSelector(getLastMessageMetadata({ type, uuid }));
+  const total = useMemo(() => {
+    if (metadata) return metadata.total;
+
+    return DEFAULT_LIMIT;
+  }, [metadata]);
   const { user: currentUser } = useCurrentUser();
+
   const [messages, setMessages] = useState<U>([] as unknown as U);
   const [isMaxReached, setIsMaxReached] = useState(false);
   const [limit, setLimit] = useState(DEFAULT_LIMIT);

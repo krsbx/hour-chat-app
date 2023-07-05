@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Animated, Easing, StatusBar, View } from 'react-native';
 import { Label } from '../components';
-import useTokenListener from '../hooks/useTokenListener';
+import useTokenListener from '../hooks/listeners/useTokenListener';
 import { COLOR_PALETTE } from '../utils/theme';
 
 const LaunchScreen = () => {

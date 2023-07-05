@@ -24,11 +24,10 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { Bubble, Header, Screens, Wrapper } from '../../components';
 import { DEFAULT_MESSAGE_VALUE } from '../../constants/defaults';
 import { CHAT_STACK } from '../../constants/screens';
-import useChatDecryption from '../../hooks/useChatDecryption';
-import useChatMessageSubscriber from '../../hooks/useChatMessageSubscriber';
-import useCurrentUser from '../../hooks/useCurrentUser';
-import useLastMessageListener from '../../hooks/useLastMessageListener';
-import useOverwriteBack from '../../hooks/useOverwriteBack';
+import useCurrentUser from '../../hooks/caches/useCurrentUser';
+import useChatMessageSubscriber from '../../hooks/chats/useChatMessageSubscriber';
+import useOverwriteBack from '../../hooks/common/useOverwriteBack';
+import useChatEncryptionRetrieval from '../../hooks/encryptions/useChatEncryptionRetrieval';
 import { chats } from '../../schema';
 import { AppState } from '../../store';
 import { setConfig as _setConfig } from '../../store/actions/config';
@@ -47,11 +46,7 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
   const flexSize = useRef(new Animated.Value(0)).current;
   const emptySize = useRef(new Animated.Value(1)).current;
 
-  const { total } = useLastMessageListener(config);
-  const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber({
-    ..._.pick(config, ['type', 'uuid']),
-    total,
-  });
+  const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber();
 
   const onPressOnBack = useCallback(() => {
     setConfig({
@@ -69,7 +64,7 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
   useOverwriteBack(onPressOnBack);
 
   const chatHasMessage = useMemo(() => messages.length > 0, [messages]);
-  useChatDecryption([chatHasMessage]);
+  useChatEncryptionRetrieval([chatHasMessage]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CHAT_TYPE } from '../../constants/common';
-import useCachedUserData from '../../hooks/useCachedUserData';
+import useCachedUserData from '../../hooks/caches/useCachedUserData';
 import Message from './Message';
 
 const PrivateMessage: React.FC<Props> = ({ uuid, ...props }) => {

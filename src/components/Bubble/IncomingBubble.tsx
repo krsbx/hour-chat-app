@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { Icon } from '..';
-import useCachedUserData from '../../hooks/useCachedUserData';
-import useChatTimestamp from '../../hooks/useChatTimestamp';
+import useCachedUserData from '../../hooks/caches/useCachedUserData';
+import useTimestamp from '../../hooks/common/useTimestamp';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
 import FileMessage from './FileMessage';
@@ -18,7 +18,7 @@ const IncomingBubble: React.FC<Props> = ({
 }) => {
   const left = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCachedUserData(senderId);
-  const datetime = useChatTimestamp(timestamp);
+  const datetime = useTimestamp(timestamp);
 
   const startAnimation = useCallback(() => {
     Animated.timing(left, {
