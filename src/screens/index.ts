@@ -3,6 +3,7 @@ import * as Chat from './Chat';
 import * as Content from './Content';
 import * as CreateStory from './CreateStory';
 import * as Profile from './Profile';
+import * as Setting from './Setting';
 import * as Story from './Story';
 
-export { Auth, Chat, Content, CreateStory, Story, Profile };
+export { Auth, Chat, Content, CreateStory, Story, Setting, Profile };

@@ -118,7 +118,7 @@ export const addDeviceToken =
   };
 
 export const logoutUser = () => async (dispatch: AppDispatch) => {
-  // if (store.getState().auth.firebaseToken) await auth().signOut();
+  if (store.getState().auth.firebaseToken) await auth().signOut();
 
   dispatch({ type: AuthActionType.LOGOUT });
   dispatch({
