@@ -7,7 +7,7 @@ import { Header, Icon } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
 import { CHAT_TYPE, RESOURCE_NAME } from '../../constants/common';
 import { CHAT_STACK, MAIN_TAB } from '../../constants/screens';
-import useDebounce from '../../hooks/useDebounce';
+import useDebounce from '../../hooks/common/useDebounce';
 import { AppState } from '../../store';
 import { setConfig as _setConfig } from '../../store/actions/config';
 import {

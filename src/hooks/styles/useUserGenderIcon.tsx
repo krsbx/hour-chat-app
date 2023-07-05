@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { GENDER } from '../constants/resources';
-import { COLOR_PALETTE } from '../utils/theme';
+import { GENDER } from '../../constants/resources';
+import { COLOR_PALETTE } from '../../utils/theme';
 
 const useUserGenderIcon = (user: HourChat.Resource.User) => {
   const iconName = useMemo(() => {

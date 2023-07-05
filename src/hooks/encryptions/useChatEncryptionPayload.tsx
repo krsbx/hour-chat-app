@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { CHAT_TYPE } from '../constants/common';
-import { getConfig } from '../store/selectors/config';
-import useCurrentUser from './useCurrentUser';
+import { CHAT_TYPE } from '../../constants/common';
+import { getConfig } from '../../store/selectors/config';
+import useCurrentUser from '../caches/useCurrentUser';
 
-const useChatDecryptionPayload = () => {
+const useChatEncryptionPayload = () => {
   const { type, uuid } = useSelector(getConfig);
   const { user: currentUser } = useCurrentUser();
 
@@ -37,4 +37,4 @@ const useChatDecryptionPayload = () => {
   return payload;
 };
 
-export default useChatDecryptionPayload;
+export default useChatEncryptionPayload;

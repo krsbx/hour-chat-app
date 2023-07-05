@@ -1,12 +1,15 @@
 import _ from 'lodash';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CHAT_TYPE } from '../constants/common';
-import { sendGroupMessage, sendPrivateMessage } from '../store/actions/chats';
-import { uploadFiles } from '../store/actions/files';
-import { dequeueMessage } from '../store/actions/queue';
-import { getMessageQueue } from '../store/selectors/queue';
-import usePrevious from './usePrevious';
+import { CHAT_TYPE } from '../../constants/common';
+import {
+  sendGroupMessage,
+  sendPrivateMessage,
+} from '../../store/actions/chats';
+import { uploadFiles } from '../../store/actions/files';
+import { dequeueMessage } from '../../store/actions/queue';
+import { getMessageQueue } from '../../store/selectors/queue';
+import usePrevious from '../common/usePrevious';
 
 const useChatMessageQueue = () => {
   const dispatch = useDispatch();

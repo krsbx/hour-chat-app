@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect, ConnectedProps } from 'react-redux';
 import { CHAT_STACK } from '../../constants/screens';
-import useChatMediaDownloader from '../../hooks/useChatMediaDownloader';
+import useMediaDownloader from '../../hooks/chats/useMediaDownloader';
 import { AppState } from '../../store';
 import { setConfig as _setConfig } from '../../store/actions/config';
 import { getConfig } from '../../store/selectors/config';
@@ -24,7 +24,7 @@ const ImageView: React.FC<Props> = ({
 
   const isOnEdit = useMemo(() => params?.editable ?? false, [params?.editable]);
 
-  const onDownload = useChatMediaDownloader();
+  const onDownload = useMediaDownloader();
 
   const onRemoveAttachment = useCallback(() => {
     const attachment = [...config.attachment];

@@ -14,7 +14,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Header, Media } from '../../components';
 import ImageView from '../../components/ImageView';
 import { CHAT_STACK } from '../../constants/screens';
-import useOverwriteBack from '../../hooks/useOverwriteBack';
+import useOverwriteBack from '../../hooks/common/useOverwriteBack';
 import { AppState } from '../../store';
 import { getConfig } from '../../store/selectors/config';
 import { COLOR_PALETTE } from '../../utils/theme';

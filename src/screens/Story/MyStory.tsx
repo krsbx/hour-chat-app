@@ -5,14 +5,11 @@ import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
 import { Card } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
-import useUserStoryListener from '../../hooks/useUserStoryListener';
 import { AppState } from '../../store';
-import { getStories } from '../../store/selectors/stories';
+import { getMyStories } from '../../store/selectors/stories';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const MyStory: React.FC<Props> = ({ stories }) => {
-  useUserStoryListener();
-
   return (
     <View
       style={{
@@ -29,7 +26,7 @@ const MyStory: React.FC<Props> = ({ stories }) => {
       />
       <FlatList
         data={stories}
-        renderItem={({ item }) => <Card.Story {...item} />}
+        renderItem={({ item }) => <Card.Story isMyStory={true} {...item} />}
         contentContainerStyle={{
           gap: scale(10),
           paddingBottom: scale(80),
@@ -43,7 +40,7 @@ const MyStory: React.FC<Props> = ({ stories }) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  stories: getStories(state),
+  stories: getMyStories(state),
 });
 
 const connector = connect(mapStateToProps);

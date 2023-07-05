@@ -8,12 +8,12 @@ export type MessageData = {
 };
 
 export type PrivateMetadata = MessageData & {
+  total: number;
   uuid: string; // receiverId
 };
 
-export type GroupMetadata = MessageData & {
+export type GroupMetadata = PrivateMetadata & {
   name: string;
-  uuid: string;
 };
 
 export type Metadata =

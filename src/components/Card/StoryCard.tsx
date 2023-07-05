@@ -7,7 +7,7 @@ import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
 import { Buttons, Icon } from '..';
-import useCachedUserData from '../../hooks/useCachedUserData';
+import useCachedUserData from '../../hooks/caches/useCachedUserData';
 import {
   dislikeStory as _dislikeStory,
   likeStory as _likeStory,
@@ -26,20 +26,21 @@ const StoryCard: React.FC<Props> = ({
   uuid,
   dislikeStory,
   likeStory,
+  isMyStory,
 }) => {
   const { user, fullName } = useCachedUserData(userId);
 
   const onPressOnLike = useCallback(() => {
     if (!uuid || mocked) return;
 
-    likeStory(uuid);
-  }, [uuid, mocked, likeStory]);
+    likeStory(uuid, isMyStory);
+  }, [uuid, mocked, isMyStory, likeStory]);
 
   const onPressOnDislike = useCallback(() => {
     if (!uuid || mocked) return;
 
-    dislikeStory(uuid);
-  }, [uuid, mocked, dislikeStory]);
+    dislikeStory(uuid, isMyStory);
+  }, [uuid, mocked, isMyStory, dislikeStory]);
 
   return (
     <View style={style.card}>
@@ -132,6 +133,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps &
   HourChat.Story.Story & {
+    isMyStory: boolean;
     mocked?: boolean;
     uuid?: string;
   };

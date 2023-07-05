@@ -15,41 +15,47 @@ export const createStory =
     resetStory()(dispatch);
   };
 
-export const likeStory = (uuid: string) => (dispatch: AppDispatch) => {
-  const { id } = getAuth(store.getState());
-  const stories = getStory(uuid)(store.getState());
+export const likeStory =
+  (uuid: string, isMyStory: boolean) => (dispatch: AppDispatch) => {
+    const { id } = getAuth(store.getState());
+    const stories = getStory(uuid, isMyStory)(store.getState());
 
-  dispatch({
-    type: StoriesActionType.UPDATE,
-    payload: {
-      uuid: uuid,
-      likes: _.uniq([...(stories?.likes ?? []), id]),
-      dislikes: _.filter(
-        [...(stories?.dislikes ?? [])],
-        (userId) => userId !== id
-      ),
-    },
-  });
+    dispatch({
+      type: isMyStory
+        ? StoriesActionType.UPDATE_USER
+        : StoriesActionType.UPDATE_USERS,
+      payload: {
+        uuid: uuid,
+        likes: _.uniq([...(stories?.likes ?? []), id]),
+        dislikes: _.filter(
+          [...(stories?.dislikes ?? [])],
+          (userId) => userId !== id
+        ),
+      },
+    });
 
-  axios.post(`/stories/${uuid}/like`).catch(() => {
-    // Do nothing if there is an error
-  });
-};
+    axios.post(`/stories/${uuid}/like`).catch(() => {
+      // Do nothing if there is an error
+    });
+  };
 
-export const dislikeStory = (uuid: string) => (dispatch: AppDispatch) => {
-  const { id } = getAuth(store.getState());
-  const stories = getStory(uuid)(store.getState());
+export const dislikeStory =
+  (uuid: string, isMyStory: boolean) => (dispatch: AppDispatch) => {
+    const { id } = getAuth(store.getState());
+    const stories = getStory(uuid, isMyStory)(store.getState());
 
-  dispatch({
-    type: StoriesActionType.UPDATE,
-    payload: {
-      uuid: uuid,
-      likes: _.filter([...(stories?.likes ?? [])], (userId) => userId !== id),
-      dislikes: _.uniq([...(stories?.dislikes ?? []), id]),
-    },
-  });
+    dispatch({
+      type: isMyStory
+        ? StoriesActionType.UPDATE_USER
+        : StoriesActionType.UPDATE_USERS,
+      payload: {
+        uuid: uuid,
+        likes: _.filter([...(stories?.likes ?? [])], (userId) => userId !== id),
+        dislikes: _.uniq([...(stories?.dislikes ?? []), id]),
+      },
+    });
 
-  axios.post(`/stories/${uuid}/dislike`).catch(() => {
-    // Do nothing if there is an error
-  });
-};
+    axios.post(`/stories/${uuid}/dislike`).catch(() => {
+      // Do nothing if there is an error
+    });
+  };

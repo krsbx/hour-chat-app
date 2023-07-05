@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { getAuth } from '../store/selectors/auth';
-import { createFullName } from '../utils/common';
+import { getAuth } from '../../store/selectors/auth';
+import { createFullName } from '../../utils/common';
 
 const useCurrentUser = () => {
   const user = useSelector(getAuth);

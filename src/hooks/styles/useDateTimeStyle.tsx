@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
-import STYLES from '../styles';
+import STYLES from '../../styles';
 
 const useDateTimeStyle = ({
   containerStyle,

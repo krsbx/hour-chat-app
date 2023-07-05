@@ -5,10 +5,13 @@ import React from 'react';
 import { scale } from 'react-native-size-matters';
 import { Buttons, Icon } from '../components';
 import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
-import useChatMediaQueue from '../hooks/useChatMediaQueue';
-import useChatMessageQueue from '../hooks/useChatMessageQueue';
-import useWatchAuthToken from '../hooks/useWatchAuthToken';
-import useWatchPosition from '../hooks/useWatchPosition';
+import useFirebaseDeviceToken from '../hooks/listeners/useFirebaseDeviceToken';
+import useLastMessageListener from '../hooks/listeners/useLastMessageListener';
+import useStoryListener from '../hooks/listeners/useStoryListener';
+import useWatchAuthToken from '../hooks/listeners/useWatchAuthToken';
+import useWatchPosition from '../hooks/listeners/useWatchPosition';
+import useChatMediaQueue from '../hooks/queues/useChatMediaQueue';
+import useChatMessageQueue from '../hooks/queues/useChatMessageQueue';
 import { Content } from '../screens';
 import ChatStack from './ChatStack';
 import CreateStoryStack from './CreateStoryStack';
@@ -22,6 +25,9 @@ const MainApp = () => {
   useWatchAuthToken();
   useChatMessageQueue();
   useChatMediaQueue();
+  useLastMessageListener();
+  useFirebaseDeviceToken();
+  useStoryListener();
 
   return (
     <Tab.Navigator

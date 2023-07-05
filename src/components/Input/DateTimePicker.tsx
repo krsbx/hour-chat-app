@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import DatePicker, { DatePickerProps } from 'react-native-date-picker';
 import { Wrapper } from '..';
-import useDateTimeStyle from '../../hooks/useDateTimeStyle';
+import useDateTimeStyle from '../../hooks/styles/useDateTimeStyle';
 import STYLES from '../../styles';
 import { RequiredLabel } from '../Label';
 

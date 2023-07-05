@@ -7,7 +7,7 @@ import { scale } from 'react-native-size-matters';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
-import useOverwriteBack from '../../hooks/useOverwriteBack';
+import useOverwriteBack from '../../hooks/common/useOverwriteBack';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
 

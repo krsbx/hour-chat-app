@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store';
-import { setConfig } from '../store/actions/config';
-import { getChatEncryption } from '../store/actions/encryptions';
-import useChatDecryptionPayload from './useChatDecryptionPayload';
+import { AppDispatch } from '../../store';
+import { setConfig } from '../../store/actions/config';
+import { getChatEncryption } from '../../store/actions/encryptions';
+import useChatEncryptionPayload from './useChatEncryptionPayload';
 
-const useChatDecryption = (dep: unknown[] = []) => {
+const useChatEncryptionRetrieval = (dep: unknown[] = []) => {
   const dispatch = useDispatch<AppDispatch>();
-  const payload = useChatDecryptionPayload();
+  const payload = useChatEncryptionPayload();
 
   useEffect(() => {
     getChatEncryption(payload)(dispatch)
@@ -23,4 +23,4 @@ const useChatDecryption = (dep: unknown[] = []) => {
   }, [dispatch, payload, ...dep]);
 };
 
-export default useChatDecryption;
+export default useChatEncryptionRetrieval;

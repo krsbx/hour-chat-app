@@ -2,7 +2,7 @@ import type { Timestamp } from '@firebase/firestore';
 import moment from 'moment';
 import { useMemo } from 'react';
 
-const useChatTimestamp = (timestamp: Timestamp) => {
+const useTimestamp = (timestamp: Timestamp) => {
   const datetime = useMemo(() => {
     if (!timestamp) return '';
 
@@ -12,4 +12,4 @@ const useChatTimestamp = (timestamp: Timestamp) => {
   return datetime;
 };
 
-export default useChatTimestamp;
+export default useTimestamp;

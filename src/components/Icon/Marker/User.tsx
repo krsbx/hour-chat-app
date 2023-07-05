@@ -6,7 +6,7 @@ import { MapMarker, MapMarkerProps, Marker } from 'react-native-maps';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Icon } from '../..';
-import useUserGenderIcon from '../../../hooks/useUserGenderIcon';
+import useUserGenderIcon from '../../../hooks/styles/useUserGenderIcon';
 import STYLES from '../../../styles';
 import { createFullName } from '../../../utils/common';
 import { COLOR_PALETTE } from '../../../utils/theme';

@@ -1,13 +1,21 @@
 import _ from 'lodash';
 import {
-  DeleteStories,
-  OverwriteStories,
-  SetStories,
+  DeleteMyStories,
+  DeleteUsersStories,
+  OverwriteMyStories,
+  OverwriteUsersStories,
+  SetMyStories,
+  SetUserStories,
   StoriesActionType as ActionType,
-  UpdateStories,
+  StoriesReducer,
+  UpdateMyStories,
+  UpdateUserStories,
 } from '../actions-types/stories';
 
-const initialState = [] as HourChat.Story.StoryWithUuid[];
+const initialState: StoriesReducer = {
+  user: [],
+  users: [],
+};
 
 export const sortStory = (
   a: HourChat.Story.StoryWithUuid,
@@ -16,46 +24,123 @@ export const sortStory = (
 
 const reducer = (
   state = _.cloneDeep(initialState),
-  action: SetStories | UpdateStories | OverwriteStories | DeleteStories
-): HourChat.Story.StoryWithUuid[] => {
+  action:
+    | DeleteMyStories
+    | DeleteUsersStories
+    | OverwriteMyStories
+    | OverwriteUsersStories
+    | SetMyStories
+    | SetUserStories
+    | UpdateMyStories
+    | UpdateUserStories
+): StoriesReducer => {
   switch (action.type) {
-    case ActionType.SET: {
+    case ActionType.SET_USERS: {
       const payload = _.isArray(action.payload)
         ? action.payload
         : [action.payload];
 
-      return _.uniqBy([...state, ...payload], 'uuid').sort(sortStory);
+      return {
+        ...state,
+        users: _.uniqBy([...state.users, ...payload], 'uuid').sort(sortStory),
+      };
     }
 
-    case ActionType.UPDATE: {
-      const index = state.findIndex(({ uuid }) => uuid === action.payload.uuid);
+    case ActionType.SET_USER: {
+      const payload = _.isArray(action.payload)
+        ? action.payload
+        : [action.payload];
+
+      return {
+        ...state,
+        user: _.uniqBy([...state.user, ...payload], 'uuid').sort(sortStory),
+      };
+    }
+
+    case ActionType.UPDATE_USERS: {
+      const index = state.users.findIndex(
+        ({ uuid }) => uuid === action.payload.uuid
+      );
 
       if (index === -1) return state;
 
-      state[index] = {
-        ...state[index],
+      state.users[index] = {
+        ...state.users[index],
         ...action.payload,
       };
 
-      return [...state].sort(sortStory);
+      return {
+        ...state,
+        users: [...state.users].sort(sortStory),
+      };
     }
 
-    case ActionType.OVERWRITE: {
+    case ActionType.UPDATE_USER: {
+      const index = state.user.findIndex(
+        ({ uuid }) => uuid === action.payload.uuid
+      );
+
+      if (index === -1) return state;
+
+      state.user[index] = {
+        ...state.user[index],
+        ...action.payload,
+      };
+
+      return {
+        ...state,
+        user: [...state.user].sort(sortStory),
+      };
+    }
+
+    case ActionType.OVERWRITE_USERS: {
       const payload = _.isArray(action.payload)
         ? action.payload
         : [action.payload];
 
-      return _.uniqBy(payload, 'uuid').sort(sortStory);
+      return {
+        ...state,
+        users: _.uniqBy(payload, 'uuid').sort(sortStory),
+      };
     }
 
-    case ActionType.DELETE: {
-      const index = state.findIndex(({ uuid }) => uuid === action.payload);
+    case ActionType.OVERWRITE_USER: {
+      const payload = _.isArray(action.payload)
+        ? action.payload
+        : [action.payload];
+
+      return {
+        ...state,
+        user: _.uniqBy(payload, 'uuid').sort(sortStory),
+      };
+    }
+
+    case ActionType.DELETE_USERS: {
+      const index = state.users.findIndex(
+        ({ uuid }) => uuid === action.payload
+      );
 
       if (index === -1) return state;
 
-      state.splice(index, 1);
+      state.users.splice(index, 1);
 
-      return [...state].sort(sortStory);
+      return {
+        ...state,
+        users: [...state.users].sort(sortStory),
+      };
+    }
+
+    case ActionType.DELETE_USER: {
+      const index = state.user.findIndex(({ uuid }) => uuid === action.payload);
+
+      if (index === -1) return state;
+
+      state.user.splice(index, 1);
+
+      return {
+        ...state,
+        user: [...state.user].sort(sortStory),
+      };
     }
 
     default: {

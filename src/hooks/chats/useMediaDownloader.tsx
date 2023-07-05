@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { enqueuFile } from '../store/actions/queue';
-import { getConfig } from '../store/selectors/config';
+import { enqueuFile } from '../../store/actions/queue';
+import { getConfig } from '../../store/selectors/config';
 
-const useChatMediaDownloader = () => {
+const useMediaDownloader = () => {
   const dispatch = useDispatch();
   const { uuid, type } = useSelector(getConfig);
 
@@ -22,4 +22,4 @@ const useChatMediaDownloader = () => {
   return onDownload;
 };
 
-export default useChatMediaDownloader;
+export default useMediaDownloader;

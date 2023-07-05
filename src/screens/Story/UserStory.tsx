@@ -1,34 +1,14 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { FlatList, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
 import { Card } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
-import { CHAT_TYPE } from '../../constants/common';
-import useSingleChatListListener from '../../hooks/useSingleChatListListener';
-import useUserStoryListener from '../../hooks/useUserStoryListener';
 import { AppState } from '../../store';
-import { getStories } from '../../store/selectors/stories';
+import { getUserStories } from '../../store/selectors/stories';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const UserStory: React.FC<Props> = ({ stories }) => {
-  // Listen to user that has been chatted
-  const [messages] = useSingleChatListListener(CHAT_TYPE.PRIVATE);
-  const userIds = useMemo(
-    () =>
-      messages.reduce((prev, curr) => {
-        // Unique only
-        if (prev.includes(curr.uuid)) return prev;
-
-        prev.push(curr.uuid);
-
-        return prev;
-      }, [] as string[]),
-    [messages]
-  );
-
-  useUserStoryListener(userIds);
-
   return (
     <View
       style={{
@@ -45,7 +25,7 @@ const UserStory: React.FC<Props> = ({ stories }) => {
       />
       <FlatList
         data={stories}
-        renderItem={({ item }) => <Card.Story {...item} />}
+        renderItem={({ item }) => <Card.Story isMyStory={false} {...item} />}
         contentContainerStyle={{
           gap: scale(10),
           paddingBottom: scale(80),
@@ -59,7 +39,7 @@ const UserStory: React.FC<Props> = ({ stories }) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  stories: getStories(state),
+  stories: getUserStories(state),
 });
 
 const connector = connect(mapStateToProps);

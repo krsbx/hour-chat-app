@@ -11,7 +11,7 @@ import { scale } from 'react-native-size-matters';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Icon } from '..';
 import { FONT_SIZE } from '../../constants/fonts';
-import useCachedUserData from '../../hooks/useCachedUserData';
+import useCachedUserData from '../../hooks/caches/useCachedUserData';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
 
