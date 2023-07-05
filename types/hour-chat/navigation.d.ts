@@ -12,6 +12,7 @@ import {
   MAIN_STACK,
   MAIN_TAB,
   PROFILE_STACK,
+  SETTING_TAB,
   STORY_TAB,
 } from '../../src/constants/screens';
 
@@ -43,6 +44,11 @@ export type ChatStack = {
   [CHAT_STACK.MEDIA]: {
     editable?: boolean;
   };
+};
+
+export type SettingTab = {
+  [SETTING_TAB.PUBLIC]: undefined;
+  [SETTING_TAB.PRIVATE]: undefined;
 };
 
 export type MainTab = {
@@ -86,6 +92,9 @@ export type CreateStoryStackProps<T extends keyof CreateStoryStack> =
     StackScreenProps<MainTab>
   >;
 
+export type SettingTabProps<T extends keyof SettingTab> =
+  MaterialTopTabScreenProps<SettingTab, T>;
+
 export type MainTabProps<T extends keyof MainTabProps> = CompositeScreenProps<
   BottomTabScreenProps<MainTab, T>,
   StackScreenProps<MainStack>
@@ -99,7 +108,10 @@ export type MainStackProps<T extends keyof MainStack> = CompositeScreenProps<
 export type ProfileStackProps<T extends keyof ProfileStack> =
   CompositeScreenProps<
     StackScreenProps<ProfileStack, T>,
-    StackScreenProps<MainTab>
+    CompositeScreenProps<
+      MaterialTopTabScreenProps<SettingTab>,
+      StackScreenProps<MainTab>
+    >
   >;
 
 export type AuthStackNavigation<T extends keyof AuthStack> =

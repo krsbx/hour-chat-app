@@ -42,4 +42,9 @@ export const PROFILE_STACK = {
   MY_CONNECTION: 'profile.my-connection.screen',
 } as const;
 
+export const SETTING_TAB = {
+  PUBLIC: 'setting.public.screen',
+  PRIVATE: 'setting.private.screen',
+} as const;
+
 export const TAB_HIDEABLE = _(CHAT_STACK).omit(['LIST']).map().value();

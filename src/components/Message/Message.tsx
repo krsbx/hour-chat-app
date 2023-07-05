@@ -40,7 +40,7 @@ const Message: React.FC<Props> = ({
   const maxHeight = useRef(new Animated.Value(0)).current;
   const today = useMemo(() => moment(), []);
   const timestamp = useMemo(
-    () => moment(timestampProps.toDate()),
+    () => moment(timestampProps?.toDate?.()),
     [timestampProps]
   );
   const timestampLabel = useMemo(() => {

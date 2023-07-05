@@ -1,49 +1,28 @@
 import { Text } from '@rneui/base';
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { connect, ConnectedProps } from 'react-redux';
-import { Icon } from '../../..';
-import { FONT_SIZE } from '../../../../constants/fonts';
-import useCurrentUser from '../../../../hooks/caches/useCurrentUser';
-import useUserGenderIcon from '../../../../hooks/styles/useUserGenderIcon';
-import { updateMyData as _updateMyData } from '../../../../store/actions/auth';
-import { uploadFiles as _uploadFiles } from '../../../../store/actions/files';
-import STYLES from '../../../../styles';
-import { COLOR_PALETTE, opacityColor } from '../../../../utils/theme';
+import { Icon } from '../..';
+import { FONT_SIZE } from '../../../constants/fonts';
+import useUserGenderIcon from '../../../hooks/styles/useUserGenderIcon';
+import STYLES from '../../../styles';
+import { createFullName } from '../../../utils/common';
+import { COLOR_PALETTE, opacityColor } from '../../../utils/theme';
 
-const UserAvatar: React.FC<Props> = ({ uploadFiles, updateMyData }) => {
-  const { fullName, user: currentUser } = useCurrentUser();
-  const { iconColor, iconName } = useUserGenderIcon(currentUser);
-
-  const onPressOnAvatar = useCallback(async () => {
-    try {
-      const result = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.images],
-      });
-
-      const { data } = await uploadFiles(result as never);
-      const [newAvatarUri] = data;
-
-      await updateMyData({
-        avatar: newAvatarUri,
-      });
-    } catch {
-      // Do nothing if there is an error
-    }
-  }, [uploadFiles, updateMyData]);
+const UserAvatar: React.FC<Props> = ({ user }) => {
+  const { iconColor, iconName } = useUserGenderIcon(user);
+  const fullName = useMemo(() => createFullName(user), [user]);
 
   return (
     <View style={style.userContainer}>
       <TouchableOpacity
         style={style.avatarMainContainer}
-        onPress={onPressOnAvatar}
+        onPress={() => console.log('F')}
       >
         <Icon.DefaultAvatar
           containerStyle={style.avatarContainer}
-          user={currentUser}
+          user={user}
           name={fullName}
           size={scale(100)}
         />
@@ -94,13 +73,8 @@ const style = StyleSheet.create({
   },
 });
 
-const connector = connect(null, {
-  uploadFiles: _uploadFiles,
-  updateMyData: _updateMyData,
-});
+type Props = {
+  user: HourChat.Resource.User;
+};
 
-type ReduxProps = ConnectedProps<typeof connector>;
-
-type Props = ReduxProps;
-
-export default connector(UserAvatar);
+export default UserAvatar;
