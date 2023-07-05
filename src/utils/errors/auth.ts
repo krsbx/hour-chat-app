@@ -30,4 +30,8 @@ export const onLoginError = <T>(
   if (status === 404) {
     setFieldError('identifier', 'User not found');
   }
+
+  if (status === 400) {
+    setFieldError('password', 'Incorrect password');
+  }
 };

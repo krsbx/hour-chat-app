@@ -30,7 +30,7 @@ const useUserStoryListener = (_uids?: string[]) => {
       .where('createdAt', '>', moment().subtract(7, 'day').toDate())
       .where('createdAt', '<=', moment().toDate())
       .onSnapshot((snap) => {
-        if (!snap?.docs) return;
+        if (!snap || !snap?.docs) return;
 
         const docs = _.compact(
           snap.docs.map((doc) => ({

@@ -1,19 +1,24 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store';
+import { setConfig } from '../store/actions/config';
 import { getChatEncryption } from '../store/actions/encryptions';
-import { getConfig } from '../store/selectors/config';
 import useChatDecryptionPayload from './useChatDecryptionPayload';
 
 const useChatDecryption = (dep: unknown[] = []) => {
   const dispatch = useDispatch<AppDispatch>();
-  const config = useSelector(getConfig);
-  const payload = useChatDecryptionPayload(config);
+  const payload = useChatDecryptionPayload();
 
   useEffect(() => {
-    getChatEncryption(payload)(dispatch).catch(() => {
-      // Do nothing if there is an error
-    });
+    getChatEncryption(payload)(dispatch)
+      .then(({ data: config }) => {
+        setConfig({
+          config,
+        })(dispatch);
+      })
+      .catch(() => {
+        // Do nothing if there is an error
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, payload, ...dep]);
 };

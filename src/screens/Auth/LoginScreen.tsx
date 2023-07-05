@@ -71,7 +71,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         barStyle={'dark-content'}
       />
       <Label.AppTitle />
-      <Animated.View style={[formStyle]}>
+      <Animated.View style={formStyle}>
         <Formik
           validationSchema={toFormikValidationSchema(auths.loginSchema)}
           initialValues={_.cloneDeep(DEFAULT_LOGIN_VALUE)}

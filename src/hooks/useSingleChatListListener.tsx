@@ -29,6 +29,8 @@ const useSingleChatListListener = <
       .collection('users')
       .doc(`${currentUser.id}`)
       .onSnapshot((snap) => {
+        if (!snap) return;
+
         const data = snap.data() as V | undefined;
 
         if (!data) return;

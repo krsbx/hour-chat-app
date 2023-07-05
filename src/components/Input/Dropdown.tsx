@@ -1,5 +1,6 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Text } from '@rneui/base';
+import React, { useMemo } from 'react';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { Dropdown as RNDropdown } from 'react-native-element-dropdown';
 import { DropdownProps } from 'react-native-element-dropdown/src/components/Dropdown/model';
 import { scale } from 'react-native-size-matters';
@@ -8,7 +9,27 @@ import { FONT_SIZE } from '../../constants/fonts';
 import STYLES from '../../styles';
 import { COLOR_PALETTE, opacityColor } from '../../utils/theme';
 
-const Dropdown = <T,>({ label, isRequired, ...props }: Props<T>) => {
+const Dropdown = <T,>({
+  label,
+  isRequired,
+  isError,
+  isValid,
+  errorMessage,
+  ...props
+}: Props<T>) => {
+  const styles = useMemo(() => {
+    const styles: StyleProp<ViewStyle>[] = [style.style];
+
+    console.log({ isValid });
+
+    if (isValid) styles.push(STYLES.INPUTS.VALID);
+    if (isError) styles.push(STYLES.INPUTS.ERROR);
+
+    console.log(styles);
+
+    return styles;
+  }, [isValid, isError]);
+
   return (
     <View style={[STYLES.INPUTS.DEFAULT_PADDING, style.container]}>
       {label && (
@@ -17,7 +38,7 @@ const Dropdown = <T,>({ label, isRequired, ...props }: Props<T>) => {
         </Label.RequiredLabel>
       )}
       <RNDropdown<T>
-        style={style.style}
+        style={styles}
         placeholderStyle={STYLES.LABELS.PLACEHOLDER}
         activeColor={opacityColor(COLOR_PALETTE.NEUTRAL_20, 0.7)}
         itemContainerStyle={style.itemContainer}
@@ -25,6 +46,9 @@ const Dropdown = <T,>({ label, isRequired, ...props }: Props<T>) => {
         itemTextStyle={style.itemText}
         {...props}
       />
+      {isError && !!errorMessage && (
+        <Text style={STYLES.ERRORS.ERROR_DATE}>{errorMessage}</Text>
+      )}
     </View>
   );
 };
@@ -49,6 +73,9 @@ const style = StyleSheet.create({
 type Props<T> = DropdownProps<T> & {
   label?: string;
   isRequired?: boolean;
+  isValid?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
 };
 
 export default Dropdown;

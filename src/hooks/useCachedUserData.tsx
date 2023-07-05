@@ -10,11 +10,7 @@ const useCachedUserData = (uuid: string) => {
   const _user = useSelector(getResurceDataById(RESOURCE_NAME.USERS, uuid));
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [user, setUser] = useState<HourChat.Resource.User | undefined>(_user);
-  const fullName = useMemo(() => {
-    if (!user) return '';
-
-    return createFullName(user);
-  }, [user]);
+  const fullName = useMemo(() => createFullName(user), [user]);
   const alias = useMemo(() => {
     const names = fullName.split(/ /g);
 

@@ -68,7 +68,7 @@ const DateTimePicker: React.FC<Props> = ({
   const errorStyle = useMemo(() => {
     const styles: StyleProp<TextStyle>[] = [STYLES.ERRORS.ERROR_DATE];
 
-    if (errorStyleProps) styles.push(errorStyle);
+    if (errorStyleProps) styles.push(errorStyleProps);
 
     return styles;
   }, [errorStyleProps]);

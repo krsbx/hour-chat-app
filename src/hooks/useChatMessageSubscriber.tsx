@@ -38,6 +38,8 @@ const useChatMessageSubscriber = <
       .orderBy('timestamp', 'asc')
       .limitToLast(limit)
       .onSnapshot((snap) => {
+        if (!snap) return;
+
         const messages = _(snap.docs)
           .map((doc) => {
             const data = doc.data() as U | undefined;
@@ -71,6 +73,8 @@ const useChatMessageSubscriber = <
       .orderBy('timestamp', 'asc')
       .limitToLast(limit)
       .onSnapshot((snap) => {
+        if (!snap) return;
+
         const messages = _(snap.docs)
           .map((doc) => doc.data())
           .compact()

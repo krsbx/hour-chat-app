@@ -11,6 +11,7 @@ import {
 const initialState = {
   token: null,
   deviceToken: null,
+  firebaseToken: null,
 } as AuthReducer;
 
 const reducer = (
@@ -19,10 +20,22 @@ const reducer = (
 ): AuthReducer => {
   switch (action.type) {
     case ActionType.LOGIN: {
+      const decoded = jwtDecode<HourChat.Resource.User>(
+        _.isString(action.payload) ? action.payload : action.payload.token
+      );
+
+      if (_.isString(action.payload))
+        return {
+          ...state,
+          ...decoded,
+          token: action.payload,
+        };
+
       return {
         ...state,
-        ...jwtDecode<HourChat.Resource.User>(action.payload),
-        token: action.payload,
+        ...decoded,
+        token: action.payload.token,
+        firebaseToken: action.payload.firebaseToken,
       };
     }
 
