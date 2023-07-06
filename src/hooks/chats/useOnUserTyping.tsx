@@ -8,12 +8,12 @@ import {
   setTypingGroupMessage,
   setTypingPrivateMessage,
 } from '../../store/actions/chats';
-import { getConfig } from '../../store/selectors/config';
+import { getCurrentChat } from '../../store/selectors/currentChat';
 import useDebounce from '../common/useDebounce';
 
 const useOnUserTyping = () => {
   const { values } = useFormikContext<z.infer<typeof chats.messageSchema>>();
-  const { type, uuid } = useSelector(getConfig);
+  const { type, uuid } = useSelector(getCurrentChat);
 
   const onUserTyping = useCallback(
     (typing: boolean) => {

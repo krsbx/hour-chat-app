@@ -31,11 +31,11 @@ import useOverwriteBack from '../../hooks/common/useOverwriteBack';
 import useChatEncryptionRetrieval from '../../hooks/encryptions/useChatEncryptionRetrieval';
 import { chats } from '../../schema';
 import { AppState } from '../../store';
-import { setConfig as _setConfig } from '../../store/actions/config';
-import { getConfig } from '../../store/selectors/config';
+import { setCurrentChat as _setCurrentChat } from '../../store/actions/currentChat';
+import { getCurrentChat } from '../../store/selectors/currentChat';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatView: React.FC<Props> = ({ config, setConfig }) => {
+const ChatView: React.FC<Props> = ({ currentChat, setCurrentChat }) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
@@ -51,7 +51,7 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
   const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber();
 
   const onPressOnBack = useCallback(() => {
-    setConfig({
+    setCurrentChat({
       attachment: [],
     });
 
@@ -61,7 +61,7 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
     }
 
     navigation.dispatch(StackActions.replace(CHAT_STACK.LIST));
-  }, [navigation, setConfig]);
+  }, [navigation, setCurrentChat]);
 
   useOverwriteBack(onPressOnBack);
 
@@ -127,7 +127,7 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
       <Animated.View style={{ flex: emptySize }} />
       <Animated.View style={{ flex: flexSize }}>
         <Header.BackHeader
-          title={`[${_.capitalize(config.type)}] ${config.name}`}
+          title={`[${_.capitalize(currentChat.type)}] ${currentChat.name}`}
           onBack={onPressOnBack}
         />
         <FlatList
@@ -194,11 +194,11 @@ const style = StyleSheet.create({
 });
 
 const mapStateToProps = (state: AppState) => ({
-  config: getConfig(state),
+  currentChat: getCurrentChat(state),
 });
 
 const connector = connect(mapStateToProps, {
-  setConfig: _setConfig,
+  setCurrentChat: _setCurrentChat,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

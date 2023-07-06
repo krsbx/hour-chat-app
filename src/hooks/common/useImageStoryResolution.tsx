@@ -1,8 +1,12 @@
 import _ from 'lodash';
 import { useMemo } from 'react';
-import { HALF_WINDOW, QUARTER_WINDOW, WINDOW_WIDTH } from '../constants/sizes';
+import {
+  HALF_WINDOW,
+  QUARTER_WINDOW,
+  WINDOW_WIDTH,
+} from '../../constants/sizes';
 
-const useImageStoryResoulution = (_resolution: {
+const useImageStoryResolution = (_resolution: {
   width: number;
   height: number;
 }) => {
@@ -21,4 +25,4 @@ const useImageStoryResoulution = (_resolution: {
   return resolution;
 };
 
-export default useImageStoryResoulution;
+export default useImageStoryResolution;

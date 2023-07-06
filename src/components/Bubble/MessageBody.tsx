@@ -2,7 +2,7 @@ import { Text } from '@rneui/base';
 import React, { useMemo } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 import { scale } from 'react-native-size-matters';
-import useTextDecryptor from '../../hooks/useTextDecryptor';
+import useTextDecryptor from '../../hooks/chats/useTextDecryptor';
 import { COLOR_PALETTE } from '../../utils/theme';
 
 const MessageBody: React.FC<Props> = ({ body, incoming }) => {

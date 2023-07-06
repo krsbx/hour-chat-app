@@ -16,10 +16,10 @@ import ImageView from '../../components/ImageView';
 import { CHAT_STACK } from '../../constants/screens';
 import useOverwriteBack from '../../hooks/common/useOverwriteBack';
 import { AppState } from '../../store';
-import { getConfig } from '../../store/selectors/config';
+import { getCurrentChat } from '../../store/selectors/currentChat';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const ChatMedia: React.FC<Props> = ({ config, navigation, route }) => {
+const ChatMedia: React.FC<Props> = ({ currentChat, navigation, route }) => {
   const [selectedFile, setSelectedFile] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -60,11 +60,13 @@ const ChatMedia: React.FC<Props> = ({ config, navigation, route }) => {
         barStyle={'light-content'}
       />
       <Header.BackHeader
-        title={`[${_.capitalize(config.type)}] ${config.name}`}
+        title={`[${_.capitalize(currentChat.type)}] ${currentChat.name}`}
         onBack={onPressOnBack}
       />
       <FlatList
-        data={route.params?.editable ? config.attachment : config.files}
+        data={
+          route.params?.editable ? currentChat.attachment : currentChat.files
+        }
         renderItem={({ item, index }) => (
           <TouchableOpacity
             activeOpacity={0.8}
@@ -86,7 +88,7 @@ const ChatMedia: React.FC<Props> = ({ config, navigation, route }) => {
         }}
       />
       <ImageView
-        files={config.files}
+        files={currentChat.files}
         isVisible={isVisible}
         fileIndex={selectedFile}
         onIndexChange={onIndexChange}
@@ -104,7 +106,7 @@ const style = StyleSheet.create({
 });
 
 const mapStateToProps = (state: AppState) => ({
-  config: getConfig(state),
+  currentChat: getCurrentChat(state),
 });
 
 const connector = connect(mapStateToProps);

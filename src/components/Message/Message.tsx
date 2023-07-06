@@ -15,8 +15,8 @@ import { Icon } from '..';
 import { CHAT_TYPE } from '../../constants/common';
 import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
-import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
-import { setConfig as _setConfig } from '../../store/actions/config';
+import useDecryptedChatMessage from '../../hooks/chats/useDecryptedChatMessage';
+import { setCurrentChat as _setCurrentChat } from '../../store/actions/currentChat';
 import { setNotification as _setNotification } from '../../store/actions/notifications';
 import { getCurrentEncryption } from '../../store/selectors/encryption';
 import STYLES from '../../styles';
@@ -30,7 +30,7 @@ const Message: React.FC<Props> = ({
   uuid,
   user,
   files,
-  setConfig,
+  setCurrentChat,
   setNotification,
 }) => {
   const navigation =
@@ -69,7 +69,7 @@ const Message: React.FC<Props> = ({
   }, [messageBody, files]);
 
   const onPress = useCallback(() => {
-    setConfig({
+    setCurrentChat({
       type,
       uuid,
       name,
@@ -81,7 +81,7 @@ const Message: React.FC<Props> = ({
       value: 0,
     });
     navigation.push(CHAT_STACK.VIEW);
-  }, [setConfig, type, uuid, name, config, setNotification, navigation]);
+  }, [setCurrentChat, type, uuid, name, config, setNotification, navigation]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
@@ -147,7 +147,7 @@ const style = StyleSheet.create({
 });
 
 const connector = connect(null, {
-  setConfig: _setConfig,
+  setCurrentChat: _setCurrentChat,
   setNotification: _setNotification,
 });
 

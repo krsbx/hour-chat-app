@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { decryptText } from '../utils/chats/encryption';
+import { decryptText } from '../../utils/chats/encryption';
 
 const useDecryptedChatMessage = (
   message: string,

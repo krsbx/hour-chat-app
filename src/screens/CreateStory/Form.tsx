@@ -14,7 +14,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Buttons, Header, Input } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
 import { CREATE_STORY_STACK } from '../../constants/screens';
-import useImageStoryResolution from '../../hooks/useImageStoryResolution';
+import useImageStoryResolution from '../../hooks/common/useImageStoryResolution';
 import { AppState } from '../../store';
 import {
   deleteFile as _deleteFile,

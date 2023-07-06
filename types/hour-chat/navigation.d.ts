@@ -41,9 +41,11 @@ export type StoryTab = {
 export type ChatStack = {
   [CHAT_STACK.LIST]: undefined;
   [CHAT_STACK.VIEW]: undefined;
-  [CHAT_STACK.MEDIA]: {
-    editable?: boolean;
-  };
+  [CHAT_STACK.MEDIA]:
+    | {
+        editable?: boolean;
+      }
+    | undefined;
 };
 
 export type MyAccountTab = {

@@ -19,11 +19,15 @@ import { Input, Media } from '../..';
 import { CHAT_STACK } from '../../../constants/screens';
 import { chats } from '../../../schema';
 import { AppState } from '../../../store';
-import { setConfig as _setConfig } from '../../../store/actions/config';
+import { setCurrentChat as _setCurrentChat } from '../../../store/actions/currentChat';
 import { enqueuMessage as _enqueuMessage } from '../../../store/actions/queue';
-import { getConfig } from '../../../store/selectors/config';
+import { getCurrentChat } from '../../../store/selectors/currentChat';
 
-const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
+const InputForm: React.FC<Props> = ({
+  setCurrentChat,
+  enqueuMessage,
+  currentChat,
+}) => {
   const isScreenFocused = useIsFocused();
   const navigation =
     useNavigation<
@@ -31,7 +35,7 @@ const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
     >();
   const { handleChange, handleBlur, values, setFieldValue, validate } =
     useFormikContext<z.infer<typeof chats.messageSchema>>();
-  const { type, uuid } = config;
+  const { type, uuid } = currentChat;
 
   const onPressOnSend = useCallback(
     async (e: GestureResponderEvent) => {
@@ -49,14 +53,14 @@ const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
 
         setFieldValue('body', '');
         setFieldValue('files', []);
-        setConfig({
+        setCurrentChat({
           attachment: [],
         });
       } catch {
         // Do nothing if there is an error
       }
     },
-    [values, validate, enqueuMessage, uuid, type, setFieldValue, setConfig]
+    [values, validate, enqueuMessage, uuid, type, setFieldValue, setCurrentChat]
   );
 
   const onPressOnAttach = useCallback(async () => {
@@ -76,27 +80,27 @@ const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
       ];
 
       setFieldValue('files', normalizedResults);
-      setConfig({
+      setCurrentChat({
         attachment: normalizedResults,
       });
     } catch {
       // Do nothing if there is an error
     }
-  }, [values.files, setFieldValue, setConfig]);
+  }, [values.files, setFieldValue, setCurrentChat]);
 
   const onPressOnMedia = useCallback(() => {
-    setConfig({
+    setCurrentChat({
       files: values.files ?? [],
     });
     navigation.push(CHAT_STACK.MEDIA, {
       editable: true,
     });
-  }, [navigation, values.files, setConfig]);
+  }, [navigation, values.files, setCurrentChat]);
 
   useEffect(() => {
-    if (_.isEqual(values.files, config.attachment)) return;
+    if (_.isEqual(values.files, currentChat.attachment)) return;
 
-    setFieldValue('files', config.attachment);
+    setFieldValue('files', currentChat.attachment);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScreenFocused]);
 
@@ -161,11 +165,11 @@ const InputForm: React.FC<Props> = ({ setConfig, enqueuMessage, config }) => {
 };
 
 const mapStateToProps = (state: AppState) => ({
-  config: getConfig(state),
+  currentChat: getCurrentChat(state),
 });
 
 const connector = connect(mapStateToProps, {
-  setConfig: _setConfig,
+  setCurrentChat: _setCurrentChat,
   enqueuMessage: _enqueuMessage,
 });
 

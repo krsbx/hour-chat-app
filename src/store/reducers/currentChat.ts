@@ -1,12 +1,12 @@
 import { CHAT_TYPE } from '../../constants/common';
 import {
-  ConfigActionType as ActionType,
-  ConfigReducer,
-  DeleteConfig,
-  SetConfig,
-} from '../actions-types/config';
+  CurrentChatActionType as ActionType,
+  CurrentChatReducer,
+  DeleteCurrentChat,
+  SetCurrentChat,
+} from '../actions-types/currentChat';
 
-const initialState: ConfigReducer = {
+const initialState: CurrentChatReducer = {
   uuid: '',
   type: CHAT_TYPE.PRIVATE,
   name: '',
@@ -20,8 +20,8 @@ const initialState: ConfigReducer = {
 
 const reducer = (
   state = initialState,
-  action: SetConfig | DeleteConfig
-): ConfigReducer => {
+  action: SetCurrentChat | DeleteCurrentChat
+): CurrentChatReducer => {
   switch (action.type) {
     case ActionType.SET: {
       return {
