@@ -2,7 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { PROFILE_STACK } from '../constants/screens';
 import { Profile } from '../screens';
-import SettingTab from './SettingTab';
+import MyAccountTab from './MyAccountTab';
 
 const Stack = createStackNavigator<HourChat.Navigation.ProfileStack>();
 
@@ -19,7 +19,7 @@ const ProfileStack = () => {
         name={PROFILE_STACK.MY_CONNECTION}
         component={Profile.MyConnection}
       />
-      <Stack.Screen name={PROFILE_STACK.SETTING} component={SettingTab} />
+      <Stack.Screen name={PROFILE_STACK.MY_ACCOUNT} component={MyAccountTab} />
     </Stack.Navigator>
   );
 };

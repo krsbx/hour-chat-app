@@ -38,13 +38,13 @@ export const STORY_TAB = {
 
 export const PROFILE_STACK = {
   MAIN: 'profile.main.screen',
-  SETTING: 'profile.setting.screen',
+  MY_ACCOUNT: 'profile.my-account.screen',
   MY_CONNECTION: 'profile.my-connection.screen',
 } as const;
 
-export const SETTING_TAB = {
-  PUBLIC: 'setting.public.screen',
-  PRIVATE: 'setting.private.screen',
+export const MY_ACCOUNT_TAB = {
+  PUBLIC: 'my-account.public.screen',
+  PRIVATE: 'my-account.private.screen',
 } as const;
 
 export const TAB_HIDEABLE = _(CHAT_STACK).omit(['LIST']).map().value();

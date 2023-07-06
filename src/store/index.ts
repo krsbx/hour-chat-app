@@ -16,7 +16,14 @@ const rootReducer = combineReducers(reducers);
 const persistConfig = getPersistConfig({
   key: 'hour-chat',
   storage: AsyncStorage,
-  whitelist: ['auth', 'resources.users', 'encryption', 'queue', 'lastMessage'],
+  whitelist: [
+    'auth',
+    'resources.users',
+    'encryption',
+    'queue',
+    'lastMessage',
+    'notifications',
+  ],
   rootReducer,
 });
 

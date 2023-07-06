@@ -21,19 +21,25 @@ export const getLastMessages = (state: AppState) =>
   );
 
 export const getLastMessageMetadata =
-  ({ type, uuid }: { type: HourChat.Type.ChatType; uuid: string }) =>
-  (
-    state: AppState
-  ):
-    | HourChat.Chat.PrivateMetadata
-    | HourChat.Chat.GroupMetadata
-    | undefined => {
+  <
+    T extends HourChat.Type.ChatType,
+    U extends T extends typeof CHAT_TYPE.PRIVATE
+      ? HourChat.Chat.PrivateMetadata
+      : HourChat.Chat.GroupMetadata
+  >({
+    type,
+    uuid,
+  }: {
+    type: T;
+    uuid: string;
+  }) =>
+  (state: AppState): U | undefined => {
     switch (type) {
       case CHAT_TYPE.PRIVATE:
-        return getPrivateLastMessage(uuid)(state);
+        return getPrivateLastMessage(uuid)(state) as U | undefined;
 
       case CHAT_TYPE.GROUP:
-        return getGroupLastMessage(uuid)(state);
+        return getGroupLastMessage(uuid)(state) as U | undefined;
 
       default:
         return;

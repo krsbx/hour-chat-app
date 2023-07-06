@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import React, { useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect, ConnectedProps } from 'react-redux';
 import { Header, Message } from '../../components';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
@@ -9,6 +10,7 @@ import { RESOURCE_NAME } from '../../constants/common';
 import { AppState } from '../../store';
 import { getLastMessages } from '../../store/selectors/lastMessage';
 import { getResourceData } from '../../store/selectors/resources';
+import { flattenStyle } from '../../styles/factory';
 import { createFullName, hasOwnProperty } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
@@ -54,9 +56,31 @@ const ChatList: React.FC<Props> = ({ users, messages: _messages }) => {
         }}
         keyExtractor={(item) => `${item?.timestamp?.toMillis?.()}-${item.uuid}`}
       />
+      {__DEV__ && (
+        <TouchableOpacity style={chatIconStyle} activeOpacity={0.5}>
+          <MaterialIcons
+            name="message"
+            size={scale(25)}
+            color={COLOR_PALETTE.WHITE}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
+
+const chatIconStyle = flattenStyle({
+  backgroundColor: COLOR_PALETTE.BLUE_10,
+  position: 'absolute',
+  bottom: scale(75),
+  right: scale(25),
+  padding: scale(5),
+  width: scale(45),
+  height: scale(45),
+  borderRadius: scale(45),
+  alignItems: 'center',
+  justifyContent: 'center',
+});
 
 const mapStateToProps = (state: AppState) => ({
   users: getResourceData(RESOURCE_NAME.USERS)(state),

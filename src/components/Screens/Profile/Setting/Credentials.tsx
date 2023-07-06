@@ -67,6 +67,7 @@ const Credentials: React.FC<Props> = ({ auth, updateMyData }) => {
             isValid={touched?.email && !errors?.email}
             isError={touched?.email && !!errors?.email}
             errorMessage={errors?.email}
+            disabled
           />
           <Input.InputField
             isRequired

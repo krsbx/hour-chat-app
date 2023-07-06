@@ -25,7 +25,7 @@ const useStoryListener = () => {
         .doc('story')
         .collection('users')
         .where('userId', 'in', uuids)
-        .where('createdAt', '>', moment().subtract(7, 'day').toDate())
+        .where('createdAt', '>=', moment().subtract(7, 'day').toDate())
         .where('createdAt', '<=', moment().toDate())
         .onSnapshot((snap) => {
           if (!snap || !snap?.docs) return;
@@ -60,7 +60,7 @@ const useStoryListener = () => {
     if (uuids.length) unsubscribes.push(storyListSubscriber(uuids, false));
 
     return () => {
-      unsubscribes.forEach((unsubscribe) => unsubscribe?.());
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
   }, [storyListSubscriber, uuids, currentUser]);
 };

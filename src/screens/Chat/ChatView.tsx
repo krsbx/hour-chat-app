@@ -26,6 +26,7 @@ import { DEFAULT_MESSAGE_VALUE } from '../../constants/defaults';
 import { CHAT_STACK } from '../../constants/screens';
 import useCurrentUser from '../../hooks/caches/useCurrentUser';
 import useChatMessageSubscriber from '../../hooks/chats/useChatMessageSubscriber';
+import useDebounce from '../../hooks/common/useDebounce';
 import useOverwriteBack from '../../hooks/common/useOverwriteBack';
 import useChatEncryptionRetrieval from '../../hooks/encryptions/useChatEncryptionRetrieval';
 import { chats } from '../../schema';
@@ -41,6 +42,7 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
     >();
   const { user: currentUser } = useCurrentUser();
   const [isRefteching, setIsRefetching] = useState(false);
+  const [isFromFetch, setIsFromFetch] = useState(false);
 
   const flatListRef = useRef<FlatList | null>(null);
   const flexSize = useRef(new Animated.Value(0)).current;
@@ -84,17 +86,18 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
   }, [emptySize, flexSize]);
 
   const onContentSizeChange = useCallback(() => {
-    if (!flatListRef.current) return;
+    if (isFromFetch || !flatListRef.current) return;
 
     if (!messages.length) return;
 
     flatListRef.current.scrollToEnd();
-  }, [flatListRef, messages]);
+  }, [isFromFetch, flatListRef, messages]);
 
   const onRefetching = useCallback(() => {
     if (isRefteching || isMaxReached) return;
 
     setIsRefetching(true);
+    setIsFromFetch(true);
 
     increaseLimit();
 
@@ -104,6 +107,15 @@ const ChatView: React.FC<Props> = ({ config, setConfig }) => {
   }, [setIsRefetching, increaseLimit, isRefteching, isMaxReached]);
 
   useEffect(startAnimation, [startAnimation]);
+  useDebounce(
+    () => {
+      if (!isFromFetch) return;
+
+      setIsFromFetch(false);
+    },
+    [isFromFetch],
+    2000
+  );
 
   return (
     <View style={style.mainContainer}>

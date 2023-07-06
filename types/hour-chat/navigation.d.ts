@@ -11,8 +11,8 @@ import {
   CREATE_STORY_STACK,
   MAIN_STACK,
   MAIN_TAB,
+  MY_ACCOUNT_TAB,
   PROFILE_STACK,
-  SETTING_TAB,
   STORY_TAB,
 } from '../../src/constants/screens';
 
@@ -29,7 +29,7 @@ export type CreateStoryStack = {
 
 export type ProfileStack = {
   [PROFILE_STACK.MAIN]: undefined;
-  [PROFILE_STACK.SETTING]: undefined;
+  [PROFILE_STACK.MY_ACCOUNT]: undefined;
   [PROFILE_STACK.MY_CONNECTION]: undefined;
 };
 
@@ -46,9 +46,9 @@ export type ChatStack = {
   };
 };
 
-export type SettingTab = {
-  [SETTING_TAB.PUBLIC]: undefined;
-  [SETTING_TAB.PRIVATE]: undefined;
+export type MyAccountTab = {
+  [MY_ACCOUNT_TAB.PUBLIC]: undefined;
+  [MY_ACCOUNT_TAB.PRIVATE]: undefined;
 };
 
 export type MainTab = {
@@ -92,8 +92,8 @@ export type CreateStoryStackProps<T extends keyof CreateStoryStack> =
     StackScreenProps<MainTab>
   >;
 
-export type SettingTabProps<T extends keyof SettingTab> =
-  MaterialTopTabScreenProps<SettingTab, T>;
+export type MyAccountTabProps<T extends keyof MyAccountTab> =
+  MaterialTopTabScreenProps<MyAccountTab, T>;
 
 export type MainTabProps<T extends keyof MainTabProps> = CompositeScreenProps<
   BottomTabScreenProps<MainTab, T>,
@@ -109,7 +109,7 @@ export type ProfileStackProps<T extends keyof ProfileStack> =
   CompositeScreenProps<
     StackScreenProps<ProfileStack, T>,
     CompositeScreenProps<
-      MaterialTopTabScreenProps<SettingTab>,
+      MaterialTopTabScreenProps<MyAccountTab>,
       StackScreenProps<MainTab>
     >
   >;

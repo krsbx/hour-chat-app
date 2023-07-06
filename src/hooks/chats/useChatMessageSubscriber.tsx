@@ -8,7 +8,7 @@ import { getConfig } from '../../store/selectors/config';
 import { getLastMessageMetadata } from '../../store/selectors/lastMessage';
 import useCurrentUser from '../caches/useCurrentUser';
 
-const DEFAULT_LIMIT = 25;
+const DEFAULT_LIMIT = 15;
 
 const useChatMessageSubscriber = <
   T extends HourChat.Type.ChatType,
@@ -106,8 +106,8 @@ const useChatMessageSubscriber = <
   const increaseLimit = useCallback(() => {
     if (isMaxReached) return;
 
-    setLimit((limit) => limit + 10);
-  }, [setLimit, isMaxReached]);
+    setLimit((limit) => Math.min(limit + 10, total));
+  }, [setLimit, total, isMaxReached]);
 
   useEffect(() => {
     const unsubscribe = subscribeMessages();
