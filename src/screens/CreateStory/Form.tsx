@@ -102,28 +102,39 @@ const Form: React.FC<Props> = ({
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLOR_PALETTE.WHITE }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: COLOR_PALETTE.WHITE,
+        paddingBottom: scale(65),
+      }}
+    >
       <FocusedStatusBar
         animated
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
       <Header.Default />
-      <ScrollView>
-        <View style={{ padding: scale(5), gap: scale(5) }}>
-          <Input.InputField
-            multiline
-            label={'Your story'}
-            placeholder={'Type your story'}
-            value={story}
-            onChangeText={setStory}
-            style={style.inputStyle}
-          />
-          <Buttons.BaseButton
-            title={'Attach Image'}
-            onPress={onAttachFile}
-            icon={<Ionicons name={'image'} {...STYLES.ICONS.DEFAULT_ICON} />}
-          />
+      <View
+        style={{
+          padding: scale(5),
+          gap: scale(5),
+          flex: 1,
+          alignItems: 'center',
+        }}
+      >
+        <Input.InputField
+          multiline
+          label={'Your story'}
+          placeholder={'Type your story'}
+          value={story}
+          onChangeText={setStory}
+          style={style.inputStyle}
+        />
+        <ScrollView
+          style={{ flex: 1, width: '100%' }}
+          contentContainerStyle={{ gap: scale(5) }}
+        >
           {!!file.uri && (
             <View style={{ position: 'relative', alignItems: 'center' }}>
               <Image
@@ -144,13 +155,18 @@ const Form: React.FC<Props> = ({
               </TouchableOpacity>
             </View>
           )}
-          <Buttons.BaseButton
-            title={'Preview'}
-            onPress={onPressOnPreview}
-            icon={<Ionicons name={'eye'} {...STYLES.ICONS.DEFAULT_ICON} />}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
+        <Buttons.BaseButton
+          title={'Attach Image'}
+          onPress={onAttachFile}
+          icon={<Ionicons name={'image'} {...STYLES.ICONS.DEFAULT_ICON} />}
+        />
+        <Buttons.BaseButton
+          title={'Preview'}
+          onPress={onPressOnPreview}
+          icon={<Ionicons name={'eye'} {...STYLES.ICONS.DEFAULT_ICON} />}
+        />
+      </View>
     </View>
   );
 };
@@ -158,6 +174,7 @@ const Form: React.FC<Props> = ({
 const style = StyleSheet.create({
   inputStyle: {
     minHeight: scale(100),
+    maxHeight: scale(115),
     verticalAlign: 'top',
   },
   removeIcon: {
