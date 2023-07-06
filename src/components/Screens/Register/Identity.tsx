@@ -31,6 +31,8 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           errorMessage={errors.step1?.middleName}
           onChangeText={handleChange('step1.middleName')}
           onBlur={handleBlur('step1.middleName')}
+          isValid={touched.step1?.middleName && !errors.step1?.middleName}
+          isError={touched.step1?.middleName && !!errors.step1?.middleName}
           placeholder={'Your middleName'}
           value={values.step1.middleName}
         />
@@ -39,6 +41,8 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           errorMessage={errors.step1?.lastName}
           onChangeText={handleChange('step1.lastName')}
           onBlur={handleBlur('step1.lastName')}
+          isValid={touched.step1?.lastName && !errors.step1?.lastName}
+          isError={touched.step1?.lastName && !!errors.step1?.lastName}
           placeholder={'Your lastName'}
           value={values.step1.lastName}
         />
@@ -58,7 +62,10 @@ const Identity: React.FC<Props> = ({ nextStep }) => {
           labelField={'label'}
           valueField={'value'}
           label={'Gender'}
+          errorMessage={errors.step1?.gender}
           onChange={({ value }) => handleChange('step1.gender')(value)}
+          isValid={touched.step1?.gender && !errors.step1?.gender}
+          isError={touched.step1?.gender && !!errors.step1?.gender}
           placeholder={'Your gender'}
           value={values.step1.gender}
         />

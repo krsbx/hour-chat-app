@@ -17,6 +17,7 @@ import { FONT_SIZE } from '../../constants/fonts';
 import { CHAT_STACK } from '../../constants/screens';
 import useDecryptedChatMessage from '../../hooks/useDecryptedChatMessage';
 import { setConfig as _setConfig } from '../../store/actions/config';
+import { setNotification as _setNotification } from '../../store/actions/notifications';
 import { getCurrentEncryption } from '../../store/selectors/encryption';
 import STYLES from '../../styles';
 import { COLOR_PALETTE } from '../../utils/theme';
@@ -30,6 +31,7 @@ const Message: React.FC<Props> = ({
   user,
   files,
   setConfig,
+  setNotification,
 }) => {
   const navigation =
     useNavigation<
@@ -68,13 +70,18 @@ const Message: React.FC<Props> = ({
 
   const onPress = useCallback(() => {
     setConfig({
-      type: type,
-      uuid: uuid,
-      name: name,
+      type,
+      uuid,
+      name,
       config,
     });
+    setNotification({
+      type,
+      uuid,
+      value: 0,
+    });
     navigation.push(CHAT_STACK.VIEW);
-  }, [type, uuid, name, config, navigation, setConfig]);
+  }, [setConfig, type, uuid, name, config, setNotification, navigation]);
 
   const startAnimation = useCallback(() => {
     Animated.parallel([
@@ -141,6 +148,7 @@ const style = StyleSheet.create({
 
 const connector = connect(null, {
   setConfig: _setConfig,
+  setNotification: _setNotification,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

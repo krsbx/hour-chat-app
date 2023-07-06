@@ -3,8 +3,10 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import _ from 'lodash';
 import React from 'react';
 import { scale } from 'react-native-size-matters';
+import { useSelector } from 'react-redux';
 import { Buttons, Icon } from '../components';
 import { MAIN_TAB, TAB_HIDEABLE } from '../constants/screens';
+import useNotificationHandler from '../hooks/common/useNotificationHandler';
 import useFirebaseDeviceToken from '../hooks/listeners/useFirebaseDeviceToken';
 import useLastMessageListener from '../hooks/listeners/useLastMessageListener';
 import useStoryListener from '../hooks/listeners/useStoryListener';
@@ -13,6 +15,7 @@ import useWatchPosition from '../hooks/listeners/useWatchPosition';
 import useChatMediaQueue from '../hooks/queues/useChatMediaQueue';
 import useChatMessageQueue from '../hooks/queues/useChatMessageQueue';
 import { Content } from '../screens';
+import { getUnreadNotifications } from '../store/selectors/notifications';
 import ChatStack from './ChatStack';
 import CreateStoryStack from './CreateStoryStack';
 import ProfileStack from './ProfileStack';
@@ -21,6 +24,8 @@ import StoryTab from './StoryTab';
 const Tab = createBottomTabNavigator<HourChat.Navigation.MainTab>();
 
 const MainApp = () => {
+  const unreadMessage = useSelector(getUnreadNotifications);
+
   useWatchPosition();
   useWatchAuthToken();
   useChatMessageQueue();
@@ -28,6 +33,7 @@ const MainApp = () => {
   useLastMessageListener();
   useFirebaseDeviceToken();
   useStoryListener();
+  useNotificationHandler();
 
   return (
     <Tab.Navigator
@@ -56,6 +62,9 @@ const MainApp = () => {
           return {
             tabBarIcon: Icon.Main.Chat,
             tabBarLabel: 'Chat',
+            ...(unreadMessage > 0 && {
+              tabBarBadge: unreadMessage > 9 ? '9+' : unreadMessage,
+            }),
             ...(isHideable && {
               tabBarStyle: {
                 display: 'none',

@@ -1,7 +1,8 @@
+import { ScreenWidth } from '@rneui/base';
 import _ from 'lodash';
 import moment from 'moment';
 import React, { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect, ConnectedProps } from 'react-redux';
@@ -110,21 +111,27 @@ const Preview: React.FC<Props> = ({
       />
       <Header.Default />
       <View style={style.mainContainer}>
-        <Card.Story
-          likes={[]}
-          dislikes={[]}
-          createdAt={moment() as never}
-          updatedAt={moment() as never}
-          body={story}
-          userId={currentUser.id}
-          file={{
-            uri: file.uri,
-            height: resolution.height,
-            width: resolution.width,
-            type: file.type,
-          }}
-          mocked
-        />
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={style.contentContainer}
+        >
+          <Card.Story
+            likes={[]}
+            dislikes={[]}
+            createdAt={moment() as never}
+            updatedAt={moment() as never}
+            body={story}
+            userId={currentUser.id}
+            isMyStory={true}
+            file={{
+              uri: file.uri,
+              height: resolution.height,
+              width: resolution.width,
+              type: file.type,
+            }}
+            mocked
+          />
+        </ScrollView>
         <Buttons.BaseButton
           title={'Back to Edit'}
           icon={
@@ -156,8 +163,13 @@ const Preview: React.FC<Props> = ({
 const style = StyleSheet.create({
   mainContainer: {
     alignItems: 'center',
-    padding: scale(5),
+    paddingBottom: scale(70),
     gap: scale(5),
+    flex: 1,
+  },
+  contentContainer: {
+    padding: scale(10),
+    width: ScreenWidth,
   },
 });
 

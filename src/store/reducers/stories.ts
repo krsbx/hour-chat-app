@@ -20,10 +20,10 @@ const initialState: StoriesReducer = {
 export const sortStory = (
   a: HourChat.Story.StoryWithUuid,
   b: HourChat.Story.StoryWithUuid
-) => a.createdAt.toMillis() - b.createdAt.toMillis();
+) => b.createdAt.toMillis() - a.createdAt.toMillis();
 
 const reducer = (
-  state = _.cloneDeep(initialState),
+  state = initialState,
   action:
     | DeleteMyStories
     | DeleteUsersStories

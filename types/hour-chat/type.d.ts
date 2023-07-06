@@ -34,3 +34,11 @@ export type Position = {
 export type ImageSource = ImageURISource | FileHref | ImageRequireSource;
 
 export type Gender = ValueOf<typeof GENDER>;
+
+export type Notification = {
+  title: string;
+  body: string;
+  senderId: string;
+  type: ChatType;
+  uuid: string;
+};

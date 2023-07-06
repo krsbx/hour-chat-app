@@ -2,16 +2,16 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import React from 'react';
 import { scale } from 'react-native-size-matters';
 import { FONT_SIZE } from '../constants/fonts';
-import { SETTING_TAB } from '../constants/screens';
+import { MY_ACCOUNT_TAB } from '../constants/screens';
 import { Setting } from '../screens';
 import { COLOR_PALETTE } from '../utils/theme';
 
-const Tab = createMaterialTopTabNavigator<HourChat.Navigation.SettingTab>();
+const Tab = createMaterialTopTabNavigator<HourChat.Navigation.MyAccountTab>();
 
-const SettingTab = () => {
+const MyAccountTab = () => {
   return (
     <Tab.Navigator
-      initialRouteName={SETTING_TAB.PUBLIC}
+      initialRouteName={MY_ACCOUNT_TAB.PUBLIC}
       screenOptions={{
         tabBarStyle: {
           backgroundColor: COLOR_PALETTE.BLUE_10,
@@ -29,14 +29,14 @@ const SettingTab = () => {
       }}
     >
       <Tab.Screen
-        name={SETTING_TAB.PUBLIC}
+        name={MY_ACCOUNT_TAB.PUBLIC}
         component={Setting.Public}
         options={{
           tabBarLabel: 'Public',
         }}
       />
       <Tab.Screen
-        name={SETTING_TAB.PRIVATE}
+        name={MY_ACCOUNT_TAB.PRIVATE}
         component={Setting.Private}
         options={{
           tabBarLabel: 'Private',
@@ -46,4 +46,4 @@ const SettingTab = () => {
   );
 };
 
-export default SettingTab;
+export default MyAccountTab;

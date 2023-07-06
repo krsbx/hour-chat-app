@@ -7,6 +7,7 @@ const PrivateMessage: React.FC<Props> = ({ uuid, ...props }) => {
   const { fullName, user } = useCachedUserData(uuid);
 
   if (!user) return null;
+  if (!user.username || !user.email || !user.phoneNumber) return null;
 
   return (
     <Message

@@ -1,5 +1,4 @@
 import { GeolocationResponse } from '@react-native-community/geolocation';
-import _ from 'lodash';
 import {
   DeleteLocation,
   LocationActionType as ActionType,
@@ -13,7 +12,7 @@ const initialState = {
 } as GeolocationResponse;
 
 const reducer = (
-  state = _.cloneDeep(initialState),
+  state = initialState,
   action: SetLocation | UpdateLocation | DeleteLocation
 ): GeolocationResponse => {
   switch (action.type) {
@@ -33,7 +32,7 @@ const reducer = (
     }
 
     case ActionType.DELETE: {
-      return _.cloneDeep(initialState);
+      return initialState;
     }
 
     default: {

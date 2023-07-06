@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { DocumentPickerResponse } from 'react-native-document-picker';
 import {
   DeleteFile,
@@ -22,7 +21,7 @@ const initialState = {
 } as StoryReducer;
 
 const reducer = (
-  state = _.cloneDeep(initialState),
+  state = initialState,
   action:
     | DeleteFile
     | DeleteResolution
@@ -82,7 +81,7 @@ const reducer = (
     }
 
     case ActionType.RESET: {
-      return _.cloneDeep(initialState);
+      return initialState;
     }
 
     default: {

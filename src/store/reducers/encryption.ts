@@ -15,7 +15,7 @@ const initialState: EncryptionReducer = {
 };
 
 const reducer = (
-  state = _.cloneDeep(initialState),
+  state = initialState,
   action: DeleteEncryption | ResetEncryption | SetEncryption
 ): EncryptionReducer => {
   switch (action.type) {
@@ -30,9 +30,11 @@ const reducer = (
     }
 
     case ActionType.DELETE: {
-      return _.omit(state, [
-        `${action.payload.type}.${action.payload.uuid}`,
-      ]) as EncryptionReducer;
+      const clone = _.cloneDeep(state);
+
+      delete state[action.payload.type][action.payload.uuid];
+
+      return clone;
     }
 
     case ActionType.RESET: {
@@ -54,7 +56,7 @@ const reducer = (
         }
       }
 
-      return _.cloneDeep(initialState);
+      return initialState;
     }
 
     default: {

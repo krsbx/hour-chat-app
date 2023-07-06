@@ -37,8 +37,8 @@ const ItemSection: React.FC<Props> = ({ logoutUser }) => {
     navigation.push(PROFILE_STACK.MY_CONNECTION);
   }, [navigation]);
 
-  const navigateToSetting = useCallback(() => {
-    navigation.push(PROFILE_STACK.SETTING);
+  const navigateToMyAccount = useCallback(() => {
+    navigation.push(PROFILE_STACK.MY_ACCOUNT);
   }, [navigation]);
 
   return (
@@ -71,7 +71,7 @@ const ItemSection: React.FC<Props> = ({ logoutUser }) => {
       </View>
       <View>
         <Label.SectionLabel>Misc</Label.SectionLabel>
-        <Buttons.Section onPress={navigateToSetting} title={'Setting'} />
+        <Buttons.Section onPress={navigateToMyAccount} title={'My Account'} />
         <Buttons.Section onPress={logoutUser} title="Logout" />
       </View>
     </ScrollView>
