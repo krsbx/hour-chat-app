@@ -1,9 +1,13 @@
+import { Formik } from 'formik';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { connect, ConnectedProps } from 'react-redux';
-import { Buttons, Input } from '../../components';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 import FocusedStatusBar from '../../components/FocusedStatusBar';
+import { Profile } from '../../components/Screens';
+import { createCredentialValue } from '../../constants/defaults';
+import { auths } from '../../schema';
 import { AppState } from '../../store';
 import { getAuth } from '../../store/selectors/auth';
 import { COLOR_PALETTE } from '../../utils/theme';
@@ -22,39 +26,14 @@ const PrivateSetting: React.FC<Props> = ({ auth }) => {
         backgroundColor={COLOR_PALETTE.BLUE_10}
         barStyle={'light-content'}
       />
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{
-          padding: scale(10),
-          paddingBottom: scale(80),
-        }}
+      <Formik
+        initialValues={createCredentialValue(auth)}
+        onSubmit={console.log}
+        validationSchema={toFormikValidationSchema(auths.credentialSchema)}
+        validateOnMount
       >
-        <Input.InputField
-          isRequired
-          label={'E-mail'}
-          placeholder={'example@example.com'}
-          value={auth.email}
-          disabled
-        />
-        <Input.InputField
-          isRequired
-          label={'Username'}
-          placeholder={'Your username'}
-          value={auth.username}
-          disabled
-        />
-        <Input.InputField
-          isRequired
-          label={'Phone Number'}
-          placeholder={'Your phone number'}
-          value={auth.phoneNumber}
-          disabled
-        />
-      </ScrollView>
-      <View style={{ rowGap: scale(5), alignItems: 'center' }}>
-        <Buttons.BaseButton title={'Change Password'} />
-        <Buttons.BaseButton title={'Update My Data'} />
-      </View>
+        <Profile.Setting.Credentials />
+      </Formik>
     </View>
   );
 };

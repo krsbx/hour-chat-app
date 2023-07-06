@@ -4,12 +4,15 @@ import _ from 'lodash';
 import validator from 'validator';
 import { z } from 'zod';
 import { AppDispatch, store } from '..';
+import { RESOURCE_NAME } from '../../constants/common';
 import { auths } from '../../schema';
 import { AuthActionType, AuthReducer } from '../actions-types/auth';
 import { ResourceAction } from '../actions-types/resources';
 import axios from '../axios';
 import { getAuth } from '../selectors/auth';
 import { resetEncryption } from './encryptions';
+import { setGroupLastMessages, setPrivateLastMessages } from './lastMessage';
+import { updateResource } from './resources';
 import { updateUser } from './resources/users';
 import { resetStory } from './story';
 
@@ -117,14 +120,22 @@ export const addDeviceToken =
       });
   };
 
-export const logoutUser = () => async (dispatch: AppDispatch) => {
-  if (store.getState().auth.firebaseToken) await auth().signOut();
+export const logoutUser = () => (dispatch: AppDispatch) => {
+  if (store.getState().auth.firebaseToken) {
+    auth()
+      .signOut()
+      .catch(() => {
+        // Do nothing if there is an error
+      });
+  }
 
   dispatch({ type: AuthActionType.LOGOUT });
   dispatch({
     type: ResourceAction.users.OVERWRITE,
     payload: [],
   });
+  setPrivateLastMessages([])(dispatch);
+  setGroupLastMessages([])(dispatch);
   resetEncryption()(dispatch);
   resetStory()(dispatch);
 };
@@ -137,4 +148,25 @@ export const updateMyData =
     const { data } = await updateUser(id, payload, query, overwrite)();
 
     updateAuth(data)(dispatch);
+    updateResource(RESOURCE_NAME.USERS, {
+      id,
+      data,
+    });
+  };
+
+export const updateMyPassword =
+  (payload: { password: string; confirmPassword: string }) =>
+  async (dispatch: AppDispatch) => {
+    const { id } = getAuth(store.getState());
+
+    const { data } = await updateUser(id, payload as never)();
+
+    updateAuth(data)(dispatch);
+  };
+
+export const deleteMyAccount =
+  (payload: { password: string }) => async (dispatch: AppDispatch) => {
+    const { id } = getAuth(store.getState());
+    await axios.post(`/${RESOURCE_NAME.USERS}/${id}/delete`, payload);
+    logoutUser()(dispatch);
   };
