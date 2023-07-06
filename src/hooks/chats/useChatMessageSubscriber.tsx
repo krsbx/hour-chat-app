@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Config } from 'react-native-config';
 import { useSelector } from 'react-redux';
 import { CHAT_TYPE } from '../../constants/common';
-import { getConfig } from '../../store/selectors/config';
+import { getCurrentChat } from '../../store/selectors/currentChat';
 import { getLastMessageMetadata } from '../../store/selectors/lastMessage';
 import useCurrentUser from '../caches/useCurrentUser';
 
@@ -16,7 +16,7 @@ const useChatMessageSubscriber = <
     ? HourChat.Chat.PrivateMetadata[]
     : HourChat.Chat.GroupMetadata[]
 >() => {
-  const { type, uuid } = useSelector(getConfig);
+  const { type, uuid } = useSelector(getCurrentChat);
   const metadata = useSelector(getLastMessageMetadata({ type, uuid }));
   const total = useMemo(() => {
     if (metadata) return metadata.total;

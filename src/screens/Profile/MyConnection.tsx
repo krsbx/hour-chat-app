@@ -8,19 +8,23 @@ import FocusedStatusBar from '../../components/FocusedStatusBar';
 import { CHAT_TYPE, RESOURCE_NAME } from '../../constants/common';
 import { CHAT_STACK, MAIN_TAB, PROFILE_STACK } from '../../constants/screens';
 import { AppState } from '../../store';
-import { setConfig as _setConfig } from '../../store/actions/config';
+import { setCurrentChat as _setCurrentChat } from '../../store/actions/currentChat';
 import { getPrivateLastMessages } from '../../store/selectors/lastMessage';
 import { getResourceData } from '../../store/selectors/resources';
 import { createFullName } from '../../utils/common';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const MyConnection: React.FC<Props> = ({ users, navigation, setConfig }) => {
+const MyConnection: React.FC<Props> = ({
+  users,
+  navigation,
+  setCurrentChat,
+}) => {
   const _messages = useSelector(getPrivateLastMessages);
   const [query, setQuery] = useState('');
 
   const navigateToChat = useCallback(
     (uuid: string) => {
-      setConfig({
+      setCurrentChat({
         name: createFullName(users[uuid]),
         type: CHAT_TYPE.PRIVATE,
         uuid,
@@ -30,7 +34,7 @@ const MyConnection: React.FC<Props> = ({ users, navigation, setConfig }) => {
         screen: CHAT_STACK.VIEW,
       });
     },
-    [navigation, users, setConfig]
+    [navigation, users, setCurrentChat]
   );
 
   const messages = useMemo(() => {
@@ -85,7 +89,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const connector = connect(mapStateToProps, {
-  setConfig: _setConfig,
+  setCurrentChat: _setCurrentChat,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

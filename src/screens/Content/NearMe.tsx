@@ -9,7 +9,7 @@ import { CHAT_TYPE, RESOURCE_NAME } from '../../constants/common';
 import { CHAT_STACK, MAIN_TAB } from '../../constants/screens';
 import useDebounce from '../../hooks/common/useDebounce';
 import { AppState } from '../../store';
-import { setConfig as _setConfig } from '../../store/actions/config';
+import { setCurrentChat } from '../../store/actions/currentChat';
 import {
   addUserPosition as _addUserPosition,
   getNearMe as _getNearMe,
@@ -22,7 +22,7 @@ import { COLOR_PALETTE } from '../../utils/theme';
 
 const NearMe: React.FC<Props> = ({
   addUserPosition,
-  setConfig,
+  setCurrentChat,
   getNearMe,
   coordinate,
   users,
@@ -35,7 +35,7 @@ const NearMe: React.FC<Props> = ({
 
   const navigateToChat = useCallback(
     (uuid: string) => {
-      setConfig({
+      setCurrentChat({
         name: createFullName(users[uuid]),
         type: CHAT_TYPE.PRIVATE,
         uuid,
@@ -44,7 +44,7 @@ const NearMe: React.FC<Props> = ({
         screen: CHAT_STACK.VIEW,
       });
     },
-    [navigation, users, setConfig]
+    [navigation, users, setCurrentChat]
   );
 
   useDebounce(() => {
@@ -125,7 +125,7 @@ const mapStateToProps = (state: AppState) => ({
 const connector = connect(mapStateToProps, {
   addUserPosition: _addUserPosition,
   getNearMe: _getNearMe,
-  setConfig: _setConfig,
+  setCurrentChat: setCurrentChat,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

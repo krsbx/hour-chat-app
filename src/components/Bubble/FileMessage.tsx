@@ -12,12 +12,12 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Media } from '..';
 import { MAX_MEDIA, MIN_MEDIA } from '../../constants/common';
 import { CHAT_STACK } from '../../constants/screens';
-import useFileDecryptor from '../../hooks/useFileDecryptor';
-import { setConfig as _setConfig } from '../../store/actions/config';
+import useFileDecryptor from '../../hooks/chats/useFileDecryptor';
+import { setCurrentChat as _setCurrentChat } from '../../store/actions/currentChat';
 import { isMediaPreviewable } from '../../utils/chats/media';
 import ImageView from '../ImageView';
 
-const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
+const FileMessage: React.FC<Props> = ({ files: _files, setCurrentChat }) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
@@ -46,11 +46,11 @@ const FileMessage: React.FC<Props> = ({ files: _files, setConfig }) => {
   }, [previewableMedias]);
 
   const onPressOnMore = useCallback(() => {
-    setConfig({
+    setCurrentChat({
       files,
     });
-    navigation.push(CHAT_STACK.MEDIA, {});
-  }, [navigation, files, setConfig]);
+    navigation.push(CHAT_STACK.MEDIA);
+  }, [navigation, files, setCurrentChat]);
 
   const onPressOnPreview = useCallback(() => {
     setIsVisible((curr) => !curr);
@@ -103,7 +103,7 @@ const style = StyleSheet.create({
 });
 
 const connector = connect(null, {
-  setConfig: _setConfig,
+  setCurrentChat: _setCurrentChat,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

@@ -7,8 +7,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { CHAT_STACK } from '../../constants/screens';
 import useMediaDownloader from '../../hooks/chats/useMediaDownloader';
 import { AppState } from '../../store';
-import { setConfig as _setConfig } from '../../store/actions/config';
-import { getConfig } from '../../store/selectors/config';
+import { setCurrentChat as _setCurrentChat } from '../../store/actions/currentChat';
+import { getCurrentChat } from '../../store/selectors/currentChat';
 import { flattenStyle } from '../../styles/factory';
 import { COLOR_PALETTE } from '../../utils/theme';
 
@@ -16,8 +16,8 @@ const ImageView: React.FC<Props> = ({
   fileIndex,
   item,
   onRequestClose,
-  config,
-  setConfig,
+  currentChat,
+  setCurrentChat,
 }) => {
   const { params } =
     useRoute<HourChat.Navigation.ChatStackRoute<typeof CHAT_STACK.MEDIA>>();
@@ -27,17 +27,17 @@ const ImageView: React.FC<Props> = ({
   const onDownload = useMediaDownloader();
 
   const onRemoveAttachment = useCallback(() => {
-    const attachment = [...config.attachment];
+    const attachment = [...currentChat.attachment];
     attachment.splice(fileIndex, 1);
 
-    setConfig({
+    setCurrentChat({
       attachment,
     });
 
     if (attachment.length) return;
 
     onRequestClose?.();
-  }, [config, setConfig, onRequestClose, fileIndex]);
+  }, [currentChat, setCurrentChat, onRequestClose, fileIndex]);
 
   const onPressOnAction = useCallback(() => {
     if (isOnEdit) {
@@ -77,11 +77,11 @@ const headerStyle = flattenStyle({
 });
 
 const mapStateToProps = (state: AppState) => ({
-  config: getConfig(state),
+  currentChat: getCurrentChat(state),
 });
 
 const connector = connect(mapStateToProps, {
-  setConfig: _setConfig,
+  setCurrentChat: _setCurrentChat,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;

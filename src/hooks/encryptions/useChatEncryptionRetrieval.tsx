@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store';
-import { setConfig } from '../../store/actions/config';
+import { setCurrentChat } from '../../store/actions/currentChat';
 import { getChatEncryption } from '../../store/actions/encryptions';
 import useChatEncryptionPayload from './useChatEncryptionPayload';
 
@@ -12,7 +12,7 @@ const useChatEncryptionRetrieval = (dep: unknown[] = []) => {
   useEffect(() => {
     getChatEncryption(payload)(dispatch)
       .then(({ data: config }) => {
-        setConfig({
+        setCurrentChat({
           config,
         })(dispatch);
       })

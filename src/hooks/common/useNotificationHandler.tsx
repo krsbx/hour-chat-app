@@ -7,12 +7,12 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CHAT_STACK } from '../../constants/screens';
 import { incrementNotification } from '../../store/actions/notifications';
-import { getConfig } from '../../store/selectors/config';
+import { getCurrentChat } from '../../store/selectors/currentChat';
 import { navigationRef } from '../../utils/navigation';
 
 const useNotificationHandler = () => {
   const dispatch = useDispatch();
-  const { type, uuid } = useSelector(getConfig);
+  const { type, uuid } = useSelector(getCurrentChat);
 
   const onMessage = useCallback(
     async (message: FirebaseMessagingTypes.RemoteMessage) => {

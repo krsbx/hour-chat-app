@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { CHAT_STACK } from '../constants/screens';
 import { store } from '../store';
 import { incrementNotification } from '../store/actions/notifications';
-import { getConfig } from '../store/selectors/config';
+import { getCurrentChat } from '../store/selectors/currentChat';
 import { navigationRef } from './navigation';
 
 const onMessageReceived = async (
@@ -14,7 +14,7 @@ const onMessageReceived = async (
 ) => {
   if (!message?.data) return;
 
-  const { type, uuid } = getConfig(store.getState());
+  const { type, uuid } = getCurrentChat(store.getState());
 
   try {
     const payload: HourChat.Type.Notification = JSON.parse(

@@ -1,5 +1,5 @@
 import auth from './auth';
-import config from './config';
+import currentChat from './currentChat';
 import encryption from './encryption';
 import lastMessage from './lastMessage';
 import location from './location';
@@ -12,7 +12,7 @@ import story from './story';
 export {
   auth,
   encryption,
-  config,
+  currentChat,
   lastMessage,
   location,
   notifications,
