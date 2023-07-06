@@ -35,3 +35,20 @@ export const onLoginError = <T>(
     setFieldError('password', 'Incorrect password');
   }
 };
+
+export const onUpdateMyData = <T>(
+  error: T,
+  setFieldError: (field: string, message: string | undefined) => void
+) => {
+  if (!isAxiosError(error)) return;
+  const response = error.response?.data;
+
+  if (!response) return;
+
+  if (hasOwnProperty(response, 'name') && hasOwnProperty(response, 'errors')) {
+    const { errors }: UniqueConstraintError | ValidationError = response;
+    _.map(errors, ({ path }) => {
+      setFieldError(path, `${_.capitalize(path)} already in use`);
+    });
+  }
+};

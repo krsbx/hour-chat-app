@@ -42,6 +42,7 @@ const MainApp = () => {
           borderRadius: scale(20),
           height: scale(45),
         },
+        tabBarHideOnKeyboard: true,
         tabBarButton: Buttons.TabBarButton,
       }}
     >
@@ -55,7 +56,6 @@ const MainApp = () => {
           return {
             tabBarIcon: Icon.Main.Chat,
             tabBarLabel: 'Chat',
-            tabBarHideOnKeyboard: true,
             ...(isHideable && {
               tabBarStyle: {
                 display: 'none',

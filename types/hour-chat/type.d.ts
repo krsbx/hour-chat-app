@@ -1,5 +1,6 @@
 import { ImageRequireSource, ImageURISource } from 'react-native';
 import { CHAT_TYPE, RESOURCE_NAME } from '../../src/constants/common';
+import { GENDER } from '../../src/constants/resources';
 
 export type ResourceName = ValueOf<typeof RESOURCE_NAME>;
 
@@ -31,3 +32,5 @@ export type Position = {
 };
 
 export type ImageSource = ImageURISource | FileHref | ImageRequireSource;
+
+export type Gender = ValueOf<typeof GENDER>;

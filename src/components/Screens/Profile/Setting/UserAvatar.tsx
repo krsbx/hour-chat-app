@@ -3,14 +3,14 @@ import React, { useMemo } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Icon } from '../..';
-import { FONT_SIZE } from '../../../constants/fonts';
-import useUserGenderIcon from '../../../hooks/styles/useUserGenderIcon';
-import STYLES from '../../../styles';
-import { createFullName } from '../../../utils/common';
-import { COLOR_PALETTE, opacityColor } from '../../../utils/theme';
+import { Icon } from '../../..';
+import { FONT_SIZE } from '../../../../constants/fonts';
+import useUserGenderIcon from '../../../../hooks/styles/useUserGenderIcon';
+import STYLES from '../../../../styles';
+import { createFullName } from '../../../../utils/common';
+import { COLOR_PALETTE, opacityColor } from '../../../../utils/theme';
 
-const UserAvatar: React.FC<Props> = ({ user }) => {
+const UserAvatar: React.FC<Props> = ({ user, onPressOnAvatar }) => {
   const { iconColor, iconName } = useUserGenderIcon(user);
   const fullName = useMemo(() => createFullName(user), [user]);
 
@@ -18,7 +18,7 @@ const UserAvatar: React.FC<Props> = ({ user }) => {
     <View style={style.userContainer}>
       <TouchableOpacity
         style={style.avatarMainContainer}
-        onPress={() => console.log('F')}
+        onPress={onPressOnAvatar}
       >
         <Icon.DefaultAvatar
           containerStyle={style.avatarContainer}
@@ -75,6 +75,7 @@ const style = StyleSheet.create({
 
 type Props = {
   user: HourChat.Resource.User;
+  onPressOnAvatar?: () => void;
 };
 
 export default UserAvatar;

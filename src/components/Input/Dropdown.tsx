@@ -20,12 +20,8 @@ const Dropdown = <T,>({
   const styles = useMemo(() => {
     const styles: StyleProp<ViewStyle>[] = [style.style];
 
-    console.log({ isValid });
-
     if (isValid) styles.push(STYLES.INPUTS.VALID);
     if (isError) styles.push(STYLES.INPUTS.ERROR);
-
-    console.log(styles);
 
     return styles;
   }, [isValid, isError]);
