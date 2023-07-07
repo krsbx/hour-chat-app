@@ -33,7 +33,7 @@ const InputForm: React.FC<Props> = ({
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
     >();
-  const { handleChange, handleBlur, values, setFieldValue, validate } =
+  const { handleChange, handleBlur, values, setFieldValue, validateForm } =
     useFormikContext<z.infer<typeof chats.messageSchema>>();
   const { type, uuid } = currentChat;
 
@@ -42,7 +42,9 @@ const InputForm: React.FC<Props> = ({
       e.stopPropagation();
 
       try {
-        await validate?.(values);
+        const errors = await validateForm(values);
+
+        if (!_.isEmpty(errors)) throw errors;
 
         enqueuMessage({
           body: values.body ?? '',
@@ -60,7 +62,15 @@ const InputForm: React.FC<Props> = ({
         // Do nothing if there is an error
       }
     },
-    [values, validate, enqueuMessage, uuid, type, setFieldValue, setCurrentChat]
+    [
+      values,
+      enqueuMessage,
+      uuid,
+      type,
+      setFieldValue,
+      setCurrentChat,
+      validateForm,
+    ]
   );
 
   const onPressOnAttach = useCallback(async () => {

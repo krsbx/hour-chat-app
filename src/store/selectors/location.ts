@@ -1,4 +1,9 @@
+import { createSelector } from 'reselect';
 import { AppState } from '..';
 
-export const getUserCoordinate = (state: AppState) =>
-  state.location?.coords ?? {};
+export const getLocation = (state: AppState) => state.location;
+
+export const getUserCoordinate = createSelector(
+  getLocation,
+  (location) => location?.coords ?? {}
+);

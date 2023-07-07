@@ -1,20 +1,31 @@
 import {
   DequeueFile,
+  DequeuFailedMessage,
   DequeuMessage,
+  EnqueueFailedMessage,
   EnqueueFile,
   EnqueueMessage,
   QueueActionType as ActionType,
   QueuReducer,
+  ResetQueue,
 } from '../actions-types/queue';
 
 const initialState: QueuReducer = {
   messages: [],
+  failedMessages: [],
   files: [],
 };
 
 const reducer = (
   state = initialState,
-  action: EnqueueMessage | DequeuMessage | EnqueueFile | DequeueFile
+  action:
+    | EnqueueMessage
+    | DequeuMessage
+    | EnqueueFile
+    | DequeueFile
+    | EnqueueFailedMessage
+    | DequeuFailedMessage
+    | ResetQueue
 ): QueuReducer => {
   switch (action.type) {
     case ActionType.ENQUEUE_MESSAGE: {
@@ -42,6 +53,31 @@ const reducer = (
       };
     }
 
+    case ActionType.ENQUEUE_FAILED_MESSAGE: {
+      if (!state.failedMessages.length)
+        return {
+          ...state,
+          failedMessages: [action.payload],
+        };
+
+      return {
+        ...state,
+        failedMessages: [...state.failedMessages, action.payload],
+      };
+    }
+
+    case ActionType.DEQUEUE_FAILED_MESSAGE: {
+      if (!state.failedMessages.length) return state;
+
+      const failedMessages = [...state.failedMessages];
+      failedMessages.shift();
+
+      return {
+        ...state,
+        failedMessages,
+      };
+    }
+
     case ActionType.ENQUEUE_FILE: {
       if (!state.files.length) {
         return {
@@ -66,6 +102,10 @@ const reducer = (
         ...state,
         files,
       };
+    }
+
+    case ActionType.RESET: {
+      return initialState;
     }
 
     default: {

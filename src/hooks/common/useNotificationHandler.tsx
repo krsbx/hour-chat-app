@@ -23,11 +23,6 @@ const useNotificationHandler = () => {
           message?.data?.payload ?? ''
         );
 
-        console.log({
-          type: type === payload.type,
-          uuid: payload.uuid,
-        });
-
         if (type === payload.type && uuid === payload.uuid) {
           if (
             navigationRef.current?.getCurrentRoute()?.name === CHAT_STACK.VIEW
