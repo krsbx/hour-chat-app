@@ -54,7 +54,7 @@ const ChatList: React.FC<Props> = ({ users, messages: _messages }) => {
 
           return <Message.Private {...item} />;
         }}
-        keyExtractor={(item) => `${item?.timestamp?.toMillis?.()}-${item.uuid}`}
+        keyExtractor={(item) => `${item.uuid}`}
       />
       {__DEV__ && (
         <TouchableOpacity style={chatIconStyle} activeOpacity={0.5}>

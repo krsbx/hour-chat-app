@@ -2,6 +2,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { ScreenHeight, ScreenWidth } from '@rneui/base';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
+import moment from 'moment';
 import React, { useCallback, useEffect } from 'react';
 import {
   FlatList,
@@ -17,6 +18,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { z } from 'zod';
 import { Input, Media } from '../..';
 import { CHAT_STACK } from '../../../constants/screens';
+import useCurrentUser from '../../../hooks/caches/useCurrentUser';
 import { chats } from '../../../schema';
 import { AppState } from '../../../store';
 import { setCurrentChat as _setCurrentChat } from '../../../store/actions/currentChat';
@@ -28,6 +30,7 @@ const InputForm: React.FC<Props> = ({
   enqueuMessage,
   currentChat,
 }) => {
+  const { user: currentUser } = useCurrentUser();
   const isScreenFocused = useIsFocused();
   const navigation =
     useNavigation<
@@ -51,6 +54,8 @@ const InputForm: React.FC<Props> = ({
           files: values.files ?? [],
           uuid,
           type,
+          senderId: currentUser.id,
+          timestamp: moment().toDate(),
         });
 
         setFieldValue('body', '');
@@ -63,10 +68,11 @@ const InputForm: React.FC<Props> = ({
       }
     },
     [
-      values,
-      enqueuMessage,
-      uuid,
       type,
+      uuid,
+      values,
+      currentUser.id,
+      enqueuMessage,
       setFieldValue,
       setCurrentChat,
       validateForm,

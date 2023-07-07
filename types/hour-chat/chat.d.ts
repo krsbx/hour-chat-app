@@ -2,9 +2,10 @@ import type { Timestamp } from '@firebase/firestore';
 
 export type MessageData = {
   senderId: string;
-  timestamp: Timestamp;
+  timestamp: Timestamp | string | Date;
   body: string;
   files: HourChat.Type.File[];
+  fromQueue?: boolean; // Indicator to determine the message source
 };
 
 export type PrivateMetadata = MessageData & {
@@ -19,11 +20,11 @@ export type GroupMetadata = PrivateMetadata & {
 export type Metadata =
   | {
       typing: string[];
-      timestamp: Timestamp;
+      timestamp: Timestamp | string | Date;
     }
   | {
       members: string[];
-      timestamp: Timestamp;
+      timestamp: Timestamp | string | Date;
       typing: string[];
     };
 

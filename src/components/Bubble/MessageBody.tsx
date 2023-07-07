@@ -5,7 +5,7 @@ import { scale } from 'react-native-size-matters';
 import useTextDecryptor from '../../hooks/chats/useTextDecryptor';
 import { COLOR_PALETTE } from '../../utils/theme';
 
-const MessageBody: React.FC<Props> = ({ body, incoming }) => {
+const MessageBody: React.FC<Props> = ({ body, incoming, fromQueue }) => {
   const messageBody = useTextDecryptor(body);
 
   const messageStyle = useMemo(() => {
@@ -22,6 +22,8 @@ const MessageBody: React.FC<Props> = ({ body, incoming }) => {
     return styles;
   }, [incoming]);
 
+  if (fromQueue) return <Text style={messageStyle}>{body}</Text>;
+
   if (!messageBody) return null;
 
   return <Text style={messageStyle}>{messageBody}</Text>;
@@ -30,6 +32,7 @@ const MessageBody: React.FC<Props> = ({ body, incoming }) => {
 type Props = {
   body: string;
   incoming?: boolean;
+  fromQueue?: boolean;
 };
 
 export default MessageBody;
