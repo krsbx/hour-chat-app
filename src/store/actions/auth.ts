@@ -12,6 +12,7 @@ import axios from '../axios';
 import { getAuth } from '../selectors/auth';
 import { resetEncryption } from './encryptions';
 import { setGroupLastMessages, setPrivateLastMessages } from './lastMessage';
+import { resetQueu } from './queue';
 import { updateResource } from './resources';
 import { updateUser } from './resources/users';
 import { resetStory } from './story';
@@ -138,6 +139,7 @@ export const logoutUser = () => (dispatch: AppDispatch) => {
   setGroupLastMessages([])(dispatch);
   resetEncryption()(dispatch);
   resetStory()(dispatch);
+  resetQueu()(dispatch);
 };
 
 export const updateMyData =

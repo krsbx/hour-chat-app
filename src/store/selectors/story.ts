@@ -1,7 +1,13 @@
+import { createSelector } from 'reselect';
 import { AppState } from '..';
 
-export const getFileResolution = (state: AppState) => state.story.resolution;
+export const getStory = (state: AppState) => state.story;
 
-export const getAttachedFile = (state: AppState) => state.story.file;
+export const getFileResolution = createSelector(
+  getStory,
+  (story) => story.resolution
+);
 
-export const getTypedStory = (state: AppState) => state.story.story;
+export const getAttachedFile = createSelector(getStory, (story) => story.file);
+
+export const getTypedStory = createSelector(getStory, (story) => story.story);

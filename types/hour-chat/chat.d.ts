@@ -42,7 +42,3 @@ export type PrivateChatPayload = BaseChatPayload & {
 export type GroupChatPayload = BaseChatPayload & {
   uuid: string;
 };
-
-export type MessageQueuePayload = GroupChatPayload & {
-  type: HourChat.Type.ChatType;
-};

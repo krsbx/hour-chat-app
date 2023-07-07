@@ -7,7 +7,7 @@ import {
   sendPrivateMessage,
 } from '../../store/actions/chats';
 import { uploadFiles } from '../../store/actions/files';
-import { dequeueMessage } from '../../store/actions/queue';
+import { dequeueMessage, enqueuFailedMessage } from '../../store/actions/queue';
 import { getMessageQueue } from '../../store/selectors/queue';
 import usePrevious from '../common/usePrevious';
 
@@ -49,7 +49,7 @@ const useChatMessageQueue = () => {
           break;
       }
     } catch {
-      // Do nothing if there is an error
+      enqueuFailedMessage(message)(dispatch);
     } finally {
       dequeueMessage()(dispatch);
     }

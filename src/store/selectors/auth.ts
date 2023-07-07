@@ -1,8 +1,11 @@
+import { createSelector } from 'reselect';
 import { AppState } from '..';
 
 export const getAuth = (state: AppState) => state.auth;
 
-export const getAuthToken = (state: AppState) => getAuth(state).token;
+export const getAuthToken = createSelector(getAuth, (auth) => auth.token);
 
-export const getAuthEmailStatus = (state: AppState) =>
-  getAuth(state).isEmailVerified;
+export const getAuthEmailStatus = createSelector(
+  getAuth,
+  (auth) => auth.isEmailVerified
+);
