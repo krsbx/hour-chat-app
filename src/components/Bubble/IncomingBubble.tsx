@@ -15,6 +15,7 @@ const IncomingBubble: React.FC<Props> = ({
   files,
   timestamp,
   senderId,
+  fromQueue,
 }) => {
   const left = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCachedUserData(senderId);
@@ -48,8 +49,8 @@ const IncomingBubble: React.FC<Props> = ({
           {fullName}
         </Text>
         <View>
-          <FileMessage files={files} incoming />
-          <MessageBody body={body} incoming />
+          <FileMessage files={files} fromQueue={fromQueue} incoming />
+          <MessageBody body={body} fromQueue={fromQueue} incoming />
         </View>
         <Text style={style.timestamp}>{datetime}</Text>
       </View>

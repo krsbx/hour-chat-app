@@ -10,7 +10,12 @@ import { COLOR_PALETTE } from '../../utils/theme';
 import FileMessage from './FileMessage';
 import MessageBody from './MessageBody';
 
-const OutgoingBubble: React.FC<Props> = ({ body, files, timestamp }) => {
+const OutgoingBubble: React.FC<Props> = ({
+  body,
+  files,
+  timestamp,
+  fromQueue,
+}) => {
   const right = useRef(new Animated.Value(-ScreenWidth)).current;
   const { fullName, user } = useCurrentUser();
   const datetime = useTimestamp(timestamp);
@@ -39,8 +44,8 @@ const OutgoingBubble: React.FC<Props> = ({ body, files, timestamp }) => {
           {fullName}
         </Text>
         <View>
-          <FileMessage files={files} />
-          <MessageBody body={body} />
+          <FileMessage files={files} fromQueue={fromQueue} />
+          <MessageBody body={body} fromQueue={fromQueue} />
         </View>
         <Text style={style.timestamp}>{datetime}</Text>
       </View>

@@ -8,6 +8,8 @@ export type FilePayload = {
 
 export type MessageQueue = HourChat.Chat.GroupChatPayload & {
   type: HourChat.Type.ChatType;
+  senderId: string;
+  timestamp: string | Date;
 };
 
 export type QueuReducer = {

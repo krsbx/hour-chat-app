@@ -25,7 +25,7 @@ import { Bubble, Header, Screens, Wrapper } from '../../components';
 import { DEFAULT_MESSAGE_VALUE } from '../../constants/defaults';
 import { CHAT_STACK } from '../../constants/screens';
 import useCurrentUser from '../../hooks/caches/useCurrentUser';
-import useChatMessageSubscriber from '../../hooks/chats/useChatMessageSubscriber';
+import useChatMessages from '../../hooks/chats/useChatMessages';
 import useDebounce from '../../hooks/common/useDebounce';
 import useOverwriteBack from '../../hooks/common/useOverwriteBack';
 import useChatEncryptionRetrieval from '../../hooks/encryptions/useChatEncryptionRetrieval';
@@ -48,7 +48,7 @@ const ChatView: React.FC<Props> = ({ currentChat, setCurrentChat }) => {
   const flexSize = useRef(new Animated.Value(0)).current;
   const emptySize = useRef(new Animated.Value(1)).current;
 
-  const { messages, increaseLimit, isMaxReached } = useChatMessageSubscriber();
+  const { messages, increaseLimit, isMaxReached } = useChatMessages();
 
   const onPressOnBack = useCallback(() => {
     setCurrentChat({
@@ -161,9 +161,7 @@ const ChatView: React.FC<Props> = ({ currentChat, setCurrentChat }) => {
               </Wrapper.ChatBubbleContainer>
             );
           }}
-          keyExtractor={(item, index) =>
-            `${item.timestamp.toMillis()}-${item.uuid}-${index}`
-          }
+          keyExtractor={(item, index) => `${item.uuid}-${index}`}
           refreshControl={
             <RefreshControl
               refreshing={isRefteching}

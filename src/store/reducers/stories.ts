@@ -18,9 +18,9 @@ const initialState: StoriesReducer = {
 };
 
 export const sortStory = (
-  a: HourChat.Story.StoryWithUuid,
-  b: HourChat.Story.StoryWithUuid
-) => b.createdAt.toMillis() - a.createdAt.toMillis();
+  arg0: HourChat.Story.StoryWithUuid,
+  arg1: HourChat.Story.StoryWithUuid
+) => arg1.createdAt.toMillis() - arg0.createdAt.toMillis();
 
 const reducer = (
   state = initialState,

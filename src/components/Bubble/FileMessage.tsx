@@ -17,14 +17,18 @@ import { setCurrentChat as _setCurrentChat } from '../../store/actions/currentCh
 import { isMediaPreviewable } from '../../utils/chats/media';
 import ImageView from '../ImageView';
 
-const FileMessage: React.FC<Props> = ({ files: _files, setCurrentChat }) => {
+const FileMessage: React.FC<Props> = ({
+  files: _files,
+  fromQueue,
+  setCurrentChat,
+}) => {
   const navigation =
     useNavigation<
       HourChat.Navigation.ChatStackNavigation<typeof CHAT_STACK.VIEW>
     >();
   const [isVisible, setIsVisible] = useState(false);
 
-  const files = useFileDecryptor(_files);
+  const files = useFileDecryptor(_files, fromQueue);
   const isMinimal = useMemo(() => files.length === MIN_MEDIA, [files]);
 
   const previewableMedias = useMemo(() => {
@@ -111,6 +115,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 type Props = ReduxProps & {
   files: HourChat.Type.File[];
   incoming?: boolean;
+  fromQueue?: boolean;
 };
 
 export default connector(FileMessage);
